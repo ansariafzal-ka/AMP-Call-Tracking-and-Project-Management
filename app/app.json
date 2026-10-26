@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "AMP Call Tracker",
+    "slug": "amp-call-tracker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/app-logo.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.amp.calltracker",
+      "permissions": [
+        "android.permission.READ_CALL_LOG"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/app-logo.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0d432c55-b752-4167-a821-93b0ff0ae5d8"
+      }
+    }
+  }
+}

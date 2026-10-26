@@ -1,0 +1,7 @@
+{
+  "name": "call-log",
+  "platforms": ["android"],
+  "android": {
+    "modules": ["expo.modules.calllog.CallLogModule"]
+  }
+}
