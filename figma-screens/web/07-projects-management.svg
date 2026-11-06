@@ -1,0 +1,205 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Page Background -->
+  <rect id="Page Background" width="1440" height="900" fill="#FBF1F2"/>
+
+  <!-- Left Sidebar (Admin Role) -->
+  <g id="Left Sidebar">
+    <rect x="0" y="0" width="236" height="900" fill="#7A1424"/>
+    <g id="Sidebar Header">
+      <rect x="12" y="16" width="52" height="36" rx="8" fill="#FFFFFF"/>
+      <circle cx="34.5" cy="24.5" r="2" fill="#B91C1C"/>
+      <circle cx="41.5" cy="24.5" r="2" fill="#B91C1C"/>
+      <text x="38" y="37" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="800" fill="#27272A">AMP</text>
+      <path d="M20 41.5C26 45 34 45.5 40 42.5" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M36 44C43 44 49 42 55 39.5" stroke="#B91C1C" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="74" y="30" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Call Tracker</text>
+      <rect x="74" y="36" width="46" height="16" rx="4" fill="#C9A04A"/>
+      <text x="97" y="47" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ADMIN</text>
+      <line x1="0" y1="68" x2="236" y2="68" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    </g>
+
+    <g id="Sidebar Navigation">
+      <text x="55" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Admin Dashboard</text>
+
+      <!-- Active: Projects -->
+      <rect x="12" y="134" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0.18"/>
+      <rect x="26" y="149" width="15" height="13" rx="2" stroke="#FFFFFF" stroke-width="1.75"/>
+      <path d="M26 153H41" stroke="#FFFFFF" stroke-width="1.75"/>
+      <text x="55" y="161" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Projects</text>
+
+      <text x="55" y="211" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Contacts Database</text>
+      <text x="55" y="261" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Follow-ups</text>
+      <text x="55" y="311" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Users &amp; Targets</text>
+      <text x="55" y="361" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Reports &amp; Exports</text>
+    </g>
+
+    <line x1="0" y1="776" x2="236" y2="776" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    <text x="55" y="819" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Settings</text>
+    <text x="55" y="867" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Sign out</text>
+  </g>
+
+  <!-- Right Main Content Area -->
+  <g id="Main Content">
+    <!-- Top Header -->
+    <text x="268" y="48" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#1B2437">AMP Projects Management</text>
+    <text x="268" y="68" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Create and manage multiple calling projects, dates, status, and assigned callers (BRD Section 4B)</text>
+
+    <!-- Status Filter Tabs -->
+    <rect x="1032" y="28" width="220" height="40" rx="8" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="1036" y="32" width="76" height="32" rx="6" fill="#7A1424"/>
+    <text x="1074" y="52" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF">All (6)</text>
+    <text x="1148" y="52" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1B2437">Active (4)</text>
+    <text x="1216" y="52" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Closed (2)</text>
+
+    <rect x="1264" y="28" width="144" height="40" rx="8" fill="#7A1424"/>
+    <text x="1336" y="53" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">+ Create Project</text>
+
+    <!-- Split Layout: Left Projects Table (760px) + Right Create/Edit Project Card (360px) -->
+    <!-- Left Card: Projects List -->
+    <g id="Projects List Card">
+      <rect x="268" y="88" width="760" height="780" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Search Toolbar -->
+      <rect x="288" y="108" width="320" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="304" y="133" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694" fill-opacity="0.6">Search project name or description...</text>
+      <text x="1008" y="133" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Showing 4 Active, 2 Closed</text>
+      <line x1="268" y1="164" x2="1028" y2="164" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Project Item 1 -->
+      <g id="Project Card Row 1">
+        <rect x="288" y="180" width="720" height="132" rx="10" fill="#FFFFFF" stroke="#7A1424" stroke-width="1.2"/>
+        <text x="308" y="208" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1B2437">Ramadan Zakat &amp; Scholarship Drive 2026</text>
+        <rect x="622" y="192" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="652" y="207" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+        <text x="988" y="207" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit Project</text>
+
+        <text x="308" y="230" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Outreach to past and prospective donors for annual higher education &amp; zakat fund.</text>
+
+        <text x="308" y="258" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Start / End Date:</text>
+        <text x="412" y="258" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">01 Oct 2026  15 Dec 2026</text>
+
+        <text x="600" y="258" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Assigned Users:</text>
+        <text x="700" y="258" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">Ansari Afzal, Fatima S., +3 more</text>
+
+        <rect x="308" y="276" width="580" height="8" rx="4" fill="#F3F4F6"/>
+        <rect x="308" y="276" width="475" height="8" rx="4" fill="#7A1424"/>
+        <text x="988" y="284" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">980 / 1,200 (82%)</text>
+      </g>
+
+      <!-- Project Item 2 -->
+      <g id="Project Card Row 2">
+        <rect x="288" y="328" width="720" height="132" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+        <text x="308" y="356" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1B2437">Mega National Job Fair  Mumbai</text>
+        <rect x="568" y="340" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="598" y="355" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+        <text x="988" y="355" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit Project</text>
+
+        <text x="308" y="378" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Calling registered students and job seekers for slot confirmation and resume screening.</text>
+
+        <text x="308" y="406" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Start / End Date:</text>
+        <text x="412" y="406" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">10 Oct 2026  20 Nov 2026</text>
+
+        <text x="600" y="406" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Assigned Users:</text>
+        <text x="700" y="406" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">Syed Mudassir, Rehan Q., +2 more</text>
+
+        <rect x="308" y="424" width="580" height="8" rx="4" fill="#F3F4F6"/>
+        <rect x="308" y="424" width="330" height="8" rx="4" fill="#C9A04A"/>
+        <text x="988" y="432" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">860 / 1,500 (57%)</text>
+      </g>
+
+      <!-- Project Item 3 -->
+      <g id="Project Card Row 3">
+        <rect x="288" y="476" width="720" height="132" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+        <text x="308" y="504" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1B2437">Industry Mentorship &amp; Volunteer Connect</text>
+        <rect x="614" y="488" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="644" y="503" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+        <text x="988" y="503" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit Project</text>
+
+        <text x="308" y="526" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Onboarding working professionals for weekend student mentorship sessions.</text>
+
+        <text x="308" y="554" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Start / End Date:</text>
+        <text x="412" y="554" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">15 Oct 2026  30 Nov 2026</text>
+
+        <text x="600" y="554" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Assigned Users:</text>
+        <text x="700" y="554" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">Ansari Afzal, Rehan Q., +1 more</text>
+
+        <rect x="308" y="572" width="580" height="8" rx="4" fill="#F3F4F6"/>
+        <rect x="308" y="572" width="464" height="8" rx="4" fill="#047857"/>
+        <text x="988" y="580" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">640 / 800 (80%)</text>
+      </g>
+
+      <!-- Project Item 4 (Closed) -->
+      <g id="Project Card Row 4">
+        <rect x="288" y="624" width="720" height="120" rx="10" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+        <text x="308" y="652" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#6B7694">Annual Teachers Training Workshop</text>
+        <rect x="576" y="636" width="60" height="22" rx="11" fill="#E5E7EB"/>
+        <text x="606" y="651" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">Closed</text>
+        <text x="988" y="651" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">View Report</text>
+
+        <text x="308" y="676" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">Start / End Date: 01 Sep 2026  30 Sep 2026 " Assigned Users: 4 Callers</text>
+        <rect x="308" y="700" width="580" height="8" rx="4" fill="#047857"/>
+        <text x="988" y="708" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#047857">500 / 500 (100%)</text>
+      </g>
+    </g>
+
+    <!-- Right Form Card: Create / Edit Project (BRD Section 4B Fields) -->
+    <g id="Create Edit Project Form Card">
+      <rect x="1044" y="88" width="364" height="780" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <text x="1068" y="122" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#1B2437">Create / Edit Project</text>
+      <text x="1068" y="142" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">Configure project details &amp; assign callers</text>
+      <line x1="1044" y1="158" x2="1408" y2="158" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Field 1: Project Name * -->
+      <text x="1068" y="186" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Project Name <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="194" width="316" height="42" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1082" y="220" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">Ramadan Zakat &amp; Scholarship Drive</text>
+
+      <!-- Field 2: Description -->
+      <text x="1068" y="260" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Description</text>
+      <rect x="1068" y="268" width="316" height="72" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1082" y="292" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">Outreach to past and prospective donors</text>
+      <text x="1082" y="310" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">for annual higher education &amp; zakat fund.</text>
+
+      <!-- Field 3: Start / End Date -->
+      <text x="1068" y="366" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Start Date</text>
+      <rect x="1068" y="374" width="152" height="42" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1080" y="400" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">01 Oct 2026</text>
+
+      <text x="1232" y="366" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">End Date</text>
+      <rect x="1232" y="374" width="152" height="42" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1244" y="400" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">15 Dec 2026</text>
+
+      <!-- Field 4: Status * (Active / Closed) -->
+      <text x="1068" y="444" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Project Status <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="452" width="152" height="40" rx="8" fill="#7A1424" fill-opacity="0.08" stroke="#7A1424" stroke-width="1.2"/>
+      <text x="1144" y="477" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#7A1424">Ï Active</text>
+
+      <rect x="1232" y="452" width="152" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1308" y="477" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Ë Closed</text>
+
+      <!-- Field 5: Assigned Users * -->
+      <text x="1068" y="520" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Assigned Users <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="528" width="316" height="156" rx="8" fill="#F9FAFB" stroke="#D1D5DB" stroke-width="1"/>
+
+      <!-- Selected User Checkboxes -->
+      <rect x="1082" y="542" width="16" height="16" rx="4" fill="#7A1424"/>
+      <path d="M1085.5 550L1088.5 553L1094.5 547" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="1108" y="555" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Ansari Mohammed Afzal</text>
+
+      <rect x="1082" y="574" width="16" height="16" rx="4" fill="#7A1424"/>
+      <path d="M1085.5 582L1088.5 585L1094.5 579" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="1108" y="587" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Fatima Siddiqui</text>
+
+      <rect x="1082" y="606" width="16" height="16" rx="4" fill="#7A1424"/>
+      <path d="M1085.5 614L1088.5 617L1094.5 611" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="1108" y="619" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Syed Mudassir Ali</text>
+
+      <rect x="1082" y="638" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1.5"/>
+      <text x="1108" y="651" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Rehan Qureshi</text>
+
+      <!-- Save Project Button -->
+      <rect x="1068" y="712" width="316" height="44" rx="8" fill="#7A1424"/>
+      <text x="1226" y="739" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Save Project Changes</text>
+    </g>
+  </g>
+</svg>

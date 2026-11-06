@@ -1,0 +1,165 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="drawer-shadow" x="860" y="0" width="580" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-8"/>
+      <feGaussianBlur stdDeviation="12"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.14 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+
+  <!-- Underlying Contacts Database Screen -->
+  <g id="Background Contacts Screen">
+    <rect width="1440" height="900" fill="#FBF1F2"/>
+    <rect x="0" y="0" width="236" height="900" fill="#7A1424"/>
+    <rect x="12" y="16" width="52" height="36" rx="8" fill="#FFFFFF"/>
+    <text x="38" y="37" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="800" fill="#27272A">AMP</text>
+    <text x="74" y="30" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Call Tracker</text>
+    <rect x="12" y="184" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0.18"/>
+    <text x="55" y="211" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Contacts Database</text>
+
+    <text x="268" y="48" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#1B2437">Contacts Database &amp; Assignment</text>
+    <rect x="268" y="86" width="1140" height="56" rx="12" fill="#FFFFFF" stroke="#F3F4F6"/>
+    <rect x="268" y="158" width="1140" height="710" rx="12" fill="#FFFFFF" stroke="#F3F4F6"/>
+    <text x="318" y="308" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Dr. Tariq Siddiqui " 7738251877</text>
+    <text x="318" y="381" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Imran Ahmed Khan " 9820411234</text>
+    <text x="318" y="454" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Sana Fatima Shaikh " 9819223344</text>
+  </g>
+
+  <!-- Dimmed Backdrop -->
+  <rect id="Backdrop" width="1440" height="900" fill="#000000" fill-opacity="0.45"/>
+
+  <!-- Right Slide-over Contact 360° & Complete Call History Drawer (width: 540px, x=900..1440) -->
+  <g id="Contact 360 History Drawer" filter="url(#drawer-shadow)">
+    <rect x="900" y="0" width="540" height="900" fill="#FFFFFF"/>
+
+    <!-- Drawer Top Header -->
+    <g id="Drawer Header">
+      <rect x="900" y="0" width="540" height="84" fill="#7A1424"/>
+      <text x="928" y="34" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Dr. Tariq Siddiqui</text>
+      <rect x="1100" y="18" width="74" height="22" rx="11" fill="#C9A04A"/>
+      <text x="1137" y="33" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Volunteer</text>
+      <text x="928" y="58" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#FFFFFF" fill-opacity="0.85">Mobile: 7738251877 (Unique ID) " Alt: 9820112233</text>
+
+      <!-- Close Button -->
+      <rect x="1384" y="24" width="32" height="32" rx="8" fill="#FFFFFF" fill-opacity="0.15"/>
+      <path d="M1395 35L1405 45M1405 35L1395 45" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Contact Profile Metadata & Multi-Project Links (BRD Section 4A & 7) -->
+    <g id="Contact Metadata Grid">
+      <rect x="924" y="100" width="492" height="148" rx="10" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+
+      <text x="942" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#6B7694">EMAIL ADDRESS</text>
+      <text x="942" y="142" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">tariq.siddiqui@gmail.com</text>
+
+      <text x="1180" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#6B7694">CITY, STATE &amp; PIN CODE</text>
+      <text x="1180" y="142" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Mumbai, MH  400008</text>
+
+      <line x1="942" y1="156" x2="1398" y2="156" stroke="#E5E7EB" stroke-width="1"/>
+
+      <text x="942" y="176" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#6B7694">LINKED AMP PROJECTS (2)</text>
+      <rect x="942" y="184" width="118" height="24" rx="6" fill="#7A1424" fill-opacity="0.1"/>
+      <text x="1001" y="200" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#7A1424">Mentorship Drive</text>
+      <rect x="1068" y="184" width="102" height="24" rx="6" fill="#FEF3C7"/>
+      <text x="1119" y="200" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#92400E">Zakat Fund Drive</text>
+
+      <text x="1196" y="176" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#6B7694">ASSIGNED COORDINATOR</text>
+      <text x="1196" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Ansari M. Afzal</text>
+      <text x="1338" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Reassign</text>
+
+      <!-- Pending Follow-up Banner inside Profile -->
+      <rect x="942" y="216" width="456" height="24" rx="6" fill="#FEF3C7"/>
+      <text x="954" y="232" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#92400E">PENDING FOLLOW-UP: Due Today, 30 Oct 2026 at 05:00 PM (Mentorship Drive)</text>
+    </g>
+
+    <!-- Complete Call History Timeline Header -->
+    <g id="Timeline Section Header">
+      <text x="924" y="278" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#1B2437">Complete Call &amp; Note History (3 Attempts)</text>
+      <text x="1416" y="278" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">All Projects</text>
+    </g>
+
+    <!-- Vertical Timeline Line -->
+    <line x1="940" y1="304" x2="940" y2="780" stroke="#E5E7EB" stroke-width="2"/>
+
+    <!-- Timeline Item 1: Attempt #3 (Latest) -->
+    <g id="Attempt 3 Card">
+      <circle cx="940" cy="316" r="7" fill="#7A1424"/>
+      <rect x="960" y="294" width="456" height="156" rx="10" fill="#FFFFFF" stroke="#7A1424" stroke-width="1.2"/>
+      <rect x="976" y="308" width="76" height="22" rx="6" fill="#7A1424" fill-opacity="0.1"/>
+      <text x="1014" y="323" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#7A1424">Attempt #3</text>
+
+      <rect x="1060" y="308" width="78" height="22" rx="11" fill="#D1FAE5"/>
+      <text x="1099" y="323" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Connected</text>
+
+      <rect x="1146" y="308" width="74" height="22" rx="11" fill="#FEF3C7"/>
+      <text x="1183" y="323" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#92400E">Interested</text>
+
+      <text x="1400" y="323" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">29 Oct 2026, 11:57 AM</text>
+
+      <text x="976" y="350" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">Project: Mentorship Drive " Caller: Ansari Mohammed Afzal " Duration: 3m 12s</text>
+
+      <rect x="976" y="362" width="424" height="50" rx="6" fill="#F9FAFB" stroke="#F3F4F6"/>
+      <text x="988" y="382" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">"Spoke with Dr. Tariq. Very interested in joining the Saturday</text>
+      <text x="988" y="400" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">career guidance panel. Asked to call tomorrow at 5 PM."</text>
+
+      <text x="976" y="434" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1E40AF">Follow-up Scheduled: 30 Oct 2026, 05:00 PM</text>
+    </g>
+
+    <!-- Timeline Item 2: Attempt #2 -->
+    <g id="Attempt 2 Card">
+      <circle cx="940" cy="488" r="6" fill="#C9A04A"/>
+      <rect x="960" y="466" width="456" height="140" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+      <rect x="976" y="480" width="76" height="22" rx="6" fill="#F3F4F6"/>
+      <text x="1014" y="495" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">Attempt #2</text>
+
+      <rect x="1060" y="480" width="96" height="22" rx="11" fill="#DBEAFE"/>
+      <text x="1108" y="495" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#1E40AF">Call Back Later</text>
+
+      <text x="1400" y="495" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">26 Oct 2026, 02:30 PM</text>
+
+      <text x="976" y="522" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">Project: Mentorship Drive " Caller: Ansari Mohammed Afzal " Duration: 42s</text>
+
+      <rect x="976" y="534" width="424" height="54" rx="6" fill="#F9FAFB" stroke="#F3F4F6"/>
+      <text x="988" y="556" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">"In clinic consultation right now. Requested a callback on</text>
+      <text x="988" y="574" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">Thursday morning."</text>
+    </g>
+
+    <!-- Timeline Item 3: Attempt #1 (Different Project: Zakat Fund Drive) -->
+    <g id="Attempt 1 Card">
+      <circle cx="940" cy="644" r="6" fill="#6B7694"/>
+      <rect x="960" y="622" width="456" height="148" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+      <rect x="976" y="636" width="76" height="22" rx="6" fill="#F3F4F6"/>
+      <text x="1014" y="651" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">Attempt #1</text>
+
+      <rect x="1060" y="636" width="78" height="22" rx="11" fill="#D1FAE5"/>
+      <text x="1099" y="651" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Connected</text>
+
+      <rect x="1146" y="636" width="74" height="22" rx="11" fill="#FEF3C7"/>
+      <text x="1183" y="651" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#92400E">Interested</text>
+
+      <text x="1400" y="651" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">14 Oct 2026, 04:15 PM</text>
+
+      <text x="976" y="678" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#92400E">Project: Zakat Fund Drive " Caller: Fatima Siddiqui " Duration: 4m 10s</text>
+
+      <rect x="976" y="690" width="424" height="62" rx="6" fill="#F9FAFB" stroke="#F3F4F6"/>
+      <text x="988" y="710" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">"Contributed to higher education scholarship fund. Also</text>
+      <text x="988" y="728" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#1B2437">expressed interest in volunteering for student mentorship."</text>
+      <text x="988" y="744" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="500" fill="#6B7694">Note preserved when contact was linked to Mentorship Drive</text>
+    </g>
+
+    <!-- Drawer Bottom Action Footer -->
+    <g id="Drawer Footer">
+      <line x1="900" y1="824" x2="1440" y2="824" stroke="#E5E7EB" stroke-width="1"/>
+      <rect x="924" y="840" width="236" height="44" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1042" y="867" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#1B2437">Edit Contact Profile</text>
+
+      <rect x="1176" y="840" width="240" height="44" rx="8" fill="#7A1424"/>
+      <text x="1296" y="867" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Log / Update Call Outcome</text>
+    </g>
+  </g>
+</svg>

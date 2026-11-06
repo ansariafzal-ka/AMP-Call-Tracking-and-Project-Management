@@ -1,0 +1,252 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fab-shadow" x="298" y="752" width="84" height="84" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="6"/>
+      <feGaussianBlur stdDeviation="7"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.502 0 0 0 0 0.075 0 0 0 0 0.129 0 0 0 0.35 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+
+  <!-- Screen Background -->
+  <rect id="Screen Background" width="390" height="844" fill="#FBF2F3"/>
+
+  <!-- Top App Bar (y=44, margin-bottom: 20px) -->
+  <g id="Top App Bar">
+    <!-- AMP Logo (48x36px, margin-right: 10px) -->
+    <g id="AMP Logo">
+      <rect x="20" y="44" width="48" height="36" rx="8" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+      <circle cx="41" cy="52.5" r="1.9" fill="#B91C1C"/>
+      <circle cx="47" cy="52.5" r="1.9" fill="#B91C1C"/>
+      <text x="44" y="65" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="800" fill="#27272A">AMP</text>
+      <path d="M27 69.5C33 73 40 73.5 46 70.5" stroke="#B91C1C" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M42 72C48 72 55 70 60 68" stroke="#B91C1C" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+
+    <!-- Stacked Title & Subtitle -->
+    <text x="78" y="60" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="600" fill="#801321">Call Tracker</text>
+    <text x="78" y="79" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Ansari Mohammed Afzal</text>
+
+    <!-- Feather settings gear icon (22px #801321) -->
+    <g id="Icon / settings" transform="translate(346, 51)">
+      <circle cx="11" cy="11" r="3" stroke="#801321" stroke-width="1.8"/>
+      <path d="M17.8 13.8A1.5 1.5 0 0 0 18.1 15.45L18.16 15.51A1.82 1.82 0 1 1 15.58 18.09L15.52 18.03A1.5 1.5 0 0 0 13.87 17.73A1.5 1.5 0 0 0 12.95 19.12V19.29A1.82 1.82 0 1 1 9.31 19.29V19.2A1.5 1.5 0 0 0 8.31 17.73A1.5 1.5 0 0 0 6.66 18.03L6.6 18.09A1.82 1.82 0 1 1 4.02 15.51L4.08 15.45A1.5 1.5 0 0 0 4.38 13.8A1.5 1.5 0 0 0 2.99 12.88H2.82A1.82 1.82 0 1 1 2.82 9.24H2.91A1.5 1.5 0 0 0 4.38 8.24A1.5 1.5 0 0 0 4.08 6.59L4.02 6.53A1.82 1.82 0 1 1 6.6 3.95L6.66 4.01A1.5 1.5 0 0 0 8.31 4.31H8.4A1.5 1.5 0 0 0 9.31 2.92V2.75A1.82 1.82 0 1 1 12.95 2.75V2.84A1.5 1.5 0 0 0 13.87 4.31A1.5 1.5 0 0 0 15.52 4.01L15.58 3.95A1.82 1.82 0 1 1 18.16 6.53L18.1 6.59A1.5 1.5 0 0 0 17.8 8.24V8.33A1.5 1.5 0 0 0 19.19 9.24H19.36A1.82 1.82 0 1 1 19.36 12.88H19.27A1.5 1.5 0 0 0 17.8 13.8Z" stroke="#801321" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Summary KPI Row (2 equal-width cards side-by-side, gap: 12px -> each 169px wide) -->
+  <g id="Summary KPI Row">
+    <!-- Card 1: TOTAL CALLS -->
+    <g id="KPI Card 1 / Total Calls">
+      <rect x="20" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+      <text x="36" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" letter-spacing="0.5" fill="#64748B">TOTAL CALLS</text>
+      <text x="36" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">13</text>
+    </g>
+
+    <!-- Card 2: TOTAL TALK TIME -->
+    <g id="KPI Card 2 / Total Talk Time">
+      <rect x="201" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+      <text x="217" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" letter-spacing="0.5" fill="#64748B">TOTAL TALK TIME</text>
+      <text x="217" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">1m 00s</text>
+    </g>
+  </g>
+
+  <!-- Section Header Row -->
+  <g id="Section Header">
+    <text x="20" y="218" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="600" fill="#1E293B">Call History</text>
+    <text x="370" y="218" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="400" fill="#64748B">13 recorded</text>
+  </g>
+
+  <!-- Search & Filter Bar (gap: 10px, height: 42px) -->
+  <g id="Search and Filter Bar">
+    <!-- Search Box (width: 298px, height: 42px) -->
+    <g id="Search Box">
+      <rect x="20" y="232" width="298" height="42" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+      <!-- Feather search icon (16px #64748B) -->
+      <g transform="translate(34, 245)">
+        <circle cx="7.1" cy="7.1" r="5.3" stroke="#64748B" stroke-width="1.75"/>
+        <path d="M14.2 14.2L11 11" stroke="#64748B" stroke-width="1.75" stroke-linecap="round"/>
+      </g>
+      <text x="58" y="258" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Search number or purpose</text>
+    </g>
+
+    <!-- Filter Button (42x42px, #801321 fill, Feather sliders icon) -->
+    <g id="Filter Button">
+      <rect x="328" y="232" width="42" height="42" rx="10" fill="#801321"/>
+      <g transform="translate(340, 244)">
+        <line x1="3" y1="15.75" x2="3" y2="10.5" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="3" y1="7.5" x2="3" y2="2.25" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="9" y1="15.75" x2="9" y2="9" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="9" y1="6" x2="9" y2="2.25" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="15" y1="15.75" x2="15" y2="12" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="15" y1="9" x2="15" y2="2.25" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="0.75" y1="10.5" x2="5.25" y2="10.5" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="6.75" y1="6" x2="11.25" y2="6" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+        <line x1="12.75" y1="12" x2="17.25" y2="12" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Call History Cards List (vertical stack gap: 12px) -->
+  <g id="Call History Cards List">
+    <!-- CALL CARD 1 (Follow-up Scheduled example) -->
+    <g id="Call Card 1 / Follow-up Scheduled">
+      <rect x="20" y="288" width="350" height="160" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+
+      <!-- Row 1: Phone Number + Status Pill Answered -->
+      <text x="36" y="318" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="600" fill="#1E293B">7738251877</text>
+      <g id="Status Pill / Answered">
+        <rect x="258" y="300" width="96" height="26" rx="13" fill="#ECFDF5"/>
+        <!-- phone-incoming icon (12px #065F46) -->
+        <g transform="translate(268, 307)">
+          <path d="M8 1L5 4M5 4H8M5 4V1" stroke="#065F46" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 8.5V10.2C11 10.7 10.5 11.2 10 11.1C7.8 10.9 5.7 10.1 4 8.9C2.5 7.9 1.3 6.7 0.3 5.2C-0.9 3.5 -1.7 1.4 -1.9 -0.8" transform="translate(1.5, 0) scale(0.9)" stroke="#065F46" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <text x="285" y="317" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#065F46">Answered</text>
+      </g>
+
+      <!-- Row 2: Outcome Pill Follow-up Required + Note -->
+      <g id="Outcome Pill / Follow-up Required">
+        <rect x="36" y="336" width="134" height="24" rx="12" fill="#FEF3C7"/>
+        <text x="103" y="352" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#92400E">Follow-up Required</text>
+      </g>
+      <text x="354" y="352" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="400" fill="#64748B">Note: Test</text>
+
+      <!-- Follow-up Date Row (aligned left below outcome pill, plain text #92400E) -->
+      <g id="Follow-up Date Row">
+        <!-- Feather calendar icon (12px #92400E) -->
+        <g transform="translate(36, 369)">
+          <rect x="1" y="2" width="10" height="9" rx="1.5" stroke="#92400E" stroke-width="1.4"/>
+          <path d="M3.5 1V3M8.5 1V3M1 5H11" stroke="#92400E" stroke-width="1.4" stroke-linecap="round"/>
+        </g>
+        <text x="53" y="379" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#92400E">09 Dec 2026, 05:00 AM</text>
+      </g>
+
+      <!-- Divider -->
+      <line x1="36" y1="394" x2="354" y2="394" stroke="#F1F5F9" stroke-width="1"/>
+
+      <!-- Row 3: Bottom metadata row -->
+      <g id="Bottom Metadata Row 1">
+        <!-- Feather clock icon (14px #801321) -->
+        <g transform="translate(36, 413)">
+          <circle cx="7" cy="7" r="5.8" stroke="#801321" stroke-width="1.5"/>
+          <path d="M7 3.8V7L9.2 8.2" stroke="#801321" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <text x="56" y="425" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">3s</text>
+
+        <text x="312" y="425" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="400" fill="#64748B">29 Oct 2026, 11:57 AM</text>
+
+        <!-- Redial Button (32x32px, rounded-lg, 1px solid #801321) -->
+        <g id="Redial Button 1">
+          <rect x="322" y="404" width="32" height="32" rx="8" fill="#FFFFFF" stroke="#801321" stroke-width="1"/>
+          <g transform="translate(330, 412) scale(0.67)">
+            <path d="M14.05 2A9 9 0 0 1 22.05 9.94M14.05 6A5 5 0 0 1 18 10M22 16.92V19.92A2 2 0 0 1 19.82 21.92A19.79 19.79 0 0 1 11.19 18.85A19.5 19.5 0 0 1 5.19 12.85A19.79 19.79 0 0 1 2.12 4.18A2 2 0 0 1 4.11 2H7.11A2 2 0 0 1 9.11 3.72A12.84 12.84 0 0 0 9.81 6.53A2 2 0 0 1 9.36 8.64L8.09 9.91A16 16 0 0 0 14.09 15.91L15.36 14.64A2 2 0 0 1 17.47 14.19A12.84 12.84 0 0 0 20.28 14.89A2 2 0 0 1 22 16.92Z" stroke="#801321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </g>
+      </g>
+    </g>
+
+    <!-- CALL CARD 2 (Interested example) -->
+    <g id="Call Card 2 / Interested">
+      <rect x="20" y="460" width="350" height="136" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+
+      <!-- Row 1 -->
+      <text x="36" y="490" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="600" fill="#1E293B">7738251877</text>
+      <g id="Status Pill / Answered 2">
+        <rect x="258" y="472" width="96" height="26" rx="13" fill="#ECFDF5"/>
+        <g transform="translate(268, 479)">
+          <path d="M8 1L5 4M5 4H8M5 4V1" stroke="#065F46" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 8.5V10.2C11 10.7 10.5 11.2 10 11.1C7.8 10.9 5.7 10.1 4 8.9C2.5 7.9 1.3 6.7 0.3 5.2C-0.9 3.5 -1.7 1.4 -1.9 -0.8" transform="translate(1.5, 0) scale(0.9)" stroke="#065F46" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <text x="285" y="489" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#065F46">Answered</text>
+      </g>
+
+      <!-- Row 2 -->
+      <g id="Outcome Pill / Interested">
+        <rect x="36" y="508" width="80" height="24" rx="12" fill="#ECFDF5"/>
+        <text x="76" y="524" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#065F46">Interested</text>
+      </g>
+      <text x="354" y="524" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="400" fill="#64748B">Note: Discussed scholarship</text>
+
+      <!-- Divider -->
+      <line x1="36" y1="544" x2="354" y2="544" stroke="#F1F5F9" stroke-width="1"/>
+
+      <!-- Row 3 -->
+      <g transform="translate(36, 563)">
+        <circle cx="7" cy="7" r="5.8" stroke="#801321" stroke-width="1.5"/>
+        <path d="M7 3.8V7L9.2 8.2" stroke="#801321" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+      <text x="56" y="575" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">45s</text>
+      <text x="312" y="575" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="400" fill="#64748B">28 Oct 2026, 04:12 PM</text>
+      <g id="Redial Button 2">
+        <rect x="322" y="554" width="32" height="32" rx="8" fill="#FFFFFF" stroke="#801321" stroke-width="1"/>
+        <g transform="translate(330, 562) scale(0.67)">
+          <path d="M14.05 2A9 9 0 0 1 22.05 9.94M14.05 6A5 5 0 0 1 18 10M22 16.92V19.92A2 2 0 0 1 19.82 21.92A19.79 19.79 0 0 1 11.19 18.85A19.5 19.5 0 0 1 5.19 12.85A19.79 19.79 0 0 1 2.12 4.18A2 2 0 0 1 4.11 2H7.11A2 2 0 0 1 9.11 3.72A12.84 12.84 0 0 0 9.81 6.53A2 2 0 0 1 9.36 8.64L8.09 9.91A16 16 0 0 0 14.09 15.91L15.36 14.64A2 2 0 0 1 17.47 14.19A12.84 12.84 0 0 0 20.28 14.89A2 2 0 0 1 22 16.92Z" stroke="#801321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- CALL CARD 3 (Not Answered example) -->
+    <g id="Call Card 3 / Not Answered">
+      <rect x="20" y="608" width="350" height="136" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+
+      <!-- Row 1 -->
+      <text x="36" y="638" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="600" fill="#1E293B">9820112233</text>
+      <g id="Status Pill / Not answered">
+        <rect x="238" y="620" width="116" height="26" rx="13" fill="#F1F5F9"/>
+        <!-- phone-missed icon (12px #475569) -->
+        <g transform="translate(248, 627)">
+          <path d="M5.5 1L8.5 4M8.5 1L5.5 4" stroke="#475569" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M11 8.5V10.2C11 10.7 10.5 11.2 10 11.1C7.8 10.9 5.7 10.1 4 8.9C2.5 7.9 1.3 6.7 0.3 5.2C-0.9 3.5 -1.7 1.4 -1.9 -0.8" transform="translate(1.5, 0) scale(0.9)" stroke="#475569" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <text x="265" y="637" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#475569">Not answered</text>
+      </g>
+
+      <!-- Row 2 -->
+      <g id="Outcome Pill / Unanswered">
+        <rect x="36" y="656" width="92" height="24" rx="12" fill="#F1F5F9"/>
+        <text x="82" y="672" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#475569">Unanswered</text>
+      </g>
+      <text x="354" y="672" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="400" fill="#64748B">No notes</text>
+
+      <!-- Divider -->
+      <line x1="36" y1="692" x2="354" y2="692" stroke="#F1F5F9" stroke-width="1"/>
+
+      <!-- Row 3 -->
+      <g transform="translate(36, 711)">
+        <circle cx="7" cy="7" r="5.8" stroke="#801321" stroke-width="1.5"/>
+        <path d="M7 3.8V7L9.2 8.2" stroke="#801321" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+      <text x="56" y="723" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">0s</text>
+      <text x="312" y="723" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="400" fill="#64748B">26 Oct 2026, 02:30 PM</text>
+      <g id="Redial Button 3">
+        <rect x="322" y="702" width="32" height="32" rx="8" fill="#FFFFFF" stroke="#801321" stroke-width="1"/>
+        <g transform="translate(330, 710) scale(0.67)">
+          <path d="M14.05 2A9 9 0 0 1 22.05 9.94M14.05 6A5 5 0 0 1 18 10M22 16.92V19.92A2 2 0 0 1 19.82 21.92A19.79 19.79 0 0 1 11.19 18.85A19.5 19.5 0 0 1 5.19 12.85A19.79 19.79 0 0 1 2.12 4.18A2 2 0 0 1 4.11 2H7.11A2 2 0 0 1 9.11 3.72A12.84 12.84 0 0 0 9.81 6.53A2 2 0 0 1 9.36 8.64L8.09 9.91A16 16 0 0 0 14.09 15.91L15.36 14.64A2 2 0 0 1 17.47 14.19A12.84 12.84 0 0 0 20.28 14.89A2 2 0 0 1 22 16.92Z" stroke="#801321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Floating Action Button (FAB)  Bottom-Right (right: 20px, bottom: 24px -> x=314, y=764) -->
+  <g id="FAB / Dialpad" filter="url(#fab-shadow)">
+    <circle cx="342" cy="792" r="28" fill="#801321"/>
+    <!-- Material dialpad icon (26px white) -->
+    <g transform="translate(331, 780)" fill="#FFFFFF">
+      <circle cx="3" cy="3" r="2"/>
+      <circle cx="11" cy="3" r="2"/>
+      <circle cx="19" cy="3" r="2"/>
+      <circle cx="3" cy="10" r="2"/>
+      <circle cx="11" cy="10" r="2"/>
+      <circle cx="19" cy="10" r="2"/>
+      <circle cx="3" cy="17" r="2"/>
+      <circle cx="11" cy="17" r="2"/>
+      <circle cx="19" cy="17" r="2"/>
+      <circle cx="11" cy="24" r="2"/>
+    </g>
+  </g>
+</svg>

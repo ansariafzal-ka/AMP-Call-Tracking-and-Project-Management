@@ -1,0 +1,94 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="card-shadow" x="504" y="182" width="432" height="536" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="2"/>
+      <feGaussianBlur stdDeviation="4"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+    <filter id="logo-shadow" x="688" y="219" width="64" height="40" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="1"/>
+      <feGaussianBlur stdDeviation="1"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+
+  <!-- Page Background -->
+  <rect id="Page Background" width="1440" height="900" fill="#FBF1F2"/>
+
+  <!-- Centered Login Card (width: 416px, padding: 32px) -->
+  <g id="Login Card" filter="url(#card-shadow)">
+    <rect x="512" y="188" width="416" height="524" rx="12" fill="#FFFFFF"/>
+    <rect x="512.5" y="188.5" width="415" height="523" rx="11.5" stroke="#F3F4F6"/>
+  </g>
+
+  <!-- Top Header -->
+  <g id="Header">
+    <!-- AMP Logo Badge -->
+    <g id="AMP Logo Badge" filter="url(#logo-shadow)">
+      <rect x="690" y="220" width="60" height="36" rx="8" fill="#FFFFFF"/>
+      <rect x="690.5" y="220.5" width="59" height="35" rx="7.5" stroke="#F3F4F6"/>
+      <circle cx="716.5" cy="228.5" r="2.2" fill="#B91C1C"/>
+      <circle cx="723.5" cy="228.5" r="2.2" fill="#B91C1C"/>
+      <text x="720" y="242" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="800" letter-spacing="0.5" fill="#27272A">AMP</text>
+      <path d="M699 246.5C706 250.5 715 251 722 247.5" stroke="#B91C1C" stroke-width="2" stroke-linecap="round"/>
+      <path d="M718 249.5C726 249.5 734 247 741 244.5" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <text id="Title" x="720" y="284" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#1B2437">AMP Call Tracker</text>
+    <text id="Subtitle" x="720" y="306" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#6B7694">Sign in to manage projects, contacts &amp; calling activity</text>
+  </g>
+
+  <!-- Role Selector Segmented Pill (Admin / User) -->
+  <g id="Role Switcher">
+    <rect x="544" y="328" width="352" height="40" rx="8" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="548" y="332" width="172" height="32" rx="6" fill="#7A1424"/>
+    <text x="634" y="353" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">User / Caller</text>
+    <text x="806" y="353" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Admin Portal</text>
+  </g>
+
+  <!-- Form -->
+  <g id="Login Form">
+    <!-- Field 1: Mobile or Email -->
+    <g id="Email or Mobile Field">
+      <text x="544" y="396" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#1B2437">Mobile number or Email</text>
+      <rect x="544" y="404" width="352" height="44" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="558" y="431" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#1B2437">afzal@ampindia.org</text>
+    </g>
+
+    <!-- Field 2: Password -->
+    <g id="Password Field">
+      <text x="544" y="476" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#1B2437">Password</text>
+      <text x="896" y="476" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#7A1424">Forgot password?</text>
+      <rect x="544" y="484" width="352" height="44" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="558" y="511" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#1B2437">••••••••••••</text>
+      <!-- Lucide Eye Icon -->
+      <g id="Icon / Eye" transform="translate(866, 497)">
+        <path d="M1.5 9C1.5 9 4.5 3.75 9 3.75C13.5 3.75 16.5 9 16.5 9C16.5 9 13.5 14.25 9 14.25C4.5 14.25 1.5 9 1.5 9Z" stroke="#6B7694" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="9" r="2.25" stroke="#6B7694" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- Primary Button: Sign in -->
+    <g id="Primary Button / Sign In">
+      <rect x="544" y="552" width="352" height="44" rx="8" fill="#7A1424"/>
+      <text x="720" y="579" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Sign in to Call Tracker</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <g id="Footer">
+    <line x1="544" y1="624" x2="896" y2="624" stroke="#F3F4F6" stroke-width="1"/>
+    <text x="720" y="654" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">Association of Muslim Professionals • Secure Role-Based Access</text>
+    <text x="720" y="678" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#7A1424">Need an account? Contact your AMP Project Admin</text>
+  </g>
+</svg>

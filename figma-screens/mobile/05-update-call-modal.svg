@@ -1,0 +1,106 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Underlying Dashboard Preview -->
+  <g id="Background Dashboard">
+    <rect width="390" height="844" fill="#FBF2F3"/>
+    <rect x="20" y="44" width="48" height="36" rx="8" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="44" y="65" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="800" fill="#27272A">AMP</text>
+    <text x="78" y="60" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="600" fill="#801321">Call Tracker</text>
+    <text x="78" y="79" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Ansari Mohammed Afzal</text>
+
+    <rect x="20" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="36" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#64748B">TOTAL CALLS</text>
+    <text x="36" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">13</text>
+
+    <rect x="201" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="217" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#64748B">TOTAL TALK TIME</text>
+    <text x="217" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">1m 00s</text>
+  </g>
+
+  <!-- Dimmed Backdrop (rgba(15, 23, 42, 0.45)) -->
+  <rect id="Dimmed Backdrop" width="390" height="844" fill="#0F172A" fill-opacity="0.45"/>
+
+  <!-- Bottom Sheet Container (#FFFFFF, top corners 20px radius, padding: 20px) -->
+  <g id="Update Call Bottom Sheet">
+    <path d="M0 212C0 200.954 8.95431 192 20 192H370C381.046 192 390 200.954 390 212V844H0V212Z" fill="#FFFFFF"/>
+
+    <!-- Header (margin-bottom: 16px) -->
+    <g id="Sheet Header">
+      <text x="20" y="228" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="18" font-weight="700" fill="#1E293B">Update Call</text>
+      <text x="20" y="248" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="400" fill="#64748B">7738251877 " 29 Oct 2026, 11:57 AM</text>
+    </g>
+
+    <!-- Field 1  Note -->
+    <g id="Field 1 / Note">
+      <text x="20" y="280" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Note <tspan font-size="12" font-weight="400" fill="#94A3B8">(Optional)</tspan></text>
+      <rect x="20" y="288" width="350" height="84" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="34" y="312" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#1E293B">Test</text>
+      <text x="358" y="362" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="400" fill="#94A3B8">4/255</text>
+    </g>
+
+    <!-- Field 2  Outcome (margin-top: 14px) -->
+    <g id="Field 2 / Outcome">
+      <text x="20" y="398" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Outcome <tspan fill="#EF4444">*</tspan></text>
+
+      <!-- Row 1: Interested -->
+      <g id="Option / Interested">
+        <rect x="20" y="408" width="350" height="44" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+        <text x="34" y="435" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="500" fill="#1E293B">Interested</text>
+      </g>
+
+      <!-- Row 2: Not Interested -->
+      <g id="Option / Not Interested">
+        <rect x="20" y="460" width="350" height="44" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+        <text x="34" y="487" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="500" fill="#1E293B">Not Interested</text>
+      </g>
+
+      <!-- Row 3: Unanswered -->
+      <g id="Option / Unanswered">
+        <rect x="20" y="512" width="350" height="44" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+        <text x="34" y="539" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="500" fill="#1E293B">Unanswered</text>
+      </g>
+
+      <!-- Row 4: Follow-up Required (Selected) -->
+      <g id="Option / Follow-up Required (Selected)">
+        <rect x="20" y="564" width="350" height="44" rx="10" fill="#FDF2F3" stroke="#801321" stroke-width="1.5"/>
+        <text x="34" y="591" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="600" fill="#801321">Follow-up Required</text>
+        <!-- Feather check icon (16px #801321) -->
+        <g transform="translate(340, 578)">
+          <path d="M13.33 4L6 11.33L2.67 8" stroke="#801321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Field 3  Schedule Follow-up Box (#FFFBEB container, 1px solid #FDE68A, radius 12px, padding 12px) -->
+    <g id="Field 3 / Schedule Follow-up Box">
+      <rect x="20" y="622" width="350" height="122" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+      <text x="32" y="644" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#92400E">Schedule Follow-up *</text>
+
+      <!-- Selected Date Preview Badge (#FEF3C7 bg, radius 8px, padding 8px 10px) -->
+      <rect x="32" y="654" width="326" height="36" rx="8" fill="#FEF3C7"/>
+      <g transform="translate(42, 665)">
+        <circle cx="7" cy="7" r="5.8" stroke="#B45309" stroke-width="1.5"/>
+        <path d="M7 3.8V7L9.2 8.2" stroke="#B45309" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+      <text x="62" y="677" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#92400E">09 Dec 2026, 05:00 AM</text>
+
+      <!-- Pick Date & Time chip button -->
+      <rect x="32" y="700" width="142" height="32" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+      <!-- Feather edit-3 icon (13px #801321) -->
+      <g transform="translate(44, 710)">
+        <path d="M6.5 10.8H11.4M9 1.9C9.4 1.5 10 1.5 10.4 1.9C10.8 2.3 10.8 2.9 10.4 3.3L3.6 10.1L1.4 10.6L1.9 8.4L9 1.9Z" stroke="#801321" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <text x="63" y="720" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Pick Date &amp; Time</text>
+    </g>
+
+    <!-- Bottom Action Buttons (margin-top: 20px, gap: 12px -> each 169px wide, height 48px) -->
+    <g id="Bottom Action Buttons">
+      <!-- Cancel Button -->
+      <rect x="20" y="764" width="169" height="48" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="104.5" y="793" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#64748B">Cancel</text>
+
+      <!-- Save Button -->
+      <rect x="201" y="764" width="169" height="48" rx="10" fill="#801321"/>
+      <text x="285.5" y="793" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Save</text>
+    </g>
+  </g>
+</svg>

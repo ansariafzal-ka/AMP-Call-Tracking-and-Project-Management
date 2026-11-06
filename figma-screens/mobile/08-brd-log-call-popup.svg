@@ -1,0 +1,169 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Underlying Assigned Contacts Screen Preview -->
+  <g id="Background Screen">
+    <rect width="390" height="844" fill="#FBF2F3"/>
+    <rect x="20" y="44" width="48" height="36" rx="8" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="44" y="65" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="800" fill="#27272A">AMP</text>
+    <text x="78" y="60" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="18" font-weight="700" fill="#801321">Assigned Contacts</text>
+    <text x="78" y="77" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="400" fill="#64748B">Returning from phone dialer...</text>
+  </g>
+
+  <!-- Dimmed Backdrop (rgba(15, 23, 42, 0.5)) -->
+  <rect id="Dimmed Backdrop" width="390" height="844" fill="#0F172A" fill-opacity="0.5"/>
+
+  <!-- Bottom Sheet Container (y=76..844, top corners 24px radius) -->
+  <g id="BRD Log Call Auto-Popup">
+    <path d="M0 100C0 86.7452 10.7452 76 24 76H366C379.255 76 390 86.7452 390 100V844H0V100Z" fill="#FFFFFF"/>
+
+    <!-- Top Drag Handle & Header -->
+    <rect x="171" y="86" width="48" height="4" rx="2" fill="#CBD5E1"/>
+    <text x="20" y="116" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="18" font-weight="700" fill="#1E293B">Log Call Outcome</text>
+    <rect x="266" y="99" width="104" height="24" rx="12" fill="#ECFDF5"/>
+    <circle cx="278" cy="111" r="3.5" fill="#065F46"/>
+    <text x="323" y="115" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#065F46">Auto-Captured</text>
+
+    <!-- ==================================================================== -->
+    <!-- PART A: AUTO-FILLED BY SYSTEM (VIEW ONLY)  BRD Section 3A          -->
+    <!-- ==================================================================== -->
+    <g id="Part A / System Auto-Filled Card">
+      <rect x="20" y="130" width="350" height="174" rx="12" fill="#FBF2F3" stroke="#F1E3E5" stroke-width="1"/>
+
+      <!-- Row 1: Contact Name, Mobile Number, Attempt No., Call Duration -->
+      <text x="34" y="152" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="700" fill="#1E293B">Dr. Tariq Siddiqui</text>
+      <text x="34" y="170" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">+91 77382 51877</text>
+
+      <rect x="210" y="139" width="72" height="22" rx="6" fill="#801321" fill-opacity="0.1"/>
+      <text x="246" y="154" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="700" fill="#801321">Attempt #3</text>
+
+      <rect x="288" y="139" width="68" height="22" rx="6" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="322" y="154" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="700" fill="#1E293B">01m 12s</text>
+
+      <!-- Row 2: Project, Category & City, Call Date & Time -->
+      <rect x="34" y="178" width="112" height="20" rx="5" fill="#FFFFFF" stroke="#F1E3E5"/>
+      <text x="90" y="192" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#801321">Zakat Fund Drive</text>
+
+      <rect x="152" y="178" width="98" height="20" rx="5" fill="#FEF3C7"/>
+      <text x="201" y="192" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#92400E">Donor " Mumbai</text>
+
+      <text x="356" y="192" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="500" fill="#64748B">30 Oct, 11:57 AM</text>
+
+      <line x1="34" y1="206" x2="356" y2="206" stroke="#F1E3E5" stroke-width="1"/>
+
+      <!-- Row 3: Last Call Date & Status + Last Note -->
+      <text x="34" y="222" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.4" fill="#64748B">LAST CALL (26 OCT " CALL BACK LATER) &amp; LAST NOTE:</text>
+      <text x="34" y="238" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="500" fill="#1E293B">"In clinic consultation, asked to call on Friday morning"</text>
+
+      <!-- Row 4: Pending Follow-up & Caller Name -->
+      <rect x="34" y="246" width="322" height="22" rx="5" fill="#FEF3C7"/>
+      <text x="42" y="261" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#92400E">Pending Follow-up: Due Today, 30 Oct " Caller: Ansari M. Afzal</text>
+
+      <text x="34" y="294" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="500" fill="#64748B">Auto-filled from Contact Database &amp; System Clock (Read-Only)</text>
+    </g>
+
+    <!-- ==================================================================== -->
+    <!-- PART B: FILLED BY USER (QUICK SELECTION)  BRD Section 3B            -->
+    <!-- ==================================================================== -->
+
+    <!-- 1. Call Status * (6 Quick Selection Chips) -->
+    <g id="Field 1 / Call Status (Mandatory)">
+      <text x="20" y="328" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="700" fill="#1E293B">1. Call Status <tspan fill="#EF4444">*</tspan></text>
+
+      <!-- Connected (Selected) -->
+      <rect x="20" y="338" width="110" height="36" rx="10" fill="#801321"/>
+      <text x="75" y="361" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#FFFFFF"> Connected</text>
+
+      <!-- Not Answered -->
+      <rect x="138" y="338" width="112" height="36" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="194" y="361" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="500" fill="#475569">Not Answered</text>
+
+      <!-- Busy -->
+      <rect x="258" y="338" width="112" height="36" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="314" y="361" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="500" fill="#475569">Busy</text>
+
+      <!-- Switched Off -->
+      <rect x="20" y="382" width="110" height="36" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="75" y="405" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="500" fill="#475569">Switched Off</text>
+
+      <!-- Call Back Later -->
+      <rect x="138" y="382" width="112" height="36" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="194" y="405" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="500" fill="#475569">Call Back Later</text>
+
+      <!-- Wrong Number -->
+      <rect x="258" y="382" width="112" height="36" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="314" y="405" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="500" fill="#475569">Wrong Number</text>
+    </g>
+
+    <!-- 2. Interest Level * (Only if Connected: Interested / Maybe / Not Interested) -->
+    <g id="Field 2 / Interest Level">
+      <text x="20" y="444" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="700" fill="#1E293B">2. Interest Level <tspan fill="#EF4444">*</tspan> <tspan font-size="11" font-weight="400" fill="#64748B">(Since Connected)</tspan></text>
+
+      <!-- Interested (Selected) -->
+      <rect x="20" y="454" width="110" height="38" rx="10" fill="#ECFDF5" stroke="#065F46" stroke-width="1.5"/>
+      <text x="75" y="478" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="700" fill="#065F46"> Interested</text>
+
+      <!-- Maybe -->
+      <rect x="138" y="454" width="112" height="38" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="194" y="478" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Maybe</text>
+
+      <!-- Not Interested -->
+      <rect x="258" y="454" width="112" height="38" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="314" y="478" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Not Interested</text>
+    </g>
+
+    <!-- 3. Notes (Short text, Optional) -->
+    <g id="Field 3 / Notes">
+      <text x="20" y="516" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="700" fill="#1E293B">3. Discussion Notes <tspan font-size="11" font-weight="400" fill="#94A3B8">(Optional)</tspan></text>
+      <rect x="20" y="524" width="350" height="54" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="32" y="548" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="400" fill="#1E293B">Pledged Rs. 25,000 for scholarship, send receipt link</text>
+      <text x="358" y="570" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="400" fill="#94A3B8">53/255</text>
+    </g>
+
+    <!-- 4. Follow-up Required * (Yes / No) -->
+    <g id="Field 4 / Follow-up Required">
+      <text x="20" y="604" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="700" fill="#1E293B">4. Follow-up Required? <tspan fill="#EF4444">*</tspan></text>
+
+      <!-- Yes (Selected) -->
+      <rect x="200" y="586" width="80" height="32" rx="8" fill="#801321"/>
+      <text x="240" y="607" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Yes</text>
+
+      <!-- No -->
+      <rect x="288" y="586" width="82" height="32" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="329" y="607" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">No</text>
+    </g>
+
+    <!-- 5. Follow-up Date & Time * (Only if Yes: Tomorrow / 3 Days / Next Week / Pick Date) -->
+    <g id="Field 5 / Follow-up Date and Time">
+      <rect x="20" y="628" width="350" height="114" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+      <text x="32" y="648" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="700" fill="#92400E">5. Follow-up Date &amp; Time <tspan fill="#EF4444">*</tspan></text>
+
+      <!-- Tomorrow (Selected) -->
+      <rect x="32" y="658" width="78" height="34" rx="8" fill="#801321"/>
+      <text x="71" y="680" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF">Tomorrow</text>
+
+      <!-- 3 Days -->
+      <rect x="116" y="658" width="68" height="34" rx="8" fill="#FFFFFF" stroke="#FDE68A" stroke-width="1"/>
+      <text x="150" y="680" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#92400E">3 Days</text>
+
+      <!-- Next Week -->
+      <rect x="190" y="658" width="82" height="34" rx="8" fill="#FFFFFF" stroke="#FDE68A" stroke-width="1"/>
+      <text x="231" y="680" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#92400E">Next Week</text>
+
+      <!-- Pick Date -->
+      <rect x="278" y="658" width="80" height="34" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="318" y="680" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#1E293B">Pick Date</text>
+
+      <text x="32" y="724" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#92400E">Scheduled for: Sat, 31 Oct 2026 at 11:00 AM</text>
+    </g>
+
+    <!-- ==================================================================== -->
+    <!-- PART C: ACTION BUTTONS (Save / Save & Next)  BRD Section 3C         -->
+    <!-- ==================================================================== -->
+    <g id="Part C / Action Buttons">
+      <rect x="20" y="760" width="136" height="50" rx="12" fill="#F8FAFC" stroke="#801321" stroke-width="1.5"/>
+      <text x="88" y="790" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="700" fill="#801321">Save</text>
+
+      <rect x="166" y="760" width="204" height="50" rx="12" fill="#801321"/>
+      <text x="268" y="790" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF">Save &amp; Next Contact ’</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,104 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Screen Background -->
+  <rect id="Screen Background" width="390" height="844" fill="#FBF2F3"/>
+
+  <!-- Top Header (margin-bottom: 20px, space-between) -->
+  <g id="Top Header">
+    <!-- Left: Feather arrow-left icon (22px #801321) -->
+    <g id="Icon / arrow-left" transform="translate(20, 42)">
+      <path d="M17.4 11H4.6M4.6 11L11 17.4M4.6 11L11 4.6" stroke="#801321" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <!-- Center: Settings (20px Bold #801321) -->
+    <text x="195" y="59" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="700" fill="#801321">Settings</text>
+  </g>
+
+  <!-- Card 1  Profile Card (#FFFFFF, radius: 12px, padding: 16px, margin-bottom: 12px) -->
+  <g id="Card 1 / Profile">
+    <rect x="20" y="80" width="350" height="148" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <text x="36" y="108" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Profile</text>
+
+    <!-- Item 1: NAME -->
+    <text x="36" y="132" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#64748B">NAME</text>
+    <text x="36" y="152" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#1E293B">Ansari Mohammed Afzal</text>
+
+    <!-- Divider -->
+    <line x1="36" y1="166" x2="354" y2="166" stroke="#F1F5F9" stroke-width="1"/>
+
+    <!-- Item 2: EMAIL -->
+    <text x="36" y="186" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#64748B">EMAIL</text>
+    <text x="36" y="206" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#1E293B">afzal@ampindia.org</text>
+  </g>
+
+  <!-- Card 2  Change Password Card (#FFFFFF, radius: 12px, padding: 16px, margin-bottom: 12px) -->
+  <g id="Card 2 / Change Password">
+    <rect x="20" y="240" width="350" height="314" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <text x="36" y="268" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Change Password</text>
+
+    <!-- Input 1: Current password -->
+    <text x="36" y="292" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Current password</text>
+    <rect x="36" y="298" width="318" height="44" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="48" y="325" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Enter current password</text>
+    <g transform="translate(324, 311)">
+      <path d="M1.5 9C1.5 9 4.5 3.75 9 3.75C13.5 3.75 16.5 9 16.5 9C16.5 9 13.5 14.25 9 14.25C4.5 14.25 1.5 9 1.5 9Z" stroke="#64748B" stroke-width="1.6"/>
+      <circle cx="9" cy="9" r="2.25" stroke="#64748B" stroke-width="1.6"/>
+    </g>
+
+    <!-- Input 2: New password -->
+    <text x="36" y="362" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">New password</text>
+    <rect x="36" y="368" width="318" height="44" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="48" y="395" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">At least 8 characters</text>
+    <g transform="translate(324, 381)">
+      <path d="M1.5 9C1.5 9 4.5 3.75 9 3.75C13.5 3.75 16.5 9 16.5 9C16.5 9 13.5 14.25 9 14.25C4.5 14.25 1.5 9 1.5 9Z" stroke="#64748B" stroke-width="1.6"/>
+      <circle cx="9" cy="9" r="2.25" stroke="#64748B" stroke-width="1.6"/>
+    </g>
+
+    <!-- Input 3: Confirm new password -->
+    <text x="36" y="432" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Confirm new password</text>
+    <rect x="36" y="438" width="318" height="44" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="48" y="465" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Re-enter new password</text>
+    <g transform="translate(324, 451)">
+      <path d="M1.5 9C1.5 9 4.5 3.75 9 3.75C13.5 3.75 16.5 9 16.5 9C16.5 9 13.5 14.25 9 14.25C4.5 14.25 1.5 9 1.5 9Z" stroke="#64748B" stroke-width="1.6"/>
+      <circle cx="9" cy="9" r="2.25" stroke="#64748B" stroke-width="1.6"/>
+    </g>
+
+    <!-- Update Password Button -->
+    <rect x="36" y="494" width="318" height="46" rx="10" fill="#801321"/>
+    <text x="195" y="522" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Update Password</text>
+  </g>
+
+  <!-- Card 3  Permissions Card (#FFFFFF, radius: 12px, padding: 16px, margin-bottom: 12px) -->
+  <g id="Card 3 / Permissions">
+    <rect x="20" y="566" width="350" height="122" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <text x="36" y="592" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Permissions</text>
+
+    <!-- Row: Call log access + Granted Pill -->
+    <text x="36" y="618" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="500" fill="#1E293B">Call log access</text>
+    <g id="Pill / Granted">
+      <rect x="276" y="601" width="78" height="24" rx="12" fill="#ECFDF5"/>
+      <path d="M287 613L290 616L296 610" stroke="#065F46" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="322" y="617" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#065F46">Granted</text>
+    </g>
+
+    <!-- Secondary Button: Open Phone Settings -->
+    <rect x="36" y="634" width="318" height="42" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="195" y="660" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="600" fill="#801321">Open Phone Settings</text>
+  </g>
+
+  <!-- Card 4  About Card (#FFFFFF, radius: 12px, padding: 16px, margin-bottom: 12px) -->
+  <g id="Card 4 / About">
+    <rect x="20" y="700" width="350" height="68" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <text x="36" y="724" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">About</text>
+    <text x="36" y="750" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="500" fill="#1E293B">App version</text>
+    <text x="354" y="750" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#64748B">1.0.0</text>
+  </g>
+
+  <!-- Bottom Sign Out Button (height: 48px, #FFFFFF fill, radius: 12px, 1px solid #E2E8F0) -->
+  <g id="Button / Sign Out">
+    <rect x="20" y="780" width="350" height="48" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Feather log-out icon (18px #801321) -->
+    <g transform="translate(148, 795)">
+      <path d="M6.75 15.75H3.75C2.92 15.75 2.25 15.08 2.25 14.25V3.75C2.25 2.92 2.92 2.25 3.75 2.25H6.75M12 12.75L15.75 9L12 5.25M15.75 9H6.75" stroke="#801321" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="174" y="809" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#801321">Sign Out</text>
+  </g>
+</svg>

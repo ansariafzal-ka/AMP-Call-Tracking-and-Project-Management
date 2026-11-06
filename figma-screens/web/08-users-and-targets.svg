@@ -1,0 +1,236 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Page Background -->
+  <rect id="Page Background" width="1440" height="900" fill="#FBF1F2"/>
+
+  <!-- Left Sidebar (Admin Role) -->
+  <g id="Left Sidebar">
+    <rect x="0" y="0" width="236" height="900" fill="#7A1424"/>
+    <g id="Sidebar Header">
+      <rect x="12" y="16" width="52" height="36" rx="8" fill="#FFFFFF"/>
+      <circle cx="34.5" cy="24.5" r="2" fill="#B91C1C"/>
+      <circle cx="41.5" cy="24.5" r="2" fill="#B91C1C"/>
+      <text x="38" y="37" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="800" fill="#27272A">AMP</text>
+      <path d="M20 41.5C26 45 34 45.5 40 42.5" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M36 44C43 44 49 42 55 39.5" stroke="#B91C1C" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="74" y="30" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Call Tracker</text>
+      <rect x="74" y="36" width="46" height="16" rx="4" fill="#C9A04A"/>
+      <text x="97" y="47" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ADMIN</text>
+      <line x1="0" y1="68" x2="236" y2="68" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    </g>
+
+    <g id="Sidebar Navigation">
+      <text x="55" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Admin Dashboard</text>
+      <text x="55" y="161" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Projects</text>
+      <text x="55" y="211" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Contacts Database</text>
+      <text x="55" y="261" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Follow-ups</text>
+
+      <!-- Active: Users & Targets -->
+      <rect x="12" y="284" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0.18"/>
+      <circle cx="33.5" cy="306" r="7.5" stroke="#FFFFFF" stroke-width="1.75"/>
+      <circle cx="33.5" cy="306" r="3" stroke="#FFFFFF" stroke-width="1.75"/>
+      <text x="55" y="311" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Users &amp; Targets</text>
+
+      <text x="55" y="361" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Reports &amp; Exports</text>
+    </g>
+
+    <line x1="0" y1="776" x2="236" y2="776" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    <text x="55" y="819" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Settings</text>
+    <text x="55" y="867" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Sign out</text>
+  </g>
+
+  <!-- Right Main Content Area -->
+  <g id="Main Content">
+    <!-- Top Header -->
+    <text x="268" y="48" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#1B2437">Users, Roles &amp; Calling Targets</text>
+    <text x="268" y="68" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Manage Admin/User roles, Active/Inactive status, and set Daily &amp; Weekly calling targets (BRD Section 4C)</text>
+
+    <!-- Action Buttons -->
+    <rect x="1108" y="28" width="152" height="40" rx="8" fill="#FFFFFF" stroke="#7A1424" stroke-width="1"/>
+    <text x="1184" y="53" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#7A1424">Set Team Targets</text>
+
+    <rect x="1272" y="28" width="136" height="40" rx="8" fill="#7A1424"/>
+    <text x="1340" y="53" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">+ Add New User</text>
+
+    <!-- Split Layout: Left Users & Targets Table (760px) + Right Add/Edit User & Target Card (364px) -->
+    <g id="Users Table Card">
+      <rect x="268" y="88" width="760" height="780" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Toolbar -->
+      <rect x="288" y="108" width="260" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="304" y="133" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694" fill-opacity="0.6">Search by name, mobile, email...</text>
+
+      <rect x="560" y="108" width="130" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="574" y="133" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">Role: All (14)</text>
+
+      <rect x="702" y="108" width="140" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="716" y="133" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">Status: Active</text>
+
+      <line x1="268" y1="164" x2="1028" y2="164" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Table Header -->
+      <rect x="269" y="165" width="758" height="40" fill="#F9FAFB"/>
+      <text x="288" y="189" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">NAME &amp; LOGIN CREDENTIALS</text>
+      <text x="506" y="189" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">ROLE</text>
+      <text x="596" y="189" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">DAILY TARGET</text>
+      <text x="706" y="189" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">WEEKLY TARGET</text>
+      <text x="832" y="189" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">STATUS</text>
+      <text x="1008" y="189" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">ACTION</text>
+      <line x1="268" y1="205" x2="1028" y2="205" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- User Row 1 (Selected) -->
+      <g id="User Row 1">
+        <rect x="269" y="206" width="758" height="72" fill="#7A1424" fill-opacity="0.04"/>
+        <text x="288" y="236" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Ansari Mohammed Afzal</text>
+        <text x="288" y="256" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">7738251877 " afzal@ampindia.org</text>
+
+        <rect x="506" y="230" width="58" height="22" rx="11" fill="#F3F4F6"/>
+        <text x="535" y="245" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">User</text>
+
+        <rect x="596" y="226" width="78" height="30" rx="6" fill="#FFFFFF" stroke="#7A1424" stroke-width="1"/>
+        <text x="635" y="245" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">50 / day</text>
+
+        <rect x="706" y="226" width="90" height="30" rx="6" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+        <text x="751" y="245" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">250 / wk</text>
+
+        <rect x="832" y="230" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="862" y="245" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+
+        <text x="1008" y="246" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit</text>
+        <line x1="268" y1="278" x2="1028" y2="278" stroke="#F3F4F6" stroke-width="1"/>
+      </g>
+
+      <!-- User Row 2 -->
+      <g id="User Row 2">
+        <text x="288" y="308" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Fatima Siddiqui</text>
+        <text x="288" y="328" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">9820334455 " fatima.s@ampindia.org</text>
+
+        <rect x="506" y="302" width="58" height="22" rx="11" fill="#F3F4F6"/>
+        <text x="535" y="317" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">User</text>
+
+        <rect x="596" y="298" width="78" height="30" rx="6" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+        <text x="635" y="317" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">50 / day</text>
+
+        <rect x="706" y="298" width="90" height="30" rx="6" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+        <text x="751" y="317" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">250 / wk</text>
+
+        <rect x="832" y="302" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="862" y="317" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+
+        <text x="1008" y="318" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit</text>
+        <line x1="268" y1="350" x2="1028" y2="350" stroke="#F3F4F6" stroke-width="1"/>
+      </g>
+
+      <!-- User Row 3 (Admin) -->
+      <g id="User Row 3">
+        <text x="288" y="380" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Aamir Edresy</text>
+        <text x="288" y="400" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">9820011122 " admin@ampindia.org</text>
+
+        <rect x="506" y="374" width="62" height="22" rx="11" fill="#7A1424" fill-opacity="0.12"/>
+        <text x="537" y="389" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#7A1424">Admin</text>
+
+        <text x="635" y="389" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694"></text>
+        <text x="751" y="389" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694"></text>
+
+        <rect x="832" y="374" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="862" y="389" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+
+        <text x="1008" y="390" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit</text>
+        <line x1="268" y1="422" x2="1028" y2="422" stroke="#F3F4F6" stroke-width="1"/>
+      </g>
+
+      <!-- User Row 4 -->
+      <g id="User Row 4">
+        <text x="288" y="452" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">Syed Mudassir Ali</text>
+        <text x="288" y="472" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">9876543210 " mudassir@ampindia.org</text>
+
+        <rect x="506" y="446" width="58" height="22" rx="11" fill="#F3F4F6"/>
+        <text x="535" y="461" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">User</text>
+
+        <rect x="596" y="442" width="78" height="30" rx="6" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+        <text x="635" y="461" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">40 / day</text>
+
+        <rect x="706" y="442" width="90" height="30" rx="6" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+        <text x="751" y="461" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">200 / wk</text>
+
+        <rect x="832" y="446" width="60" height="22" rx="11" fill="#D1FAE5"/>
+        <text x="862" y="461" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+
+        <text x="1008" y="462" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit</text>
+        <line x1="268" y1="494" x2="1028" y2="494" stroke="#F3F4F6" stroke-width="1"/>
+      </g>
+
+      <!-- User Row 5 (Inactive) -->
+      <g id="User Row 5">
+        <text x="288" y="524" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#6B7694">Bilal Deshmukh</text>
+        <text x="288" y="544" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">9123456780 " bilal.d@ampindia.org</text>
+
+        <rect x="506" y="518" width="58" height="22" rx="11" fill="#F3F4F6"/>
+        <text x="535" y="533" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="500" fill="#6B7694">User</text>
+
+        <text x="635" y="533" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">0 / day</text>
+        <text x="751" y="533" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">0 / wk</text>
+
+        <rect x="832" y="518" width="66" height="22" rx="11" fill="#E5E7EB"/>
+        <text x="865" y="533" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">Inactive</text>
+
+        <text x="1008" y="534" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">Edit</text>
+        <line x1="268" y1="566" x2="1028" y2="566" stroke="#F3F4F6" stroke-width="1"/>
+      </g>
+    </g>
+
+    <!-- Right Form Card: Edit User & Calling Targets (BRD Section 4C Fields) -->
+    <g id="User &amp; Target Form Card">
+      <rect x="1044" y="88" width="364" height="780" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <text x="1068" y="122" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#1B2437">Edit User &amp; Targets</text>
+      <text x="1068" y="142" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#6B7694">Manage user role, status, and calling targets</text>
+      <line x1="1044" y1="158" x2="1408" y2="158" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Field 1: Name * -->
+      <text x="1068" y="186" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Full Name <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="194" width="316" height="42" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1082" y="220" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">Ansari Mohammed Afzal</text>
+
+      <!-- Field 2: Mobile Number * (Used for login) -->
+      <text x="1068" y="260" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Mobile Number <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="268" width="316" height="42" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1082" y="294" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">7738251877</text>
+
+      <!-- Field 3: Email * (Used for login) -->
+      <text x="1068" y="334" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Email Address <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="342" width="316" height="42" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1082" y="368" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">afzal@ampindia.org</text>
+
+      <!-- Field 4: Role * (Admin / User) -->
+      <text x="1068" y="408" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Role <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="416" width="152" height="40" rx="8" fill="#7A1424" fill-opacity="0.08" stroke="#7A1424" stroke-width="1.2"/>
+      <text x="1144" y="441" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#7A1424">Ï User (Caller)</text>
+      <rect x="1232" y="416" width="152" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1308" y="441" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Ë Admin</text>
+
+      <!-- Field 5: Status * (Active / Inactive) -->
+      <text x="1068" y="480" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Account Status <tspan fill="#DC2626">*</tspan></text>
+      <rect x="1068" y="488" width="152" height="40" rx="8" fill="#D1FAE5" stroke="#047857" stroke-width="1.2"/>
+      <text x="1144" y="513" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#065F46">Ï Active</text>
+      <rect x="1232" y="488" width="152" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1308" y="513" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Ë Inactive</text>
+
+      <!-- Field 6: Daily & Weekly Target (Set by Admin) -->
+      <rect x="1068" y="550" width="316" height="128" rx="10" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+      <text x="1084" y="574" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#92400E">Calling Targets (Set by Admin)</text>
+
+      <text x="1084" y="600" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1B2437">Daily Target (Calls)</text>
+      <rect x="1084" y="608" width="136" height="38" rx="6" fill="#FFFFFF" stroke="#D1D5DB"/>
+      <text x="1098" y="632" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">50</text>
+
+      <text x="1232" y="600" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#1B2437">Weekly Target (Calls)</text>
+      <rect x="1232" y="608" width="136" height="38" rx="6" fill="#FFFFFF" stroke="#D1D5DB"/>
+      <text x="1246" y="632" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#1B2437">250</text>
+
+      <text x="1084" y="664" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#92400E">Tracked automatically on User &amp; Admin Dashboards</text>
+
+      <!-- Save Button -->
+      <rect x="1068" y="704" width="316" height="44" rx="8" fill="#7A1424"/>
+      <text x="1226" y="731" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">Save User &amp; Targets</text>
+    </g>
+  </g>
+</svg>

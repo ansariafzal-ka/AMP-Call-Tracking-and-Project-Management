@@ -1,0 +1,162 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Screen Background -->
+  <rect id="Screen Background" width="390" height="844" fill="#FBF2F3"/>
+
+  <!-- Top Header -->
+  <g id="Top Header">
+    <text x="20" y="58" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="700" fill="#801321">Follow-ups &amp; Reminders</text>
+    <text x="20" y="76" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="400" fill="#64748B">Overdue = Red " Due Today = Yellow (BRD Section 6)</text>
+  </g>
+
+  <!-- Urgency Segmented Filter Tabs -->
+  <g id="Urgency Filter Tabs">
+    <rect x="20" y="90" width="350" height="40" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+
+    <!-- All (11) -->
+    <rect x="24" y="94" width="76" height="32" rx="8" fill="#801321"/>
+    <text x="62" y="114" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF">All (11)</text>
+
+    <!-- Overdue (3) in Red -->
+    <text x="148" y="114" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#DC2626">Overdue (3)</text>
+
+    <!-- Today (8) in Yellow/Amber -->
+    <text x="236" y="114" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#B45309">Today (8)</text>
+
+    <!-- Upcoming -->
+    <text x="322" y="114" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="500" fill="#64748B">Upcoming</text>
+  </g>
+
+  <!-- Follow-up Cards Stack -->
+  <g id="Follow-ups List">
+    <!-- FOLLOW-UP CARD 1: OVERDUE (Red Highlight per BRD Section 6) -->
+    <g id="Follow-up Card 1 / Overdue (Red)">
+      <rect x="20" y="144" width="350" height="196" rx="12" fill="#FEF2F2" stroke="#EF4444" stroke-width="1.5"/>
+
+      <!-- Top Badge & Timestamp -->
+      <rect x="34" y="158" width="74" height="22" rx="11" fill="#FEE2E2"/>
+      <text x="71" y="173" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#991B1B">OVERDUE</text>
+      <text x="116" y="173" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#991B1B">28 Oct 2026, 11:30 AM</text>
+      <text x="356" y="173" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#801321">Attempt #3</text>
+
+      <!-- Contact & Project Info -->
+      <text x="34" y="200" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Imran Ahmed Khan</text>
+      <text x="34" y="218" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">+91 98204 11234</text>
+      <text x="150" y="218" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="500" fill="#64748B">" Zakat Fund Drive (Donor)</text>
+
+      <!-- Previous Note Box -->
+      <rect x="34" y="228" width="322" height="44" rx="8" fill="#FFFFFF" stroke="#FECACA"/>
+      <text x="44" y="246" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="400" fill="#1E293B">"Requested bank details on WhatsApp, follow up to</text>
+      <text x="44" y="262" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="400" fill="#1E293B">confirm receipt of scholarship donation"</text>
+
+      <!-- Action Row: Mark Done / Reschedule / Call (BRD Section 6) -->
+      <rect x="34" y="284" width="98" height="40" rx="8" fill="#047857"/>
+      <text x="83" y="309" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#FFFFFF"> Mark Done</text>
+
+      <rect x="140" y="284" width="104" height="40" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="192" y="309" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#1E293B">Reschedule</text>
+
+      <rect x="252" y="284" width="104" height="40" rx="8" fill="#801321"/>
+      <text x="304" y="309" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">Call Now</text>
+    </g>
+
+    <!-- FOLLOW-UP CARD 2: DUE TODAY (Yellow Highlight per BRD Section 6) -->
+    <g id="Follow-up Card 2 / Due Today (Yellow)">
+      <rect x="20" y="354" width="350" height="224" rx="12" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+
+      <!-- Top Badge & Timestamp -->
+      <rect x="34" y="368" width="82" height="22" rx="11" fill="#FEF3C7"/>
+      <text x="75" y="383" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#92400E">DUE TODAY</text>
+      <text x="124" y="383" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#92400E">Today, 05:00 PM</text>
+      <text x="356" y="383" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#801321">Attempt #2</text>
+
+      <!-- Contact & Project Info -->
+      <text x="34" y="410" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Dr. Tariq Siddiqui</text>
+      <text x="34" y="428" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">+91 77382 51877</text>
+      <text x="150" y="428" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="500" fill="#64748B">" Mentorship Drive (Volunteer)</text>
+
+      <!-- Previous Note Box -->
+      <rect x="34" y="438" width="322" height="36" rx="8" fill="#FFFFFF" stroke="#FDE68A"/>
+      <text x="44" y="460" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="400" fill="#1E293B">"Interested in Saturday career panel, call at 5 PM"</text>
+
+      <!-- Inline Quick Reschedule Chips (Tomorrow / 3 Days / Next Week / Pick Date) -->
+      <text x="34" y="492" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#92400E">QUICK RESCHEDULE:</text>
+      <rect x="148" y="479" width="66" height="20" rx="5" fill="#FFFFFF" stroke="#F59E0B"/>
+      <text x="181" y="493" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" fill="#92400E">Tomorrow</text>
+      <rect x="220" y="479" width="54" height="20" rx="5" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="247" y="493" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="500" fill="#475569">3 Days</text>
+      <rect x="280" y="479" width="76" height="20" rx="5" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="318" y="493" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="500" fill="#475569">Next Week</text>
+
+      <!-- Action Row -->
+      <rect x="34" y="522" width="98" height="40" rx="8" fill="#047857"/>
+      <text x="83" y="547" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#FFFFFF"> Mark Done</text>
+
+      <rect x="140" y="522" width="104" height="40" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="192" y="547" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#1E293B">Pick Date</text>
+
+      <rect x="252" y="522" width="104" height="40" rx="8" fill="#801321"/>
+      <text x="304" y="547" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">Call Now</text>
+    </g>
+
+    <!-- FOLLOW-UP CARD 3: DUE TODAY (Yellow Highlight) -->
+    <g id="Follow-up Card 3 / Due Today (Yellow)">
+      <rect x="20" y="592" width="350" height="156" rx="12" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+
+      <rect x="34" y="606" width="82" height="22" rx="11" fill="#FEF3C7"/>
+      <text x="75" y="621" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#92400E">DUE TODAY</text>
+      <text x="124" y="621" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#92400E">Today, 06:30 PM</text>
+
+      <text x="34" y="648" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Nadia Parveen</text>
+      <text x="34" y="666" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#801321">+91 97654 32109</text>
+      <text x="150" y="666" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="500" fill="#64748B">" Scholarship Aid</text>
+
+      <rect x="34" y="694" width="98" height="40" rx="8" fill="#047857"/>
+      <text x="83" y="719" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#FFFFFF"> Mark Done</text>
+
+      <rect x="140" y="694" width="104" height="40" rx="8" fill="#FFFFFF" stroke="#CBD5E1"/>
+      <text x="192" y="719" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#1E293B">Reschedule</text>
+
+      <rect x="252" y="694" width="104" height="40" rx="8" fill="#801321"/>
+      <text x="304" y="719" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="700" fill="#FFFFFF">Call Now</text>
+    </g>
+  </g>
+
+  <!-- Bottom Navigation Tab Bar (Follow-ups Active) -->
+  <g id="Bottom Navigation Bar">
+    <rect x="0" y="768" width="390" height="76" fill="#FFFFFF"/>
+    <line x1="0" y1="768" x2="390" y2="768" stroke="#E2E8F0" stroke-width="1"/>
+
+    <!-- Tab 1: Dashboard -->
+    <g id="Tab 1 / Dashboard">
+      <rect x="43" y="784" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <rect x="51" y="784" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <rect x="43" y="792" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <rect x="51" y="792" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <text x="50" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Dashboard</text>
+    </g>
+
+    <!-- Tab 2: Contacts -->
+    <g id="Tab 2 / Contacts">
+      <circle cx="146" cy="788" r="4" stroke="#64748B" stroke-width="1.6"/>
+      <path d="M139 799C139 795.5 142 793.5 146 793.5C150 793.5 153 795.5 153 799" stroke="#64748B" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="146" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Contacts</text>
+    </g>
+
+    <!-- Tab 3: Follow-ups (Active) -->
+    <g id="Tab 3 / Follow-ups (Active)">
+      <rect x="220" y="778" width="44" height="26" rx="13" fill="#801321" fill-opacity="0.12"/>
+      <circle cx="242" cy="791" r="7.5" stroke="#801321" stroke-width="1.8"/>
+      <path d="M242 787V791L245 792.5" stroke="#801321" stroke-width="1.8" stroke-linecap="round"/>
+      <rect x="248" y="776" width="18" height="14" rx="7" fill="#DC2626"/>
+      <text x="257" y="786" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="9" font-weight="700" fill="#FFFFFF">11</text>
+      <text x="242" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="700" fill="#801321">Follow-ups</text>
+    </g>
+
+    <!-- Tab 4: History -->
+    <g id="Tab 4 / History">
+      <circle cx="338" cy="791" r="7.5" stroke="#64748B" stroke-width="1.6"/>
+      <path d="M335 791H341M338 788V794" stroke="#64748B" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="338" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">History</text>
+    </g>
+  </g>
+</svg>

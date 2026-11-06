@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon: #7A1424;
+  --color-maroon-hover: #5C0F1B;
+  --color-gold: #C9A04A;
+  --color-page-bg: #FBF1F2;
+  --color-card-bg: #FFFFFF;
+  --color-text-main: #1B2437;
+  --color-text-muted: #6B7694;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-page-bg);
+  color: var(--color-text-main);
+  margin: 0;
+}

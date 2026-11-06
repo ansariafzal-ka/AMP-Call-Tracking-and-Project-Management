@@ -1,0 +1,101 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Underlying Dashboard Preview -->
+  <g id="Background Dashboard">
+    <rect width="390" height="844" fill="#FBF2F3"/>
+    <rect x="20" y="44" width="48" height="36" rx="8" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="44" y="65" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="800" fill="#27272A">AMP</text>
+    <text x="78" y="60" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="600" fill="#801321">Call Tracker</text>
+    <text x="78" y="79" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Ansari Mohammed Afzal</text>
+
+    <rect x="20" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="36" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#64748B">TOTAL CALLS</text>
+    <text x="36" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">13</text>
+
+    <rect x="201" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="217" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#64748B">TOTAL TALK TIME</text>
+    <text x="217" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">1m 00s</text>
+
+    <text x="20" y="218" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="600" fill="#1E293B">Call History</text>
+    <rect x="20" y="232" width="298" height="42" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <rect x="328" y="232" width="42" height="42" rx="10" fill="#801321"/>
+  </g>
+
+  <!-- Dimmed Backdrop (rgba(15, 23, 42, 0.45)) -->
+  <rect id="Dimmed Backdrop" width="390" height="844" fill="#0F172A" fill-opacity="0.45"/>
+
+  <!-- Bottom Sheet Container (#FFFFFF, top corners 20px radius, padding: 20px) -->
+  <g id="Filters Bottom Sheet">
+    <path d="M0 492C0 480.954 8.95431 472 20 472H370C381.046 472 390 480.954 390 492V844H0V492Z" fill="#FFFFFF"/>
+
+    <!-- Header (space-between, margin-bottom: 18px) -->
+    <g id="Sheet Header">
+      <text x="20" y="510" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="18" font-weight="700" fill="#1E293B">Filters</text>
+      <!-- Feather x icon (20px #64748B) -->
+      <g id="Icon / x" transform="translate(350, 494)">
+        <path d="M15 5L5 15M5 5L15 15" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- Section 1  OUTCOME -->
+    <g id="Section 1 / Outcome">
+      <text x="20" y="544" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" letter-spacing="0.5" fill="#64748B">OUTCOME</text>
+
+      <!-- Wrapping Pill Chips Row 1 -->
+      <g id="Chip / All (Selected)">
+        <rect x="20" y="556" width="48" height="34" rx="17" fill="#801321"/>
+        <text x="44" y="578" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF">All</text>
+      </g>
+      <g id="Chip / Interested">
+        <rect x="76" y="556" width="92" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="122" y="578" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Interested</text>
+      </g>
+      <g id="Chip / Not Interested">
+        <rect x="176" y="556" width="116" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="234" y="578" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Not Interested</text>
+      </g>
+
+      <!-- Wrapping Pill Chips Row 2 -->
+      <g id="Chip / Unanswered">
+        <rect x="20" y="598" width="106" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="73" y="620" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Unanswered</text>
+      </g>
+      <g id="Chip / Follow-up Required">
+        <rect x="134" y="598" width="146" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="207" y="620" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Follow-up Required</text>
+      </g>
+      <g id="Chip / Not set">
+        <rect x="288" y="598" width="74" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="325" y="620" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Not set</text>
+      </g>
+    </g>
+
+    <!-- Section 2  STATUS -->
+    <g id="Section 2 / Status">
+      <text x="20" y="664" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" letter-spacing="0.5" fill="#64748B">STATUS</text>
+
+      <g id="Status Chip / All (Selected)">
+        <rect x="20" y="676" width="48" height="34" rx="17" fill="#801321"/>
+        <text x="44" y="698" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#FFFFFF">All</text>
+      </g>
+      <g id="Status Chip / Answered">
+        <rect x="76" y="676" width="92" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="122" y="698" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Answered</text>
+      </g>
+      <g id="Status Chip / Not answered">
+        <rect x="176" y="676" width="114" height="34" rx="17" fill="#F1F5F9"/>
+        <text x="233" y="698" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="500" fill="#475569">Not answered</text>
+      </g>
+    </g>
+
+    <!-- Bottom Action Row (margin-top: 24px, gap: 12px) -->
+    <g id="Bottom Action Row">
+      <!-- Clear Button -->
+      <rect x="20" y="748" width="169" height="48" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="104.5" y="777" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#1E293B">Clear</text>
+
+      <!-- Apply filters Button -->
+      <rect x="201" y="748" width="169" height="48" rx="10" fill="#801321"/>
+      <text x="285.5" y="777" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Apply filters</text>
+    </g>
+  </g>
+</svg>

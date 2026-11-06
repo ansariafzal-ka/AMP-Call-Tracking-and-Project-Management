@@ -1,0 +1,317 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Page Background -->
+  <rect id="Page Background" width="1440" height="900" fill="#FBF1F2"/>
+
+  <!-- Left Sidebar (Admin Role, 236px x 900px, Maroon #7A1424) -->
+  <g id="Left Sidebar (Admin Role)">
+    <rect x="0" y="0" width="236" height="900" fill="#7A1424"/>
+
+    <!-- Sidebar Header -->
+    <g id="Sidebar Header">
+      <g id="AMP Logo Badge">
+        <rect x="12" y="16" width="52" height="36" rx="8" fill="#FFFFFF"/>
+        <circle cx="34.5" cy="24.5" r="2" fill="#B91C1C"/>
+        <circle cx="41.5" cy="24.5" r="2" fill="#B91C1C"/>
+        <text x="38" y="37" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="800" fill="#27272A">AMP</text>
+        <path d="M20 41.5C26 45 34 45.5 40 42.5" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M36 44C43 44 49 42 55 39.5" stroke="#B91C1C" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
+      <text x="74" y="30" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Call Tracker</text>
+      <rect x="74" y="36" width="46" height="16" rx="4" fill="#C9A04A"/>
+      <text x="97" y="47" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ADMIN</text>
+      <g id="Collapse Button" transform="translate(199, 25)">
+        <path d="M8.25 12.75L4.5 9L8.25 5.25M13.5 12.75L9.75 9L13.5 5.25" stroke="#FFFFFF" stroke-opacity="0.8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <line x1="0" y1="68" x2="236" y2="68" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    </g>
+
+    <!-- Admin Navigation -->
+    <g id="Admin Navigation">
+      <!-- Active: Admin Dashboard -->
+      <g id="Nav / Admin Dashboard (Active)">
+        <rect x="12" y="84" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0.18"/>
+        <g transform="translate(24, 96.5)">
+          <rect x="2.375" y="2.375" width="5.54" height="7.125" rx="1" stroke="#FFFFFF" stroke-width="1.75"/>
+          <rect x="11.08" y="2.375" width="5.54" height="3.96" rx="1" stroke="#FFFFFF" stroke-width="1.75"/>
+          <rect x="11.08" y="9.5" width="5.54" height="7.125" rx="1" stroke="#FFFFFF" stroke-width="1.75"/>
+          <rect x="2.375" y="12.67" width="5.54" height="3.96" rx="1" stroke="#FFFFFF" stroke-width="1.75"/>
+        </g>
+        <text x="55" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF">Admin Dashboard</text>
+      </g>
+
+      <!-- Projects -->
+      <g id="Nav / Projects">
+        <rect x="12" y="134" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0"/>
+        <rect x="26" y="149" width="15" height="13" rx="2" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75"/>
+        <path d="M26 153H41" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75"/>
+        <text x="55" y="161" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Projects</text>
+      </g>
+
+      <!-- Contacts Database -->
+      <g id="Nav / Contacts Database">
+        <rect x="12" y="184" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0"/>
+        <circle cx="33.5" cy="202" r="3" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75"/>
+        <path d="M27.5 213C27.5 210 30 208 33.5 208C37 208 39.5 210 39.5 213" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75" stroke-linecap="round"/>
+        <text x="55" y="211" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Contacts Database</text>
+      </g>
+
+      <!-- Follow-ups -->
+      <g id="Nav / Follow-ups">
+        <rect x="12" y="234" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0"/>
+        <circle cx="33.5" cy="256" r="7.5" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75"/>
+        <path d="M33.5 252V256L36.5 257.5" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75" stroke-linecap="round"/>
+        <text x="55" y="261" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Follow-ups</text>
+        <rect x="180" y="246" width="32" height="20" rx="10" fill="#DC2626"/>
+        <text x="196" y="260" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#FFFFFF">42</text>
+      </g>
+
+      <!-- Users & Targets -->
+      <g id="Nav / Users &amp; Targets">
+        <rect x="12" y="284" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0"/>
+        <circle cx="33.5" cy="306" r="7.5" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75"/>
+        <circle cx="33.5" cy="306" r="3" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.75"/>
+        <text x="55" y="311" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Users &amp; Targets</text>
+      </g>
+
+      <!-- Reports & Exports -->
+      <g id="Nav / Reports &amp; Exports">
+        <rect x="12" y="334" width="212" height="44" rx="8" fill="#FFFFFF" fill-opacity="0"/>
+        <path d="M28 362V354M33.5 362V349M39 362V357" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="2" stroke-linecap="round"/>
+        <text x="55" y="361" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Reports &amp; Exports</text>
+      </g>
+    </g>
+
+    <!-- Bottom Section -->
+    <g id="Sidebar Footer">
+      <line x1="0" y1="776" x2="236" y2="776" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+      <text x="55" y="819" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Settings</text>
+      <text x="55" y="867" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="500" fill="#FFFFFF" fill-opacity="0.85">Sign out</text>
+    </g>
+  </g>
+
+  <!-- Right Main Content Area (x=268, width=1140) -->
+  <g id="Main Content">
+    <!-- Top Header & Global Admin Filters (Project, User, Date Range per BRD 5B) -->
+    <g id="Admin Header &amp; Filters">
+      <text x="268" y="48" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#1B2437">Admin Overview &amp; Team Performance</text>
+      <text x="268" y="68" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">Real-time calling metrics across all AMP projects and coordinators</text>
+
+      <!-- Filter 1: Project -->
+      <rect x="752" y="28" width="180" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="766" y="53" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">Project: All Projects</text>
+      <path d="M910 46L915 51L920 46" stroke="#6B7694" stroke-width="1.75" stroke-linecap="round"/>
+
+      <!-- Filter 2: User -->
+      <rect x="944" y="28" width="168" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="958" y="53" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">User: All Callers (12)</text>
+      <path d="M1090 46L1095 51L1100 46" stroke="#6B7694" stroke-width="1.75" stroke-linecap="round"/>
+
+      <!-- Filter 3: Date Range -->
+      <rect x="1124" y="28" width="150" height="40" rx="8" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="1"/>
+      <text x="1138" y="53" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#1B2437">24 Oct  30 Oct</text>
+      <path d="M1252 46L1257 51L1262 46" stroke="#6B7694" stroke-width="1.75" stroke-linecap="round"/>
+
+      <!-- Export Excel Button -->
+      <rect x="1286" y="28" width="122" height="40" rx="8" fill="#7A1424"/>
+      <text x="1347" y="53" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Export Excel</text>
+    </g>
+
+    <!-- 4 Team Summary KPI Cards (BRD Section 5B) -->
+    <g id="Team KPI Cards">
+      <!-- Card 1: Total Calls Made by Team -->
+      <rect x="268" y="88" width="273" height="92" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <rect x="288" y="108" width="44" height="44" rx="8" fill="#7A1424" fill-opacity="0.1"/>
+      <circle cx="310" cy="130" r="9" stroke="#7A1424" stroke-width="1.75"/>
+      <text x="346" y="122" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Total Calls by Team</text>
+      <text x="346" y="150" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#1B2437">2,480</text>
+      <text x="424" y="149" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#047857">+14% vs last wk</text>
+
+      <!-- Card 2: Total Connected Calls -->
+      <rect x="557" y="88" width="273" height="92" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <rect x="577" y="108" width="44" height="44" rx="8" fill="#D1FAE5"/>
+      <path d="M593 130L597.5 134.5L606 126" stroke="#065F46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="635" y="122" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Total Connected Calls</text>
+      <text x="635" y="150" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#065F46">1,810</text>
+      <text x="712" y="149" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#6B7694">73.0% connect</text>
+
+      <!-- Card 3: Total Interested Contacts -->
+      <rect x="846" y="88" width="273" height="92" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <rect x="866" y="108" width="44" height="44" rx="8" fill="#FEF3C7"/>
+      <circle cx="888" cy="130" r="9" stroke="#92400E" stroke-width="1.75"/>
+      <text x="924" y="122" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Total Interested</text>
+      <text x="924" y="150" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#92400E">742</text>
+      <text x="980" y="149" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="500" fill="#92400E">41.0% conversion</text>
+
+      <!-- Card 4: Pending & Overdue Follow-ups -->
+      <rect x="1135" y="88" width="273" height="92" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+      <rect x="1155" y="108" width="44" height="44" rx="8" fill="#FEE2E2"/>
+      <circle cx="1177" cy="130" r="9" stroke="#DC2626" stroke-width="1.75"/>
+      <text x="1213" y="122" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#991B1B">Pending &amp; Overdue</text>
+      <text x="1213" y="150" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="#DC2626">42</text>
+      <text x="1252" y="149" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#991B1B">14 overdue " 28 today</text>
+    </g>
+
+    <!-- Section 1: Project-wise Calling Performance Table (y=198, height=300) -->
+    <g id="Project-wise Performance Card">
+      <rect x="268" y="198" width="1140" height="304" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <text x="288" y="232" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#1B2437">Project-wise Calling Performance</text>
+      <text x="1388" y="232" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#7A1424">Manage Projects ’</text>
+      <line x1="268" y1="248" x2="1408" y2="248" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Table Header -->
+      <rect x="269" y="249" width="1138" height="38" fill="#F9FAFB"/>
+      <text x="288" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">PROJECT NAME</text>
+      <text x="530" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">STATUS</text>
+      <text x="630" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">ASSIGNED USERS</text>
+      <text x="770" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">CALLS MADE</text>
+      <text x="890" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">CONNECTED</text>
+      <text x="1010" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">INTERESTED</text>
+      <text x="1130" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">FOLLOW-UPS</text>
+      <text x="1250" y="272" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">COMPLETION</text>
+      <line x1="268" y1="287" x2="1408" y2="287" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Project Row 1 -->
+      <text x="288" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Ramadan Zakat &amp; Scholarship Drive</text>
+      <rect x="530" y="303" width="60" height="22" rx="11" fill="#D1FAE5"/>
+      <text x="560" y="318" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+      <text x="630" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">5 Callers</text>
+      <text x="770" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">980 / 1,200</text>
+      <text x="890" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">740 (75%)</text>
+      <text x="1010" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">312</text>
+      <text x="1130" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#DC2626">18 pending</text>
+      <rect x="1250" y="310" width="96" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="1250" y="310" width="78" height="8" rx="4" fill="#7A1424"/>
+      <text x="1356" y="319" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">82%</text>
+      <line x1="268" y1="340" x2="1408" y2="340" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Project Row 2 -->
+      <text x="288" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Mega National Job Fair  Mumbai</text>
+      <rect x="530" y="356" width="60" height="22" rx="11" fill="#D1FAE5"/>
+      <text x="560" y="371" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+      <text x="630" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">4 Callers</text>
+      <text x="770" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">860 / 1,500</text>
+      <text x="890" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">615 (71%)</text>
+      <text x="1010" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">265</text>
+      <text x="1130" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#92400E">15 pending</text>
+      <rect x="1250" y="363" width="96" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="1250" y="363" width="55" height="8" rx="4" fill="#C9A04A"/>
+      <text x="1356" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">57%</text>
+      <line x1="268" y1="393" x2="1408" y2="393" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Project Row 3 -->
+      <text x="288" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Industry Mentorship &amp; Volunteer Connect</text>
+      <rect x="530" y="409" width="60" height="22" rx="11" fill="#D1FAE5"/>
+      <text x="560" y="424" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">Active</text>
+      <text x="630" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#1B2437">3 Callers</text>
+      <text x="770" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">640 / 800</text>
+      <text x="890" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">455 (71%)</text>
+      <text x="1010" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">165</text>
+      <text x="1130" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">9 pending</text>
+      <rect x="1250" y="416" width="96" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="1250" y="416" width="77" height="8" rx="4" fill="#047857"/>
+      <text x="1356" y="425" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#1B2437">80%</text>
+      <line x1="268" y1="446" x2="1408" y2="446" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Project Row 4 -->
+      <text x="288" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">Annual Teachers Training Workshop</text>
+      <rect x="530" y="462" width="60" height="22" rx="11" fill="#F3F4F6"/>
+      <text x="560" y="477" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#374151">Closed</text>
+      <text x="630" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">4 Callers</text>
+      <text x="770" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">500 / 500</text>
+      <text x="890" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">390 (78%)</text>
+      <text x="1010" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#6B7694">148</text>
+      <text x="1130" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#6B7694">0 pending</text>
+      <rect x="1250" y="469" width="96" height="8" rx="4" fill="#047857"/>
+      <text x="1356" y="478" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#047857">100%</text>
+    </g>
+
+    <!-- Section 2: User-wise Performance & Target vs Achievement by User (y=518, height=350) -->
+    <g id="User-wise Performance &amp; Target Card">
+      <rect x="268" y="518" width="1140" height="350" rx="12" fill="#FFFFFF" stroke="#F3F4F6" stroke-width="1"/>
+      <text x="288" y="552" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#1B2437">User-wise Calling Performance &amp; Target vs. Achievement</text>
+      <text x="1388" y="552" text-anchor="end" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#7A1424">Edit User Targets ’</text>
+      <line x1="268" y1="568" x2="1408" y2="568" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- Table Header -->
+      <rect x="269" y="569" width="1138" height="38" fill="#F9FAFB"/>
+      <text x="288" y="592" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">USER / COORDINATOR</text>
+      <text x="510" y="592" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">DAILY TARGET VS ACHIEVED</text>
+      <text x="730" y="592" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">WEEKLY TARGET VS ACHIEVED</text>
+      <text x="960" y="592" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">CONNECTED</text>
+      <text x="1080" y="592" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">INTERESTED</text>
+      <text x="1200" y="592" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5" fill="#6B7694">OVERDUE FOLLOW-UPS</text>
+      <line x1="268" y1="607" x2="1408" y2="607" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- User Row 1 -->
+      <text x="288" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Ansari Mohammed Afzal</text>
+      <text x="510" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">36 / 50</text>
+      <rect x="570" y="630" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="570" y="630" width="65" height="8" rx="4" fill="#7A1424"/>
+      <text x="668" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">72%</text>
+
+      <text x="730" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">195 / 250</text>
+      <rect x="802" y="630" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="802" y="630" width="70" height="8" rx="4" fill="#C9A04A"/>
+      <text x="900" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#92400E">78%</text>
+
+      <text x="960" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">142 (73%)</text>
+      <text x="1080" y="639" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">64</text>
+      <rect x="1200" y="623" width="84" height="22" rx="11" fill="#FEE2E2"/>
+      <text x="1242" y="638" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#991B1B">3 Overdue</text>
+      <line x1="268" y1="660" x2="1408" y2="660" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- User Row 2 -->
+      <text x="288" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Fatima Siddiqui</text>
+      <text x="510" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">48 / 50</text>
+      <rect x="570" y="683" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="570" y="683" width="86" height="8" rx="4" fill="#047857"/>
+      <text x="668" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#047857">96%</text>
+
+      <text x="730" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">240 / 250</text>
+      <rect x="802" y="683" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="802" y="683" width="86" height="8" rx="4" fill="#047857"/>
+      <text x="900" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#047857">96%</text>
+
+      <text x="960" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">188 (78%)</text>
+      <text x="1080" y="692" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">82</text>
+      <rect x="1200" y="676" width="84" height="22" rx="11" fill="#D1FAE5"/>
+      <text x="1242" y="691" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#065F46">0 Overdue</text>
+      <line x1="268" y1="713" x2="1408" y2="713" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- User Row 3 -->
+      <text x="288" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Syed Mudassir Ali</text>
+      <text x="510" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">22 / 40</text>
+      <rect x="570" y="736" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="570" y="736" width="50" height="8" rx="4" fill="#C9A04A"/>
+      <text x="668" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#92400E">55%</text>
+
+      <text x="730" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">145 / 200</text>
+      <rect x="802" y="736" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="802" y="736" width="65" height="8" rx="4" fill="#7A1424"/>
+      <text x="900" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#7A1424">72%</text>
+
+      <text x="960" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">104 (71%)</text>
+      <text x="1080" y="745" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">39</text>
+      <rect x="1200" y="729" width="84" height="22" rx="11" fill="#FEE2E2"/>
+      <text x="1242" y="744" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#991B1B">6 Overdue</text>
+      <line x1="268" y1="766" x2="1408" y2="766" stroke="#F3F4F6" stroke-width="1"/>
+
+      <!-- User Row 4 -->
+      <text x="288" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">Rehan Qureshi</text>
+      <text x="510" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">41 / 45</text>
+      <rect x="570" y="789" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="570" y="789" width="82" height="8" rx="4" fill="#047857"/>
+      <text x="668" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#047857">91%</text>
+
+      <text x="730" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1B2437">210 / 225</text>
+      <rect x="802" y="789" width="90" height="8" rx="4" fill="#F3F4F6"/>
+      <rect x="802" y="789" width="84" height="8" rx="4" fill="#047857"/>
+      <text x="900" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#047857">93%</text>
+
+      <text x="960" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="500" fill="#065F46">156 (74%)</text>
+      <text x="1080" y="798" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#92400E">71</text>
+      <rect x="1200" y="782" width="84" height="22" rx="11" fill="#FEF3C7"/>
+      <text x="1242" y="797" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#92400E">5 Due Today</text>
+    </g>
+  </g>
+</svg>

@@ -85,6 +85,7 @@ export async function register(req: Request, res: Response) {
       id: newUserId,
       email: cleanEmail,
       fullName: cleanFullName,
+      role: 'caller',
     });
 
     return res.status(201).json({
@@ -96,6 +97,7 @@ export async function register(req: Request, res: Response) {
         fullName: cleanFullName,
         email: cleanEmail,
         mobileNumber: cleanMobile,
+        role: 'caller',
       },
     });
   } catch (error) {
@@ -147,6 +149,7 @@ export async function login(req: Request, res: Response) {
       id: user.id,
       email: user.email,
       fullName: user.full_name,
+      role: user.role || 'caller',
     });
 
     return res.status(200).json({
@@ -158,6 +161,7 @@ export async function login(req: Request, res: Response) {
         fullName: user.full_name,
         email: user.email,
         mobileNumber: user.mobile_number,
+        role: user.role || 'caller',
       },
     });
   } catch (error) {

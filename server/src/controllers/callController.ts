@@ -119,13 +119,13 @@ export async function updateCall(req: AuthenticatedRequest, res: Response) {
       return res.status(400).json({ status: 'error', message: 'Invalid call id' });
     }
 
-    const { purpose, outcome } = req.body;
+    const { purpose, outcome, follow_up_date } = req.body;
 
-    // At least one of the two keys must be present
-    if (purpose === undefined && outcome === undefined) {
+    // At least one of the keys must be present
+    if (purpose === undefined && outcome === undefined && follow_up_date === undefined) {
       return res.status(400).json({
         status: 'error',
-        message: 'At least one of purpose or outcome must be provided',
+        message: 'At least one of purpose, outcome or follow_up_date must be provided',
       });
     }
 
@@ -154,6 +154,29 @@ export async function updateCall(req: AuthenticatedRequest, res: Response) {
       cleanOutcome = (outcome === '' ? null : outcome) as CallOutcome;
     }
 
+    let cleanFollowUpDate: string | null = undefined as any;
+    if (follow_up_date !== undefined) {
+      if (follow_up_date === null || follow_up_date === '') {
+        cleanFollowUpDate = null;
+      } else if (typeof follow_up_date === 'string') {
+        const trimmed = follow_up_date.trim();
+        if (/^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}/.test(trimmed)) {
+          let formatted = trimmed.replace('T', ' ').slice(0, 19);
+          if (formatted.length === 16) formatted += ':00';
+          cleanFollowUpDate = formatted;
+        } else {
+          const dateObj = new Date(trimmed);
+          if (isNaN(dateObj.getTime())) {
+            return res.status(400).json({ status: 'error', message: 'Invalid follow_up_date format' });
+          }
+          const pad = (n: number) => String(n).padStart(2, '0');
+          cleanFollowUpDate = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}:${pad(dateObj.getSeconds())}`;
+        }
+      } else {
+        return res.status(400).json({ status: 'error', message: 'follow_up_date must be a valid date string or null' });
+      }
+    }
+
     // Check if call exists and belongs to the user
     const existingCall = await callModel.findUserCallById(callId, userId);
     if (!existingCall) {
@@ -164,6 +187,7 @@ export async function updateCall(req: AuthenticatedRequest, res: Response) {
     const updatedCall = await callModel.updateCall(callId, userId, {
       purpose: cleanPurpose,
       outcome: cleanOutcome,
+      follow_up_date: cleanFollowUpDate,
     });
 
     return res.status(200).json({

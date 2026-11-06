@@ -1,0 +1,123 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Underlying Dashboard Preview -->
+  <g id="Background Dashboard">
+    <rect width="390" height="844" fill="#FBF2F3"/>
+    <rect x="20" y="44" width="48" height="36" rx="8" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="44" y="65" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="800" fill="#27272A">AMP</text>
+    <text x="78" y="60" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="600" fill="#801321">Call Tracker</text>
+    <text x="78" y="79" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Ansari Mohammed Afzal</text>
+
+    <rect x="20" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="36" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#64748B">TOTAL CALLS</text>
+    <text x="36" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">13</text>
+
+    <rect x="201" y="102" width="169" height="82" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="217" y="130" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="600" fill="#64748B">TOTAL TALK TIME</text>
+    <text x="217" y="164" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="700" fill="#801321">1m 00s</text>
+
+    <text x="20" y="218" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="600" fill="#1E293B">Call History</text>
+    <rect x="20" y="232" width="298" height="42" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <rect x="328" y="232" width="42" height="42" rx="10" fill="#801321"/>
+  </g>
+
+  <!-- Dimmed Backdrop (rgba(15, 23, 42, 0.45)) -->
+  <rect id="Dimmed Backdrop" width="390" height="844" fill="#0F172A" fill-opacity="0.45"/>
+
+  <!-- Bottom Sheet Container (y=340..844, top-left & top-right radius 24px, padding: 12px 24px 24px) -->
+  <g id="Keypad Bottom Sheet">
+    <path d="M0 364C0 350.745 10.7452 340 24 340H366C379.255 340 390 350.745 390 364V844H0V364Z" fill="#FFFFFF"/>
+
+    <!-- Top Close Handle: Centered Feather chevron-down icon (22px #94A3B8) -->
+    <g id="Top Close Handle" transform="translate(184, 354)">
+      <path d="M5.5 8.25L11 13.75L16.5 8.25" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Number Display Row (height: 52px, centered, margin-bottom: 12px) -->
+    <g id="Number Display Row">
+      <text x="195" y="420" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="28" font-weight="700" letter-spacing="1" fill="#1E293B">7738251877</text>
+
+      <!-- Right-aligned Feather delete backspace icon (22px #64748B) -->
+      <g id="Icon / delete" transform="translate(340, 400)">
+        <path d="M19.25 3.67H7.33L0.92 11L7.33 18.33H19.25C20.26 18.33 21.08 17.51 21.08 16.5V5.5C21.08 4.49 20.26 3.67 19.25 3.67Z" stroke="#64748B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16.5 8.25L11 13.75M11 8.25L16.5 13.75" stroke="#64748B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- 3x4 Dialpad Grid (x=24..366 -> width 342px, 3 cols gap 12px -> each key 106px wide, height 60px) -->
+    <g id="Dialpad Grid">
+      <!-- Row 1 (y=446) -->
+      <g id="Key 1">
+        <rect x="24" y="446" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="77" y="484" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">1</text>
+      </g>
+      <g id="Key 2">
+        <rect x="142" y="446" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="195" y="478" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">2</text>
+        <text x="195" y="494" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">ABC</text>
+      </g>
+      <g id="Key 3">
+        <rect x="260" y="446" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="313" y="478" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">3</text>
+        <text x="313" y="494" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">DEF</text>
+      </g>
+
+      <!-- Row 2 (y=518) -->
+      <g id="Key 4">
+        <rect x="24" y="518" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="77" y="550" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">4</text>
+        <text x="77" y="566" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">GHI</text>
+      </g>
+      <g id="Key 5">
+        <rect x="142" y="518" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="195" y="550" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">5</text>
+        <text x="195" y="566" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">JKL</text>
+      </g>
+      <g id="Key 6">
+        <rect x="260" y="518" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="313" y="550" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">6</text>
+        <text x="313" y="566" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">MNO</text>
+      </g>
+
+      <!-- Row 3 (y=590) -->
+      <g id="Key 7">
+        <rect x="24" y="590" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="77" y="622" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">7</text>
+        <text x="77" y="638" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">PQRS</text>
+      </g>
+      <g id="Key 8">
+        <rect x="142" y="590" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="195" y="622" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">8</text>
+        <text x="195" y="638" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">TUV</text>
+      </g>
+      <g id="Key 9">
+        <rect x="260" y="590" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="313" y="622" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">9</text>
+        <text x="313" y="638" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" letter-spacing="0.8" fill="#94A3B8">WXYZ</text>
+      </g>
+
+      <!-- Row 4 (y=662) -->
+      <g id="Key Star">
+        <rect x="24" y="662" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="77" y="702" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="600" fill="#1E293B">*</text>
+      </g>
+      <g id="Key 0">
+        <rect x="142" y="662" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="195" y="694" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">0</text>
+        <text x="195" y="710" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="600" fill="#94A3B8">+</text>
+      </g>
+      <g id="Key Hash">
+        <rect x="260" y="662" width="106" height="60" rx="14" fill="#F8FAFC"/>
+        <text x="313" y="700" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="600" fill="#1E293B">#</text>
+      </g>
+    </g>
+
+    <!-- Full-Width Call Button (52px height, radius 14px, #801321 fill) -->
+    <g id="Call Button">
+      <rect x="24" y="742" width="342" height="52" rx="14" fill="#801321"/>
+      <g transform="translate(160, 758) scale(0.833)">
+        <path d="M14.05 2A9 9 0 0 1 22.05 9.94M14.05 6A5 5 0 0 1 18 10M22 16.92V19.92A2 2 0 0 1 19.82 21.92A19.79 19.79 0 0 1 11.19 18.85A19.5 19.5 0 0 1 5.19 12.85A19.79 19.79 0 0 1 2.12 4.18A2 2 0 0 1 4.11 2H7.11A2 2 0 0 1 9.11 3.72A12.84 12.84 0 0 0 9.81 6.53A2 2 0 0 1 9.36 8.64L8.09 9.91A16 16 0 0 0 14.09 15.91L15.36 14.64A2 2 0 0 1 17.47 14.19A12.84 12.84 0 0 0 20.28 14.89A2 2 0 0 1 22 16.92Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <text x="190" y="774" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">Call</text>
+    </g>
+  </g>
+</svg>

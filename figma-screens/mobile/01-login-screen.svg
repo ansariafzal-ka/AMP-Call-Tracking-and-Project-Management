@@ -1,0 +1,73 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="auth-card-shadow" x="16" y="189" width="358" height="468" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="1"/>
+      <feGaussianBlur stdDeviation="1.5"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+
+  <!-- Screen Background -->
+  <rect id="Screen Background" width="390" height="844" fill="#FBF2F3"/>
+
+  <!-- Vertically Centered Auth Card (margin: 0 20px -> width 350px, padding: 24px, radius: 16px) -->
+  <g id="Login Card" filter="url(#auth-card-shadow)">
+    <rect x="20" y="192" width="350" height="460" rx="16" fill="#FFFFFF"/>
+    <rect x="20.5" y="192.5" width="349" height="459" rx="15.5" stroke="#F1E3E5" stroke-width="1"/>
+  </g>
+
+  <!-- Header (centered, margin-bottom: 26px) -->
+  <g id="Header">
+    <!-- AMP Logo (64x44px, margin-bottom: 12px) -->
+    <g id="AMP Logo">
+      <rect x="163" y="216" width="64" height="44" rx="10" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+      <circle cx="191" cy="227" r="2.4" fill="#B91C1C"/>
+      <circle cx="199" cy="227" r="2.4" fill="#B91C1C"/>
+      <text x="195" y="242" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="17" font-weight="800" letter-spacing="0.5" fill="#27272A">AMP</text>
+      <path d="M173 247.5C180 251.5 190 252 197 248.5" stroke="#B91C1C" stroke-width="2" stroke-linecap="round"/>
+      <path d="M193 250.5C201 250.5 210 248 217 245.5" stroke="#B91C1C" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Title & Subtitle -->
+    <text id="Title" x="195" y="294" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="24" font-weight="800" fill="#801321">Welcome Back</text>
+    <text id="Subtitle" x="195" y="316" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Sign in to your Call Tracker account</text>
+  </g>
+
+  <!-- Form Fields -->
+  <g id="Login Form">
+    <!-- Field 1: Email Address -->
+    <g id="AppInput / Email Address">
+      <text x="44" y="355" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Email Address</text>
+      <rect x="44" y="363" width="302" height="48" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="58" y="392" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">e.g. ansari@ampworld.in</text>
+    </g>
+
+    <!-- Field 2: Password -->
+    <g id="AppInput / Password">
+      <text x="44" y="440" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Password</text>
+      <rect x="44" y="448" width="302" height="48" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+      <text x="58" y="477" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Enter your password</text>
+      <!-- Feather eye icon (#64748B) -->
+      <g id="Icon / eye" transform="translate(314, 463)">
+        <path d="M1.5 9C1.5 9 4.5 3.75 9 3.75C13.5 3.75 16.5 9 16.5 9C16.5 9 13.5 14.25 9 14.25C4.5 14.25 1.5 9 1.5 9Z" stroke="#64748B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="9" r="2.25" stroke="#64748B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </g>
+
+    <!-- Primary Button: Sign In -->
+    <g id="AppButton / Sign In">
+      <rect x="44" y="518" width="302" height="48" rx="10" fill="#801321"/>
+      <text x="195" y="547" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">Sign In</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <g id="Footer">
+    <text x="195" y="604" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="400" fill="#64748B">Don't have an account? <tspan font-weight="700" fill="#801321">Register</tspan></text>
+  </g>
+</svg>

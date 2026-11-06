@@ -18,6 +18,7 @@ export interface CallItem {
   status: 'answered' | 'not_answered';
   purpose: string | null;
   outcome: CallOutcome;
+  follow_up_date: string | null;
   called_at: string;
   created_at: string;
 }
@@ -82,6 +83,7 @@ export async function fetchCalls(
 export interface UpdateCallPayload {
   purpose?: string | null;
   outcome?: CallOutcome;
+  follow_up_date?: string | null;
 }
 
 export async function updateCallRecord(

@@ -1,0 +1,155 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Screen Background -->
+  <rect id="Screen Background" width="390" height="844" fill="#FBF2F3"/>
+
+  <!-- Top App Bar (Admin Role) -->
+  <g id="Top App Bar">
+    <rect x="20" y="42" width="48" height="36" rx="8" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <circle cx="41" cy="50.5" r="1.9" fill="#B91C1C"/>
+    <circle cx="47" cy="50.5" r="1.9" fill="#B91C1C"/>
+    <text x="44" y="63" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="800" fill="#27272A">AMP</text>
+    <path d="M27 67.5C33 71 40 71.5 46 68.5" stroke="#B91C1C" stroke-width="1.6" stroke-linecap="round"/>
+
+    <text x="78" y="58" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="18" font-weight="700" fill="#801321">Admin Monitor</text>
+    <rect x="206" y="44" width="46" height="18" rx="4" fill="#C89D4B"/>
+    <text x="229" y="56" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ADMIN</text>
+    <text x="78" y="75" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="400" fill="#64748B">Team &amp; Project Performance</text>
+
+    <!-- Export Excel Button (BRD Section 9) -->
+    <rect x="304" y="44" width="66" height="32" rx="8" fill="#047857"/>
+    <text x="337" y="64" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="700" fill="#FFFFFF">Excel “</text>
+  </g>
+
+  <!-- Global Admin Filters: Project, User, Date Range (BRD Section 5B) -->
+  <g id="Admin Filter Bar">
+    <rect x="20" y="90" width="112" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="30" y="111" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#1E293B">Project: All ¾</text>
+
+    <rect x="139" y="90" width="112" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="149" y="111" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#1E293B">User: All (12) ¾</text>
+
+    <rect x="258" y="90" width="112" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="268" y="111" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#1E293B">This Week ¾</text>
+  </g>
+
+  <!-- 4 Team Summary KPI Cards (2x2 Grid, BRD Section 5B) -->
+  <g id="Team KPI Cards">
+    <!-- Total Calls Made by Team -->
+    <rect x="20" y="136" width="169" height="74" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="34" y="158" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#64748B">TEAM CALLS MADE</text>
+    <text x="34" y="192" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="800" fill="#801321">2,480</text>
+    <text x="175" y="191" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#065F46">+14%</text>
+
+    <!-- Total Connected Calls -->
+    <rect x="201" y="136" width="169" height="74" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="215" y="158" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#64748B">CONNECTED CALLS</text>
+    <text x="215" y="192" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="800" fill="#065F46">1,810</text>
+    <text x="356" y="191" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#64748B">73.0%</text>
+
+    <!-- Total Interested Contacts -->
+    <rect x="20" y="220" width="169" height="74" rx="12" fill="#FFFFFF" stroke="#F1E3E5"/>
+    <text x="34" y="242" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#64748B">TOTAL INTERESTED</text>
+    <text x="34" y="276" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="800" fill="#92400E">742</text>
+    <text x="175" y="275" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#92400E">41% conv</text>
+
+    <!-- Pending & Overdue Follow-ups -->
+    <rect x="201" y="220" width="169" height="74" rx="12" fill="#FEF2F2" stroke="#FECACA"/>
+    <text x="215" y="242" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#991B1B">PENDING / OVERDUE</text>
+    <text x="215" y="276" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="22" font-weight="800" fill="#DC2626">42</text>
+    <text x="356" y="275" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#991B1B">14 overdue</text>
+  </g>
+
+  <!-- Project-wise Calling Performance Card (BRD Section 5B) -->
+  <g id="Project-wise Performance Card">
+    <rect x="20" y="308" width="350" height="206" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <text x="36" y="334" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="700" fill="#1E293B">Project-wise Performance</text>
+    <text x="354" y="334" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#801321">+ New Project</text>
+
+    <!-- Project 1 -->
+    <text x="36" y="360" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Zakat &amp; Scholarship Drive</text>
+    <text x="354" y="360" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#801321">980 / 1,200 (82%)</text>
+    <rect x="36" y="368" width="318" height="7" rx="3.5" fill="#F1F5F9"/>
+    <rect x="36" y="368" width="260" height="7" rx="3.5" fill="#801321"/>
+    <text x="36" y="390" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="400" fill="#64748B">Connected: 740 " Interested: 312 " 5 Callers</text>
+
+    <line x1="36" y1="400" x2="354" y2="400" stroke="#F1F5F9"/>
+
+    <!-- Project 2 -->
+    <text x="36" y="420" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Mega Job Fair  Mumbai</text>
+    <text x="354" y="420" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#C89D4B">860 / 1,500 (57%)</text>
+    <rect x="36" y="428" width="318" height="7" rx="3.5" fill="#F1F5F9"/>
+    <rect x="36" y="428" width="181" height="7" rx="3.5" fill="#C89D4B"/>
+    <text x="36" y="450" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="400" fill="#64748B">Connected: 615 " Interested: 265 " 4 Callers</text>
+
+    <line x1="36" y1="460" x2="354" y2="460" stroke="#F1F5F9"/>
+
+    <!-- Project 3 -->
+    <text x="36" y="480" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Industry Mentorship Connect</text>
+    <text x="354" y="480" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#065F46">640 / 800 (80%)</text>
+    <rect x="36" y="488" width="318" height="7" rx="3.5" fill="#F1F5F9"/>
+    <rect x="36" y="488" width="254" height="7" rx="3.5" fill="#047857"/>
+  </g>
+
+  <!-- User-wise Performance & Target vs Achievement by User (BRD Section 5B) -->
+  <g id="User-wise Target vs Achievement Card">
+    <rect x="20" y="526" width="350" height="226" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+    <text x="36" y="552" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="14" font-weight="700" fill="#1E293B">Target vs. Achievement by User</text>
+    <text x="354" y="552" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#801321">Set Targets</text>
+
+    <!-- User 1 -->
+    <text x="36" y="578" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Ansari Mohammed Afzal</text>
+    <text x="354" y="578" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#801321">36 / 50 Today (72%)</text>
+    <rect x="36" y="586" width="318" height="6" rx="3" fill="#F1F5F9"/>
+    <rect x="36" y="586" width="229" height="6" rx="3" fill="#801321"/>
+    <text x="36" y="606" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="400" fill="#64748B">Weekly: 195/250 " Interested: 64 " <tspan font-weight="600" fill="#DC2626">3 Overdue</tspan></text>
+
+    <line x1="36" y1="616" x2="354" y2="616" stroke="#F1F5F9"/>
+
+    <!-- User 2 -->
+    <text x="36" y="636" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Fatima Siddiqui</text>
+    <text x="354" y="636" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#065F46">48 / 50 Today (96%)</text>
+    <rect x="36" y="644" width="318" height="6" rx="3" fill="#F1F5F9"/>
+    <rect x="36" y="644" width="305" height="6" rx="3" fill="#047857"/>
+    <text x="36" y="664" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="400" fill="#64748B">Weekly: 240/250 " Interested: 82 " <tspan font-weight="600" fill="#065F46">0 Overdue</tspan></text>
+
+    <line x1="36" y1="674" x2="354" y2="674" stroke="#F1F5F9"/>
+
+    <!-- User 3 -->
+    <text x="36" y="694" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13" font-weight="600" fill="#1E293B">Syed Mudassir Ali</text>
+    <text x="354" y="694" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#B45309">22 / 40 Today (55%)</text>
+    <rect x="36" y="702" width="318" height="6" rx="3" fill="#F1F5F9"/>
+    <rect x="36" y="702" width="175" height="6" rx="3" fill="#C89D4B"/>
+    <text x="36" y="722" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="400" fill="#64748B">Weekly: 145/200 " Interested: 39 " <tspan font-weight="600" fill="#DC2626">6 Overdue</tspan></text>
+  </g>
+
+  <!-- Bottom Navigation Tab Bar (Admin View) -->
+  <g id="Bottom Navigation Bar">
+    <rect x="0" y="768" width="390" height="76" fill="#FFFFFF"/>
+    <line x1="0" y1="768" x2="390" y2="768" stroke="#E2E8F0" stroke-width="1"/>
+
+    <g id="Tab 1 / Overview (Active)">
+      <rect x="28" y="778" width="44" height="26" rx="13" fill="#801321" fill-opacity="0.12"/>
+      <rect x="43" y="784" width="6" height="6" rx="1" stroke="#801321" stroke-width="1.6"/>
+      <rect x="51" y="784" width="6" height="6" rx="1" stroke="#801321" stroke-width="1.6"/>
+      <rect x="43" y="792" width="6" height="6" rx="1" stroke="#801321" stroke-width="1.6"/>
+      <rect x="51" y="792" width="6" height="6" rx="1" stroke="#801321" stroke-width="1.6"/>
+      <text x="50" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="700" fill="#801321">Overview</text>
+    </g>
+
+    <g id="Tab 2 / Projects">
+      <rect x="139" y="784" width="14" height="12" rx="2" stroke="#64748B" stroke-width="1.6"/>
+      <text x="146" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Projects</text>
+    </g>
+
+    <g id="Tab 3 / Users">
+      <circle cx="242" cy="788" r="4" stroke="#64748B" stroke-width="1.6"/>
+      <path d="M235 799C235 795.5 238 793.5 242 793.5C246 793.5 249 795.5 249 799" stroke="#64748B" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="242" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Users</text>
+    </g>
+
+    <g id="Tab 4 / Reports">
+      <path d="M333 797V791M338 797V785M343 797V793" stroke="#64748B" stroke-width="1.8" stroke-linecap="round"/>
+      <text x="338" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Reports</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,176 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Screen Background -->
+  <rect id="Screen Background" width="390" height="844" fill="#FBF2F3"/>
+
+  <!-- Top Header -->
+  <g id="Top Header">
+    <text x="20" y="58" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="20" font-weight="700" fill="#801321">Assigned Contacts</text>
+    <rect x="272" y="40" width="98" height="26" rx="13" fill="#801321" fill-opacity="0.1"/>
+    <text x="321" y="57" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12" font-weight="700" fill="#801321">148 Assigned</text>
+  </g>
+
+  <!-- Fast Search Bar (Search by Name or Mobile Number per BRD Section 10) -->
+  <g id="Search and Filter Row">
+    <rect x="20" y="78" width="298" height="42" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <g transform="translate(34, 91)">
+      <circle cx="7.1" cy="7.1" r="5.3" stroke="#64748B" stroke-width="1.75"/>
+      <path d="M14.2 14.2L11 11" stroke="#64748B" stroke-width="1.75" stroke-linecap="round"/>
+    </g>
+    <text x="58" y="104" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="400" fill="#64748B">Search contact name or mobile...</text>
+
+    <!-- Filter Button -->
+    <rect x="328" y="78" width="42" height="42" rx="10" fill="#801321"/>
+    <g transform="translate(340, 90)">
+      <line x1="3" y1="15.75" x2="3" y2="10.5" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="3" y1="7.5" x2="3" y2="2.25" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="9" y1="15.75" x2="9" y2="9" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="9" y1="6" x2="9" y2="2.25" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="15" y1="15.75" x2="15" y2="12" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+      <line x1="15" y1="9" x2="15" y2="2.25" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Project & Category Filter Chips (BRD Section 4A & 10) -->
+  <g id="Filter Chips">
+    <rect x="20" y="130" width="114" height="30" rx="15" fill="#801321"/>
+    <text x="77" y="149" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#FFFFFF">Zakat Drive (64)</text>
+
+    <rect x="142" y="130" width="94" height="30" rx="15" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="189" y="149" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="500" fill="#475569">Job Fair (52)</text>
+
+    <rect x="244" y="130" width="66" height="30" rx="15" fill="#FEF3C7"/>
+    <text x="277" y="149" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="600" fill="#92400E">Donor</text>
+
+    <rect x="318" y="130" width="52" height="30" rx="15" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="344" y="149" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="500" fill="#475569">All</text>
+  </g>
+
+  <!-- Assigned Contact Queue Cards -->
+  <g id="Assigned Contact Cards List">
+    <!-- CONTACT CARD 1 -->
+    <g id="Contact Card 1">
+      <rect x="20" y="174" width="350" height="184" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+
+      <!-- Row 1: Name, Mobile, Category & Attempt -->
+      <text x="36" y="200" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Dr. Tariq Siddiqui</text>
+      <rect x="282" y="184" width="72" height="22" rx="11" fill="#FEF3C7"/>
+      <text x="318" y="199" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#92400E">Donor</text>
+
+      <text x="36" y="220" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="600" fill="#801321">+91 77382 51877</text>
+      <text x="156" y="220" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="400" fill="#64748B">" Mumbai, MH (400008)</text>
+
+      <!-- Row 2: Project(s) Linked & Attempt Count -->
+      <rect x="36" y="230" width="108" height="20" rx="5" fill="#801321" fill-opacity="0.08"/>
+      <text x="90" y="244" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#801321">Zakat Fund Drive</text>
+
+      <rect x="150" y="230" width="104" height="20" rx="5" fill="#F1F5F9"/>
+      <text x="202" y="244" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#475569">Mentorship Drive</text>
+
+      <text x="354" y="244" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#64748B">2 Past Calls</text>
+
+      <!-- Row 3: Previous Call Note Preview Box (BRD Section 7) -->
+      <rect x="36" y="258" width="318" height="40" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="46" y="274" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#64748B">LAST CALL (26 OCT " CALL BACK LATER):</text>
+      <text x="46" y="290" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="400" fill="#1E293B">"In clinic consultation, asked to call on Friday morning"</text>
+
+      <!-- Row 4: History Button + Primary Call Button -->
+      <rect x="36" y="308" width="118" height="38" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="95" y="332" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#475569">View History (2)</text>
+
+      <rect x="164" y="308" width="190" height="38" rx="8" fill="#801321"/>
+      <text x="259" y="332" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF">Call Contact Now</text>
+    </g>
+
+    <!-- CONTACT CARD 2 -->
+    <g id="Contact Card 2">
+      <rect x="20" y="370" width="350" height="184" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+
+      <text x="36" y="396" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Sana Fatima Shaikh</text>
+      <rect x="282" y="380" width="72" height="22" rx="11" fill="#ECFDF5"/>
+      <text x="318" y="395" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#065F46">Student</text>
+
+      <text x="36" y="416" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="600" fill="#801321">+91 98192 23344</text>
+      <text x="156" y="416" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="400" fill="#64748B">" Pune, MH (411001)</text>
+
+      <rect x="36" y="426" width="104" height="20" rx="5" fill="#DBEAFE"/>
+      <text x="88" y="440" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#1E40AF">Job Fair 2026</text>
+
+      <text x="354" y="440" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#991B1B">Overdue Follow-up</text>
+
+      <rect x="36" y="454" width="318" height="40" rx="8" fill="#FEF2F2" stroke="#FECACA"/>
+      <text x="46" y="470" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="700" fill="#991B1B">LAST CALL (28 OCT " INTERESTED):</text>
+      <text x="46" y="486" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="400" fill="#1E293B">"Confirming resume slot after college exam"</text>
+
+      <rect x="36" y="504" width="118" height="38" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="95" y="528" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#475569">View History (1)</text>
+
+      <rect x="164" y="504" width="190" height="38" rx="8" fill="#801321"/>
+      <text x="259" y="528" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF">Call Contact Now</text>
+    </g>
+
+    <!-- CONTACT CARD 3 (Fresh Uncalled Contact) -->
+    <g id="Contact Card 3">
+      <rect x="20" y="566" width="350" height="176" rx="12" fill="#FFFFFF" stroke="#F1E3E5" stroke-width="1"/>
+
+      <text x="36" y="592" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="16" font-weight="700" fill="#1E293B">Nadia Parveen</text>
+      <rect x="268" y="576" width="86" height="22" rx="11" fill="#DBEAFE"/>
+      <text x="311" y="591" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#1E40AF">Beneficiary</text>
+
+      <text x="36" y="612" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="600" fill="#801321">+91 97654 32109</text>
+      <text x="156" y="612" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="400" fill="#64748B">" Hyderabad, TS</text>
+
+      <rect x="36" y="622" width="108" height="20" rx="5" fill="#801321" fill-opacity="0.08"/>
+      <text x="90" y="636" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="10.5" font-weight="600" fill="#801321">Zakat Fund Drive</text>
+
+      <text x="354" y="636" text-anchor="end" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="600" fill="#065F46">New Assigned</text>
+
+      <rect x="36" y="650" width="318" height="32" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="46" y="670" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11.5" font-weight="400" fill="#64748B">No previous calls recorded in this project yet.</text>
+
+      <rect x="36" y="692" width="118" height="38" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="95" y="716" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="12.5" font-weight="600" fill="#475569">Details</text>
+
+      <rect x="164" y="692" width="190" height="38" rx="8" fill="#801321"/>
+      <text x="259" y="716" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF">Call Contact Now</text>
+    </g>
+  </g>
+
+  <!-- Bottom Navigation Tab Bar (Contacts Active) -->
+  <g id="Bottom Navigation Bar">
+    <rect x="0" y="768" width="390" height="76" fill="#FFFFFF"/>
+    <line x1="0" y1="768" x2="390" y2="768" stroke="#E2E8F0" stroke-width="1"/>
+
+    <!-- Tab 1: Dashboard -->
+    <g id="Tab 1 / Dashboard">
+      <rect x="43" y="784" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <rect x="51" y="784" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <rect x="43" y="792" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <rect x="51" y="792" width="6" height="6" rx="1" stroke="#64748B" stroke-width="1.6"/>
+      <text x="50" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Dashboard</text>
+    </g>
+
+    <!-- Tab 2: Contacts (Active) -->
+    <g id="Tab 2 / Contacts (Active)">
+      <rect x="124" y="778" width="44" height="26" rx="13" fill="#801321" fill-opacity="0.12"/>
+      <circle cx="146" cy="788" r="4" stroke="#801321" stroke-width="1.8"/>
+      <path d="M139 799C139 795.5 142 793.5 146 793.5C150 793.5 153 795.5 153 799" stroke="#801321" stroke-width="1.8" stroke-linecap="round"/>
+      <text x="146" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="700" fill="#801321">Contacts</text>
+    </g>
+
+    <!-- Tab 3: Follow-ups -->
+    <g id="Tab 3 / Follow-ups">
+      <circle cx="242" cy="791" r="7.5" stroke="#64748B" stroke-width="1.6"/>
+      <path d="M242 787V791L245 792.5" stroke="#64748B" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="248" y="776" width="18" height="14" rx="7" fill="#DC2626"/>
+      <text x="257" y="786" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="9" font-weight="700" fill="#FFFFFF">11</text>
+      <text x="242" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">Follow-ups</text>
+    </g>
+
+    <!-- Tab 4: History -->
+    <g id="Tab 4 / History">
+      <circle cx="338" cy="791" r="7.5" stroke="#64748B" stroke-width="1.6"/>
+      <path d="M335 791H341M338 788V794" stroke="#64748B" stroke-width="1.6" stroke-linecap="round"/>
+      <text x="338" y="820" text-anchor="middle" font-family="Inter, Roboto, SF Pro, sans-serif" font-size="11" font-weight="500" fill="#64748B">History</text>
+    </g>
+  </g>
+</svg>
