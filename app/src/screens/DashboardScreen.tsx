@@ -139,6 +139,80 @@ const STATUS_FILTER_LABELS: Record<string, string> = {
   not_answered: 'Not answered',
 };
 
+export type DatePreset = 'all' | 'today' | 'yesterday' | 'week' | 'month' | 'custom';
+
+const FILTER_DATE_OPTIONS: { key: DatePreset; label: string }[] = [
+  { key: 'all', label: 'All Time' },
+  { key: 'today', label: 'Today' },
+  { key: 'yesterday', label: 'Yesterday' },
+  { key: 'week', label: 'This Week' },
+  { key: 'month', label: 'This Month' },
+  { key: 'custom', label: 'Custom' },
+];
+
+const DATE_PRESET_LABELS: Record<DatePreset, string> = {
+  all: 'All Time',
+  today: 'Today',
+  yesterday: 'Yesterday',
+  week: 'This Week',
+  month: 'This Month',
+  custom: 'Custom Range',
+};
+
+export function getDateRangeBounds(
+  preset: DatePreset,
+  customStart?: Date | null,
+  customEnd?: Date | null
+): { startDate?: string; endDate?: string } {
+  const now = new Date();
+
+  if (preset === 'today') {
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    return { startDate: start.toISOString(), endDate: end.toISOString() };
+  }
+
+  if (preset === 'yesterday') {
+    const y = new Date(now);
+    y.setDate(y.getDate() - 1);
+    const start = new Date(y.getFullYear(), y.getMonth(), y.getDate(), 0, 0, 0, 0);
+    const end = new Date(y.getFullYear(), y.getMonth(), y.getDate(), 23, 59, 59, 999);
+    return { startDate: start.toISOString(), endDate: end.toISOString() };
+  }
+
+  if (preset === 'week') {
+    const day = now.getDay();
+    const diff = (day === 0 ? -6 : 1) - day;
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diff);
+    const start = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate(), 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    return { startDate: start.toISOString(), endDate: end.toISOString() };
+  }
+
+  if (preset === 'month') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    return { startDate: start.toISOString(), endDate: end.toISOString() };
+  }
+
+  if (preset === 'custom') {
+    let startIso: string | undefined;
+    let endIso: string | undefined;
+    if (customStart) {
+      const s = new Date(customStart.getFullYear(), customStart.getMonth(), customStart.getDate(), 0, 0, 0, 0);
+      startIso = s.toISOString();
+    }
+    if (customEnd) {
+      const e = new Date(customEnd.getFullYear(), customEnd.getMonth(), customEnd.getDate(), 23, 59, 59, 999);
+      endIso = e.toISOString();
+    }
+    return { startDate: startIso, endDate: endIso };
+  }
+
+  return { startDate: undefined, endDate: undefined };
+}
+
 // Keypad grid layout (3 columns by 4 rows)
 const KEYPAD_ROWS = [
   [
@@ -200,14 +274,24 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   // Active filters
   const [selectedOutcomeFilter, setSelectedOutcomeFilter] = useState<string>('all');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
+  const [selectedDatePreset, setSelectedDatePreset] = useState<DatePreset>('all');
+  const [customStartDate, setCustomStartDate] = useState<Date | null>(null);
+  const [customEndDate, setCustomEndDate] = useState<Date | null>(null);
 
   // Filter bottom sheet modal state
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
   const [draftOutcome, setDraftOutcome] = useState<string>('all');
   const [draftStatus, setDraftStatus] = useState<string>('all');
+  const [draftDatePreset, setDraftDatePreset] = useState<DatePreset>('all');
+  const [draftCustomStartDate, setDraftCustomStartDate] = useState<Date | null>(null);
+  const [draftCustomEndDate, setDraftCustomEndDate] = useState<Date | null>(null);
+  const [showCustomStartDatePicker, setShowCustomStartDatePicker] = useState(false);
+  const [showCustomEndDatePicker, setShowCustomEndDatePicker] = useState(false);
 
   const activeFilterCount =
-    (selectedOutcomeFilter !== 'all' ? 1 : 0) + (selectedStatusFilter !== 'all' ? 1 : 0);
+    (selectedOutcomeFilter !== 'all' ? 1 : 0) +
+    (selectedStatusFilter !== 'all' ? 1 : 0) +
+    (selectedDatePreset !== 'all' ? 1 : 0);
 
   // Debounce search input by 400ms
   useEffect(() => {
@@ -223,29 +307,47 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   const handleOpenFilterModal = useCallback(() => {
     setDraftOutcome(selectedOutcomeFilter);
     setDraftStatus(selectedStatusFilter);
+    setDraftDatePreset(selectedDatePreset);
+    setDraftCustomStartDate(customStartDate);
+    setDraftCustomEndDate(customEndDate);
+    setShowCustomStartDatePicker(false);
+    setShowCustomEndDatePicker(false);
     setIsFilterModalVisible(true);
-  }, [selectedOutcomeFilter, selectedStatusFilter]);
+  }, [selectedOutcomeFilter, selectedStatusFilter, selectedDatePreset, customStartDate, customEndDate]);
 
   const handleCloseFilterModal = useCallback(() => {
+    setShowCustomStartDatePicker(false);
+    setShowCustomEndDatePicker(false);
     setIsFilterModalVisible(false);
   }, []);
 
   const handleClearFilterDrafts = useCallback(() => {
     setDraftOutcome('all');
     setDraftStatus('all');
+    setDraftDatePreset('all');
+    setDraftCustomStartDate(null);
+    setDraftCustomEndDate(null);
   }, []);
 
   const handleApplyFilters = useCallback(() => {
     setSelectedOutcomeFilter(draftOutcome);
     setSelectedStatusFilter(draftStatus);
+    setSelectedDatePreset(draftDatePreset);
+    setCustomStartDate(draftCustomStartDate);
+    setCustomEndDate(draftCustomEndDate);
+    setShowCustomStartDatePicker(false);
+    setShowCustomEndDatePicker(false);
     setIsFilterModalVisible(false);
-  }, [draftOutcome, draftStatus]);
+  }, [draftOutcome, draftStatus, draftDatePreset, draftCustomStartDate, draftCustomEndDate]);
 
   const handleClearAllFiltersAndSearch = useCallback(() => {
     setSearchInput('');
     setDebouncedSearch('');
     setSelectedOutcomeFilter('all');
     setSelectedStatusFilter('all');
+    setSelectedDatePreset('all');
+    setCustomStartDate(null);
+    setCustomEndDate(null);
   }, []);
 
   // Update Call bottom sheet state
@@ -340,7 +442,10 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
       isRefresh: boolean = false,
       search: string = debouncedSearch,
       outcome: string = selectedOutcomeFilter,
-      status: string = selectedStatusFilter
+      status: string = selectedStatusFilter,
+      datePreset: DatePreset = selectedDatePreset,
+      customStart: Date | null = customStartDate,
+      customEnd: Date | null = customEndDate
     ) => {
       if (!token) return;
 
@@ -349,6 +454,8 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
           setIsLoading(true);
         }
 
+        const { startDate, endDate } = getDateRangeBounds(datePreset, customStart, customEnd);
+
         const data = await fetchCalls(
           {
             limit: 50,
@@ -356,6 +463,8 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
             search: search.trim() ? search.trim() : undefined,
             outcome: outcome !== 'all' ? outcome : undefined,
             status: status !== 'all' ? status : undefined,
+            startDate,
+            endDate,
           },
           token
         );
@@ -381,24 +490,24 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
         setIsLoadingMore(false);
       }
     },
-    [token, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter]
+    [token, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter, selectedDatePreset, customStartDate, customEndDate]
   );
 
   useEffect(() => {
     if (token) {
-      loadCalls(0, false, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter);
+      loadCalls(0, false, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter, selectedDatePreset, customStartDate, customEndDate);
     }
-  }, [token, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter]);
+  }, [token, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter, selectedDatePreset, customStartDate, customEndDate]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await loadCalls(0, true, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter);
+    await loadCalls(0, true, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter, selectedDatePreset, customStartDate, customEndDate);
   };
 
   const handleLoadMore = async () => {
     if (isLoading || isRefreshing || isLoadingMore || !hasMore || !token) return;
     setIsLoadingMore(true);
-    await loadCalls(calls.length, false, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter);
+    await loadCalls(calls.length, false, debouncedSearch, selectedOutcomeFilter, selectedStatusFilter, selectedDatePreset, customStartDate, customEndDate);
   };
 
   // Check and sync any pending call when returning to foreground
@@ -805,6 +914,14 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
               <Text style={styles.contactNameText} numberOfLines={1}>
                 {hasContact ? item.contact_name : item.contact_number}
               </Text>
+              {item.project_name ? (
+                <View style={styles.projectBadge}>
+                  <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                  <Text style={styles.projectBadgeText} numberOfLines={1}>
+                    {item.project_name}
+                  </Text>
+                </View>
+              ) : null}
               {hasContact && item.contact_category ? (
                 <View
                   style={[
@@ -1024,12 +1141,20 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
           {/* Summary Cards */}
           <View style={styles.summaryRow}>
             <View style={[styles.card, styles.summaryCard]}>
-              <Text style={styles.summaryLabel}>TOTAL CALLS</Text>
+              <Text style={styles.summaryLabel}>
+                {selectedDatePreset === 'all'
+                  ? 'TOTAL CALLS'
+                  : `TOTAL CALLS (${DATE_PRESET_LABELS[selectedDatePreset].toUpperCase()})`}
+              </Text>
               <Text style={styles.summaryValue}>{summary.total_calls}</Text>
             </View>
 
             <View style={[styles.card, styles.summaryCard]}>
-              <Text style={styles.summaryLabel}>TOTAL TALK TIME</Text>
+              <Text style={styles.summaryLabel}>
+                {selectedDatePreset === 'all'
+                  ? 'TOTAL TALK TIME'
+                  : `TALK TIME (${DATE_PRESET_LABELS[selectedDatePreset].toUpperCase()})`}
+              </Text>
               <Text style={styles.summaryValue}>
                 {formatDuration(summary.total_duration_seconds)}
               </Text>
@@ -1084,6 +1209,26 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
           {/* Active Filters Row */}
           {activeFilterCount > 0 && (
             <View style={styles.activeFiltersRow}>
+              {selectedDatePreset !== 'all' && (
+                <TouchableOpacity
+                  style={styles.activeFilterPill}
+                  onPress={() => {
+                    setSelectedDatePreset('all');
+                    setCustomStartDate(null);
+                    setCustomEndDate(null);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Feather name="calendar" size={11} color={colors.primary.main} style={{ marginRight: 4 }} />
+                  <Text style={styles.activeFilterPillText}>
+                    {selectedDatePreset === 'custom'
+                      ? `${customStartDate ? customStartDate.toLocaleDateString() : 'Start'} - ${customEndDate ? customEndDate.toLocaleDateString() : 'End'}`
+                      : DATE_PRESET_LABELS[selectedDatePreset]}
+                  </Text>
+                  <Feather name="x" size={12} color={colors.primary.main} />
+                </TouchableOpacity>
+              )}
+
               {selectedOutcomeFilter !== 'all' && (
                 <TouchableOpacity
                   style={styles.activeFilterPill}
@@ -1114,6 +1259,9 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                 onPress={() => {
                   setSelectedOutcomeFilter('all');
                   setSelectedStatusFilter('all');
+                  setSelectedDatePreset('all');
+                  setCustomStartDate(null);
+                  setCustomEndDate(null);
                 }}
                 activeOpacity={0.7}
                 style={styles.clearAllBtn}
@@ -1185,80 +1333,172 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
               </TouchableOpacity>
             </View>
 
-            {/* Section: OUTCOME */}
-            <Text style={styles.filterSectionLabel}>OUTCOME</Text>
-            <View style={styles.chipsRow}>
-              {FILTER_OUTCOME_OPTIONS.map((opt) => {
-                const isSelected = draftOutcome === opt.key;
-                return (
-                  <TouchableOpacity
-                    key={opt.key}
-                    style={[
-                      styles.filterChip,
-                      isSelected ? styles.filterChipSelected : styles.filterChipUnselected,
-                    ]}
-                    onPress={() => setDraftOutcome(opt.key)}
-                    activeOpacity={0.7}
-                  >
-                    <Text
+            <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+              {/* Section: DATE RANGE */}
+              <Text style={styles.filterSectionLabel}>DATE RANGE</Text>
+              <View style={styles.chipsRow}>
+                {FILTER_DATE_OPTIONS.map((opt) => {
+                  const isSelected = draftDatePreset === opt.key;
+                  return (
+                    <TouchableOpacity
+                      key={opt.key}
                       style={[
-                        styles.filterChipText,
-                        isSelected ? styles.filterChipTextSelected : styles.filterChipTextUnselected,
+                        styles.filterChip,
+                        isSelected ? styles.filterChipSelected : styles.filterChipUnselected,
                       ]}
+                      onPress={() => setDraftDatePreset(opt.key)}
+                      activeOpacity={0.7}
                     >
-                      {opt.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                      <Text
+                        style={[
+                          styles.filterChipText,
+                          isSelected ? styles.filterChipTextSelected : styles.filterChipTextUnselected,
+                        ]}
+                      >
+                        {opt.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
 
-            {/* Section: STATUS */}
-            <Text style={styles.filterSectionLabel}>STATUS</Text>
-            <View style={styles.chipsRow}>
-              {FILTER_STATUS_OPTIONS.map((opt) => {
-                const isSelected = draftStatus === opt.key;
-                return (
-                  <TouchableOpacity
-                    key={opt.key}
-                    style={[
-                      styles.filterChip,
-                      isSelected ? styles.filterChipSelected : styles.filterChipUnselected,
-                    ]}
-                    onPress={() => setDraftStatus(opt.key)}
-                    activeOpacity={0.7}
-                  >
-                    <Text
+              {/* Custom Date Pickers if custom is chosen */}
+              {draftDatePreset === 'custom' && (
+                <View style={styles.customDateContainer}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.customDateSubLabel}>From</Text>
+                    <TouchableOpacity
+                      style={styles.datePickerTrigger}
+                      onPress={() => setShowCustomStartDatePicker(true)}
+                      activeOpacity={0.7}
+                    >
+                      <Feather name="calendar" size={14} color={colors.text.secondary} />
+                      <Text style={styles.datePickerTriggerText}>
+                        {draftCustomStartDate ? draftCustomStartDate.toLocaleDateString() : 'Pick date'}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.customDateSubLabel}>To</Text>
+                    <TouchableOpacity
+                      style={styles.datePickerTrigger}
+                      onPress={() => setShowCustomEndDatePicker(true)}
+                      activeOpacity={0.7}
+                    >
+                      <Feather name="calendar" size={14} color={colors.text.secondary} />
+                      <Text style={styles.datePickerTriggerText}>
+                        {draftCustomEndDate ? draftCustomEndDate.toLocaleDateString() : 'Pick date'}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+
+              {/* Section: OUTCOME */}
+              <Text style={styles.filterSectionLabel}>OUTCOME</Text>
+              <View style={styles.chipsRow}>
+                {FILTER_OUTCOME_OPTIONS.map((opt) => {
+                  const isSelected = draftOutcome === opt.key;
+                  return (
+                    <TouchableOpacity
+                      key={opt.key}
                       style={[
-                        styles.filterChipText,
-                        isSelected ? styles.filterChipTextSelected : styles.filterChipTextUnselected,
+                        styles.filterChip,
+                        isSelected ? styles.filterChipSelected : styles.filterChipUnselected,
                       ]}
+                      onPress={() => setDraftOutcome(opt.key)}
+                      activeOpacity={0.7}
                     >
-                      {opt.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
+                      <Text
+                        style={[
+                          styles.filterChipText,
+                          isSelected ? styles.filterChipTextSelected : styles.filterChipTextUnselected,
+                        ]}
+                      >
+                        {opt.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
 
-            {/* Bottom Buttons: Clear and Apply filters */}
-            <View style={styles.filterButtonsRow}>
-              <TouchableOpacity
-                style={styles.clearFilterBtn}
-                onPress={handleClearFilterDrafts}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.clearFilterBtnText}>Clear</Text>
-              </TouchableOpacity>
+              {/* Section: STATUS */}
+              <Text style={styles.filterSectionLabel}>STATUS</Text>
+              <View style={styles.chipsRow}>
+                {FILTER_STATUS_OPTIONS.map((opt) => {
+                  const isSelected = draftStatus === opt.key;
+                  return (
+                    <TouchableOpacity
+                      key={opt.key}
+                      style={[
+                        styles.filterChip,
+                        isSelected ? styles.filterChipSelected : styles.filterChipUnselected,
+                      ]}
+                      onPress={() => setDraftStatus(opt.key)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.filterChipText,
+                          isSelected ? styles.filterChipTextSelected : styles.filterChipTextUnselected,
+                        ]}
+                      >
+                        {opt.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
 
-              <TouchableOpacity
-                style={styles.applyFilterBtn}
-                onPress={handleApplyFilters}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.applyFilterBtnText}>Apply filters</Text>
-              </TouchableOpacity>
-            </View>
+              {/* Bottom Buttons: Clear and Apply filters */}
+              <View style={styles.filterButtonsRow}>
+                <TouchableOpacity
+                  style={styles.clearFilterBtn}
+                  onPress={handleClearFilterDrafts}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.clearFilterBtnText}>Clear</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.applyFilterBtn}
+                  onPress={handleApplyFilters}
+                  activeOpacity={0.85}
+                >
+                  <Text style={styles.applyFilterBtnText}>Apply filters</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+
+            {/* Custom Range Native DateTimePickers */}
+            {showCustomStartDatePicker && (
+              <DateTimePicker
+                value={draftCustomStartDate || new Date()}
+                mode="date"
+                display="default"
+                onChange={(event: DateTimePickerEvent, date?: Date) => {
+                  setShowCustomStartDatePicker(false);
+                  if (event.type === 'set' && date) {
+                    setDraftCustomStartDate(date);
+                  }
+                }}
+              />
+            )}
+
+            {showCustomEndDatePicker && (
+              <DateTimePicker
+                value={draftCustomEndDate || new Date()}
+                mode="date"
+                display="default"
+                onChange={(event: DateTimePickerEvent, date?: Date) => {
+                  setShowCustomEndDatePicker(false);
+                  if (event.type === 'set' && date) {
+                    setDraftCustomEndDate(date);
+                  }
+                }}
+              />
+            )}
           </View>
         </KeyboardAvoidingView>
       </Modal>
@@ -1289,12 +1529,22 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
             >
               {/* Title & Call Info */}
               <View style={styles.sheetHeader}>
-                <Text style={styles.sheetTitle}>Update Call</Text>
-                <Text style={styles.sheetSubtitle}>
-                  {selectedCall
-                    ? `${selectedCall.contact_number} • ${formatDisplayDateTime(selectedCall.called_at)}`
-                    : ''}
-                </Text>
+                <View style={{ flex: 1, marginRight: 8 }}>
+                  <Text style={styles.sheetTitle}>Update Call</Text>
+                  <Text style={styles.sheetSubtitle}>
+                    {selectedCall
+                      ? `${selectedCall.contact_name ? `${selectedCall.contact_name} • ` : ''}${selectedCall.contact_number} • ${formatDisplayDateTime(selectedCall.called_at)}`
+                      : ''}
+                  </Text>
+                </View>
+                {selectedCall?.project_name && !sheetRecognizedContact?.project_name ? (
+                  <View style={styles.projectBadge}>
+                    <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                    <Text style={styles.projectBadgeText} numberOfLines={1}>
+                      {selectedCall.project_name}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
 
               {/* Contact Information & Auto-Recognition Banner */}
@@ -1310,10 +1560,20 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                       <Feather name="user-check" size={15} color="#059669" style={{ marginRight: 6 }} />
                       <Text style={styles.sheetContactName}>{sheetRecognizedContact.name}</Text>
                     </View>
-                    <View style={styles.sheetCategoryBadge}>
-                      <Text style={styles.sheetCategoryText}>
-                        {(sheetRecognizedContact.category || 'OTHER').toUpperCase()}
-                      </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      {(sheetRecognizedContact.project_name || selectedCall?.project_name) ? (
+                        <View style={[styles.projectBadge, { marginRight: 6 }]}>
+                          <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                          <Text style={styles.projectBadgeText} numberOfLines={1}>
+                            {sheetRecognizedContact.project_name || selectedCall?.project_name}
+                          </Text>
+                        </View>
+                      ) : null}
+                      <View style={styles.sheetCategoryBadge}>
+                        <Text style={styles.sheetCategoryText}>
+                          {(sheetRecognizedContact.category || 'OTHER').toUpperCase()}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                   <Text style={styles.sheetContactDetails}>
@@ -1647,6 +1907,14 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                   <Text style={styles.recognizedName} numberOfLines={1}>
                     {recognizedContact.name}
                   </Text>
+                  {recognizedContact.project_name ? (
+                    <View style={[styles.projectBadge, { marginRight: 6 }]}>
+                      <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                      <Text style={styles.projectBadgeText} numberOfLines={1}>
+                        {recognizedContact.project_name}
+                      </Text>
+                    </View>
+                  ) : null}
                   <View style={styles.recognizedPill}>
                     <Text style={styles.recognizedPillText}>
                       {(recognizedContact.category || 'OTHER').toUpperCase()}
@@ -1981,6 +2249,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: colors.text.primary,
+  },
+  projectBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F5F9',
+    borderColor: '#CBD5E1',
+    borderWidth: 1,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 6,
+    maxWidth: 130,
+  },
+  projectBadgeText: {
+    fontSize: 10.5,
+    fontWeight: '600',
+    color: '#334155',
   },
   categoryBadge: {
     paddingHorizontal: 7,
@@ -2471,6 +2755,35 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   filterChipTextUnselected: {
+    color: '#1E293B',
+    fontWeight: '500',
+  },
+  customDateContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 6,
+    marginBottom: 8,
+  },
+  customDateSubLabel: {
+    fontSize: 11,
+    color: '#64748B',
+    marginBottom: 4,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  datePickerTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+  },
+  datePickerTriggerText: {
+    fontSize: 13,
     color: '#1E293B',
     fontWeight: '500',
   },

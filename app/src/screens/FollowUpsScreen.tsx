@@ -607,18 +607,28 @@ export const FollowUpsScreen: React.FC = () => {
             })()}
           </View>
 
-          {item.contact_category ? (
-            <View
-              style={[
-                styles.categoryBadge,
-                { backgroundColor: catStyle.bg, borderColor: catStyle.border },
-              ]}
-            >
-              <Text style={[styles.categoryBadgeText, { color: catStyle.text }]}>
-                {item.contact_category}
-              </Text>
-            </View>
-          ) : null}
+          <View style={styles.badgeGroup}>
+            {item.project_name ? (
+              <View style={styles.projectBadge}>
+                <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                <Text style={styles.projectBadgeText} numberOfLines={1}>
+                  {item.project_name}
+                </Text>
+              </View>
+            ) : null}
+            {item.contact_category ? (
+              <View
+                style={[
+                  styles.categoryBadge,
+                  { backgroundColor: catStyle.bg, borderColor: catStyle.border },
+                ]}
+              >
+                <Text style={[styles.categoryBadgeText, { color: catStyle.text }]}>
+                  {item.contact_category}
+                </Text>
+              </View>
+            ) : null}
+          </View>
         </View>
 
         {/* Mobile Number Row */}
@@ -899,11 +909,30 @@ export const FollowUpsScreen: React.FC = () => {
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <View>
+              <View style={{ flex: 1, marginRight: 8 }}>
                 <Text style={styles.modalTitle}>Reschedule Callback</Text>
                 <Text style={styles.modalSubtitle}>
                   {selectedFollowUp?.contact_name} ({selectedFollowUp?.contact_mobile})
                 </Text>
+                {(selectedFollowUp?.project_name || selectedFollowUp?.contact_category) && (
+                  <View style={styles.modalHeaderBadgeRow}>
+                    {selectedFollowUp?.project_name ? (
+                      <View style={styles.projectBadge}>
+                        <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                        <Text style={styles.projectBadgeText} numberOfLines={1}>
+                          {selectedFollowUp.project_name}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {selectedFollowUp?.contact_category ? (
+                      <View style={[styles.categoryBadge, { backgroundColor: getCategoryStyles(selectedFollowUp.contact_category).bg, borderColor: getCategoryStyles(selectedFollowUp.contact_category).border }]}>
+                        <Text style={[styles.categoryBadgeText, { color: getCategoryStyles(selectedFollowUp.contact_category).text }]}>
+                          {selectedFollowUp.contact_category}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </View>
+                )}
               </View>
               <TouchableOpacity
                 onPress={() => setRescheduleModalVisible(false)}
@@ -1023,11 +1052,30 @@ export const FollowUpsScreen: React.FC = () => {
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <View>
+              <View style={{ flex: 1, marginRight: 8 }}>
                 <Text style={styles.modalTitle}>Mark Callback as Completed</Text>
                 <Text style={styles.modalSubtitle}>
-                  {completingFollowUp?.contact_name}
+                  {completingFollowUp?.contact_name} ({completingFollowUp?.contact_mobile})
                 </Text>
+                {(completingFollowUp?.project_name || completingFollowUp?.contact_category) && (
+                  <View style={styles.modalHeaderBadgeRow}>
+                    {completingFollowUp?.project_name ? (
+                      <View style={styles.projectBadge}>
+                        <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                        <Text style={styles.projectBadgeText} numberOfLines={1}>
+                          {completingFollowUp.project_name}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {completingFollowUp?.contact_category ? (
+                      <View style={[styles.categoryBadge, { backgroundColor: getCategoryStyles(completingFollowUp.contact_category).bg, borderColor: getCategoryStyles(completingFollowUp.contact_category).border }]}>
+                        <Text style={[styles.categoryBadgeText, { color: getCategoryStyles(completingFollowUp.contact_category).text }]}>
+                          {completingFollowUp.contact_category}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </View>
+                )}
               </View>
               <TouchableOpacity
                 onPress={() => setCompleteModalVisible(false)}
@@ -1092,7 +1140,7 @@ export const FollowUpsScreen: React.FC = () => {
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
               {/* Header */}
               <View style={styles.dispositionHeader}>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginRight: 8 }}>
                   <Text style={styles.dispositionTitle}>Update Call Details</Text>
                   <Text style={styles.dispositionSubtitle}>
                     {dispositionFollowUp ? `${dispositionFollowUp.contact_name} • ` : ''}
@@ -1101,6 +1149,25 @@ export const FollowUpsScreen: React.FC = () => {
                       ? ` (${formatDuration(activeCallItem.duration_seconds)})`
                       : ''}
                   </Text>
+                  {(dispositionFollowUp?.project_name || activeCallItem?.project_name || dispositionFollowUp?.contact_category) && (
+                    <View style={styles.modalHeaderBadgeRow}>
+                      {(dispositionFollowUp?.project_name || activeCallItem?.project_name) ? (
+                        <View style={styles.projectBadge}>
+                          <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                          <Text style={styles.projectBadgeText} numberOfLines={1}>
+                            {dispositionFollowUp?.project_name || activeCallItem?.project_name}
+                          </Text>
+                        </View>
+                      ) : null}
+                      {dispositionFollowUp?.contact_category ? (
+                        <View style={[styles.categoryBadge, { backgroundColor: getCategoryStyles(dispositionFollowUp.contact_category).bg, borderColor: getCategoryStyles(dispositionFollowUp.contact_category).border }]}>
+                          <Text style={[styles.categoryBadgeText, { color: getCategoryStyles(dispositionFollowUp.contact_category).text }]}>
+                            {dispositionFollowUp.contact_category}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  )}
                 </View>
                 <TouchableOpacity
                   style={styles.modalCloseBtn}
@@ -1415,6 +1482,34 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#64748B',
     marginLeft: 3,
+  },
+  badgeGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  projectBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F5F9',
+    borderColor: '#CBD5E1',
+    borderWidth: 1,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginRight: 6,
+    maxWidth: 130,
+  },
+  projectBadgeText: {
+    fontSize: 10.5,
+    fontWeight: '600',
+    color: '#334155',
+  },
+  modalHeaderBadgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+    flexWrap: 'wrap',
   },
   categoryBadge: {
     paddingHorizontal: 8,

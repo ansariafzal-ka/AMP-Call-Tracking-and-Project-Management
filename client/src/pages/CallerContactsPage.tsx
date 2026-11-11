@@ -13,6 +13,7 @@ import {
   CheckCircle2,
   XCircle,
   FileSpreadsheet,
+  Folder,
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import apiClient from '../api/client';
@@ -135,6 +136,7 @@ export const CallerContactsPage: React.FC = () => {
         'State': c.state || '',
         'City': c.city || '',
         'Pin Code': c.pin_code || '',
+        'Project': c.project_name || 'Unassigned',
         'Category': c.category || 'Other',
         'Total Calls': Number(c.total_calls || 0),
         'Last Called Date': c.last_called_at ? formatDateTime(c.last_called_at) : 'Never',
@@ -293,6 +295,7 @@ export const CallerContactsPage: React.FC = () => {
                   <th className="py-3 px-4 sm:px-6">Contact Name</th>
                   <th className="py-3 px-4">Mobile Number</th>
                   <th className="py-3 px-4">Location</th>
+                  <th className="py-3 px-4">Project</th>
                   <th className="py-3 px-4">Category</th>
                   <th className="py-3 px-4">Total Calls</th>
                   <th className="py-3 px-4">Last Called</th>
@@ -351,6 +354,18 @@ export const CallerContactsPage: React.FC = () => {
                             <span className="text-[11px] text-gray-400">—</span>
                           );
                         })()}
+                      </td>
+
+                      {/* Project */}
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        {c.project_name ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                            <Folder size={10} className="text-slate-500" />
+                            {c.project_name}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-gray-400">—</span>
+                        )}
                       </td>
 
                       {/* Category */}

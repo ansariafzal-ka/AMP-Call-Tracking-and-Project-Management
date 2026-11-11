@@ -10,7 +10,9 @@ import {
   AlertCircle,
   CheckCircle2,
   CalendarClock,
+  Calendar,
   MapPin,
+  Folder,
 } from 'lucide-react';
 import apiClient from '../api/client';
 import type {
@@ -38,6 +40,9 @@ export const DashboardPage: React.FC = () => {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [outcomeFilter, setOutcomeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [datePreset, setDatePreset] = useState<'all' | 'today' | 'yesterday' | 'week' | 'month' | 'custom'>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
 
   // Pagination
   const [limit, setLimit] = useState<number>(10);
@@ -49,6 +54,50 @@ export const DashboardPage: React.FC = () => {
 
   // Modal state
   const [editingCall, setEditingCall] = useState<Call | null>(null);
+
+  // Compute ISO start and end dates from selected date preset
+  const getDateRangeBounds = useCallback(() => {
+    if (datePreset === 'all') return { startDate: undefined, endDate: undefined };
+
+    const now = new Date();
+    if (datePreset === 'today') {
+      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+      const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+      return { startDate: start.toISOString(), endDate: end.toISOString() };
+    }
+
+    if (datePreset === 'yesterday') {
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const start = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 0, 0, 0);
+      const end = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 23, 59, 59, 999);
+      return { startDate: start.toISOString(), endDate: end.toISOString() };
+    }
+
+    if (datePreset === 'week') {
+      const day = now.getDay();
+      const diffToMonday = (day === 0 ? -6 : 1) - day;
+      const monday = new Date(now);
+      monday.setDate(now.getDate() + diffToMonday);
+      const start = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate(), 0, 0, 0);
+      const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+      return { startDate: start.toISOString(), endDate: end.toISOString() };
+    }
+
+    if (datePreset === 'month') {
+      const start = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
+      const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+      return { startDate: start.toISOString(), endDate: end.toISOString() };
+    }
+
+    if (datePreset === 'custom') {
+      const start = customStartDate ? new Date(`${customStartDate}T00:00:00`).toISOString() : undefined;
+      const end = customEndDate ? new Date(`${customEndDate}T23:59:59.999`).toISOString() : undefined;
+      return { startDate: start, endDate: end };
+    }
+
+    return { startDate: undefined, endDate: undefined };
+  }, [datePreset, customStartDate, customEndDate]);
 
   // Debounce search input by 400ms and reset to page 1
   useEffect(() => {
@@ -65,6 +114,7 @@ export const DashboardPage: React.FC = () => {
 
     try {
       const offset = (page - 1) * limit;
+      const { startDate, endDate } = getDateRangeBounds();
       const params: Record<string, string | number> = {
         limit,
         offset,
@@ -79,6 +129,12 @@ export const DashboardPage: React.FC = () => {
       if (statusFilter !== 'all') {
         params.status = statusFilter;
       }
+      if (startDate) {
+        params.startDate = startDate;
+      }
+      if (endDate) {
+        params.endDate = endDate;
+      }
 
       const res = await apiClient.get<GetCallsResponse>('/api/calls', { params });
       setSummary(
@@ -87,9 +143,14 @@ export const DashboardPage: React.FC = () => {
       setCalls(res.data.calls || []);
       setFilteredTotal(Number(res.data.filtered_total || 0));
 
-      // Fetch user caller stats
+      // Fetch user caller stats (filtered by date if active)
       try {
-        const statsRes = await apiClient.get<{ success: boolean; data: UserStats }>('/api/users/stats');
+        const statsParams: Record<string, string> = {};
+        if (startDate) statsParams.startDate = startDate;
+        if (endDate) statsParams.endDate = endDate;
+        const statsRes = await apiClient.get<{ success: boolean; data: UserStats }>('/api/users/stats', {
+          params: statsParams,
+        });
         if (statsRes.data?.data) {
           setStats(statsRes.data.data);
         }
@@ -101,7 +162,7 @@ export const DashboardPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, debouncedSearch, outcomeFilter, statusFilter]);
+  }, [page, limit, debouncedSearch, outcomeFilter, statusFilter, getDateRangeBounds]);
 
   useEffect(() => {
     fetchCallsData();
@@ -109,9 +170,20 @@ export const DashboardPage: React.FC = () => {
 
   const refreshSummaryOnly = useCallback(async () => {
     try {
+      const { startDate, endDate } = getDateRangeBounds();
+      const callParams: Record<string, string | number> = { limit: 1, offset: 0 };
+      const statsParams: Record<string, string> = {};
+      if (startDate) {
+        callParams.startDate = startDate;
+        statsParams.startDate = startDate;
+      }
+      if (endDate) {
+        callParams.endDate = endDate;
+        statsParams.endDate = endDate;
+      }
       const [res, statsRes] = await Promise.all([
-        apiClient.get<GetCallsResponse>('/api/calls', { params: { limit: 1, offset: 0 } }),
-        apiClient.get<{ success: boolean; data: UserStats }>('/api/users/stats').catch(() => null),
+        apiClient.get<GetCallsResponse>('/api/calls', { params: callParams }),
+        apiClient.get<{ success: boolean; data: UserStats }>('/api/users/stats', { params: statsParams }).catch(() => null),
       ]);
       if (res.data?.summary) {
         setSummary(res.data.summary);
@@ -122,7 +194,7 @@ export const DashboardPage: React.FC = () => {
     } catch {
       // Ignore background summary refresh errors
     }
-  }, []);
+  }, [getDateRangeBounds]);
 
   const handleCallUpdated = (updatedCall: Call) => {
     setCalls((prev) =>
@@ -192,10 +264,41 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
-  const hasActiveFilters =
+  const getDateRangeLabel = () => {
+    switch (datePreset) {
+      case 'today':
+        return 'Today';
+      case 'yesterday':
+        return 'Yesterday';
+      case 'week':
+        return 'This Week';
+      case 'month':
+        return 'This Month';
+      case 'custom':
+        return 'Selected Range';
+      default:
+        return 'All Time';
+    }
+  };
+
+  const hasTableFilters =
     debouncedSearch.trim().length > 0 ||
     outcomeFilter !== 'all' ||
     statusFilter !== 'all';
+
+  const hasActiveFilters =
+    hasTableFilters ||
+    datePreset !== 'all' ||
+    Boolean(customStartDate) ||
+    Boolean(customEndDate);
+
+  const handleResetTableFilters = () => {
+    setSearchInput('');
+    setDebouncedSearch('');
+    setOutcomeFilter('all');
+    setStatusFilter('all');
+    setPage(1);
+  };
 
   const totalPages = Math.max(1, Math.ceil(filteredTotal / limit));
   const startRecord = filteredTotal === 0 ? 0 : (page - 1) * limit + 1;
@@ -203,20 +306,96 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Top Header with Date Range Filter */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card-bg p-4 sm:p-5 rounded-xl border border-gray-100 shadow-sm">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-text-main">Caller Dashboard</h1>
+          <p className="text-xs sm:text-sm text-text-muted mt-0.5">
+            Overview of your performance, call logs, and follow-ups
+          </p>
+        </div>
+
+        {/* Global Date Filter controls */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-text-muted">
+            <Calendar size={15} className="text-maroon shrink-0" />
+            <span>Date Range:</span>
+          </div>
+
+          <select
+            value={datePreset}
+            onChange={(e) => {
+              setDatePreset(e.target.value as 'all' | 'today' | 'yesterday' | 'week' | 'month' | 'custom');
+              setPage(1);
+            }}
+            aria-label="Filter by date range"
+            className="h-[38px] px-3 rounded-lg border border-gray-200 bg-gray-50/70 hover:bg-white text-xs font-semibold text-text-main focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition cursor-pointer"
+          >
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="custom">Custom Range...</option>
+          </select>
+
+          {datePreset === 'custom' && (
+            <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-lg border border-gray-200">
+              <input
+                type="date"
+                value={customStartDate}
+                onChange={(e) => {
+                  setCustomStartDate(e.target.value);
+                  setPage(1);
+                }}
+                className="h-[30px] px-2 rounded border border-gray-300 bg-white text-xs text-text-main focus:outline-none focus:ring-1 focus:ring-gold"
+                title="Start Date"
+              />
+              <span className="text-text-muted text-xs font-medium">to</span>
+              <input
+                type="date"
+                value={customEndDate}
+                onChange={(e) => {
+                  setCustomEndDate(e.target.value);
+                  setPage(1);
+                }}
+                className="h-[30px] px-2 rounded border border-gray-300 bg-white text-xs text-text-main focus:outline-none focus:ring-1 focus:ring-gold"
+                title="End Date"
+              />
+            </div>
+          )}
+
+          {datePreset !== 'all' && (
+            <button
+              type="button"
+              onClick={() => {
+                setDatePreset('all');
+                setCustomStartDate('');
+                setCustomEndDate('');
+                setPage(1);
+              }}
+              className="h-[38px] px-2.5 rounded-lg text-xs font-semibold text-maroon hover:bg-maroon/5 border border-maroon/20 transition-colors cursor-pointer"
+              title="Reset Date Range to All Time"
+            >
+              Reset Date
+            </button>
+          )}
+        </div>
+      </div>
       {/* Summary Cards - 4 Grid Layout from Figma */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Calls Today */}
+        {/* Calls in Range */}
         <div className="bg-card-bg rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
           <div className="w-11 h-11 rounded-lg bg-maroon/10 text-maroon flex items-center justify-center shrink-0">
             <PhoneCall size={20} />
           </div>
           <div>
-            <div className="text-sm font-medium text-text-muted">Calls Today</div>
+            <div className="text-sm font-medium text-text-muted">Calls ({getDateRangeLabel()})</div>
             <div className="text-2xl font-bold text-text-main mt-0.5">
               {stats ? stats.callsMadeToday : summary.total_calls}
             </div>
             <div className="text-xs text-text-muted mt-0.5">
-              {stats ? `${stats.totalCallsAllTime} all-time` : 'Today'}
+              {stats ? `${stats.totalCallsAllTime} all-time` : getDateRangeLabel()}
             </div>
           </div>
         </div>
@@ -227,14 +406,14 @@ export const DashboardPage: React.FC = () => {
             <CheckCircle2 size={20} />
           </div>
           <div>
-            <div className="text-sm font-medium text-text-muted">Connected</div>
+            <div className="text-sm font-medium text-text-muted">Connected ({getDateRangeLabel()})</div>
             <div className="text-2xl font-bold text-emerald-700 mt-0.5">
               {stats ? stats.connectedCallsToday : 0}
             </div>
             <div className="text-xs text-emerald-600 mt-0.5 font-medium">
               {stats && stats.callsMadeToday > 0
                 ? `${Math.round((stats.connectedCallsToday / stats.callsMadeToday) * 100)}% rate`
-                : '100% rate'}
+                : stats?.callsMadeToday === 0 ? '0% rate' : '100% rate'}
             </div>
           </div>
         </div>
@@ -245,11 +424,11 @@ export const DashboardPage: React.FC = () => {
             <Clock size={20} />
           </div>
           <div>
-            <div className="text-sm font-medium text-text-muted">Talk Time</div>
+            <div className="text-sm font-medium text-text-muted">Talk Time ({getDateRangeLabel()})</div>
             <div className="text-2xl font-bold text-text-main mt-0.5">
               {formatDuration(stats ? stats.totalTalkTimeTodaySeconds : summary.total_duration_seconds)}
             </div>
-            <div className="text-xs text-text-muted mt-0.5">Today's duration</div>
+            <div className="text-xs text-text-muted mt-0.5">{getDateRangeLabel()} duration</div>
           </div>
         </div>
 
@@ -281,17 +460,17 @@ export const DashboardPage: React.FC = () => {
       {/* Call History Card */}
       <div className="bg-card-bg rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Toolbar */}
-        <div className="p-4 sm:p-5 border-b border-gray-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex items-baseline gap-2.5">
-            <h2 className="text-lg font-bold text-text-main">Call history</h2>
-            <span className="text-sm text-text-muted">
+        <div className="p-4 sm:p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-baseline gap-2.5 shrink-0">
+            <h2 className="text-lg font-bold text-text-main whitespace-nowrap">Call history</h2>
+            <span className="text-sm text-text-muted whitespace-nowrap">
               {filteredTotal} recorded
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* Search input */}
-            <div className="relative flex-1 sm:w-60">
+            <div className="relative flex-1 sm:w-64">
               <Search
                 size={16}
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none"
@@ -300,8 +479,8 @@ export const DashboardPage: React.FC = () => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search number or note"
-                className="w-full h-[44px] pl-9 pr-3.5 rounded-lg border border-gray-300 bg-white text-sm text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition"
+                placeholder="Search number or note..."
+                className="w-full h-[42px] pl-9 pr-3.5 rounded-lg border border-gray-300 bg-white text-sm text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition"
               />
             </div>
 
@@ -313,7 +492,7 @@ export const DashboardPage: React.FC = () => {
                 setPage(1);
               }}
               aria-label="Filter by outcome"
-              className="h-[44px] px-3.5 rounded-lg border border-gray-300 bg-white text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition cursor-pointer"
+              className="h-[42px] px-3.5 rounded-lg border border-gray-300 bg-white text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition cursor-pointer"
             >
               <option value="all">All outcomes</option>
               <option value="interested">Interested</option>
@@ -331,12 +510,22 @@ export const DashboardPage: React.FC = () => {
                 setPage(1);
               }}
               aria-label="Filter by status"
-              className="h-[44px] px-3.5 rounded-lg border border-gray-300 bg-white text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition cursor-pointer"
+              className="h-[42px] px-3.5 rounded-lg border border-gray-300 bg-white text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition cursor-pointer"
             >
               <option value="all">All status</option>
               <option value="answered">Answered</option>
               <option value="not_answered">Not answered</option>
             </select>
+
+            {hasTableFilters && (
+              <button
+                type="button"
+                onClick={handleResetTableFilters}
+                className="h-[42px] px-3.5 rounded-lg text-xs font-semibold text-maroon hover:bg-maroon/5 border border-maroon/20 transition-colors shrink-0 whitespace-nowrap cursor-pointer"
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
         </div>
 
@@ -375,6 +564,7 @@ export const DashboardPage: React.FC = () => {
                       Contact number
                     </th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Location</th>
+                    <th className="py-3.5 px-3 whitespace-nowrap">Project</th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Status</th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Outcome</th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Follow-up</th>
@@ -442,6 +632,16 @@ export const DashboardPage: React.FC = () => {
                               <span className="text-xs text-text-muted/60">—</span>
                             );
                           })()}
+                        </td>
+                        <td className="py-3.5 px-3 whitespace-nowrap">
+                          {call.project_name ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                              <Folder size={11} className="text-slate-500" />
+                              {call.project_name}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-text-muted/60">—</span>
+                          )}
                         </td>
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           {renderStatusPill(call.status)}

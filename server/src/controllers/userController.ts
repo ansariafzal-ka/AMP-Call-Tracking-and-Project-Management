@@ -10,7 +10,10 @@ export async function getUserStats(req: AuthenticatedRequest, res: Response): Pr
       return;
     }
 
-    const stats = await userModel.getUserStats(userId);
+    const startDate = typeof req.query.startDate === 'string' ? req.query.startDate : undefined;
+    const endDate = typeof req.query.endDate === 'string' ? req.query.endDate : undefined;
+
+    const stats = await userModel.getUserStats(userId, startDate, endDate);
 
     res.status(200).json({
       success: true,

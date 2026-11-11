@@ -10,6 +10,7 @@ import { AdminCallsPage } from './pages/AdminCallsPage';
 import { AdminProjectsPage } from './pages/AdminProjectsPage';
 import { AdminUsersPage } from './pages/AdminUsersPage';
 import { AdminContactsPage } from './pages/AdminContactsPage';
+import { AdminPerformancePage } from './pages/AdminPerformancePage';
 import { CallerContactsPage } from './pages/CallerContactsPage';
 import { FollowUpsPage } from './pages/FollowUpsPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -149,6 +150,16 @@ export function App() {
               element={
                 <AdminProtectedRoute>
                   <AdminContactsPage />
+                </AdminProtectedRoute>
+              }
+            />
+
+            {/* Admin Coordinator Performance */}
+            <Route
+              path="/admin/performance"
+              element={
+                <AdminProtectedRoute>
+                  <AdminPerformancePage />
                 </AdminProtectedRoute>
               }
             />

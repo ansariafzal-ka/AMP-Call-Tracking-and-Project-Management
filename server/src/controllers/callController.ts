@@ -85,11 +85,13 @@ export async function getCalls(req: AuthenticatedRequest, res: Response) {
     const search = typeof req.query.search === 'string' ? req.query.search : undefined;
     const outcome = typeof req.query.outcome === 'string' ? req.query.outcome : undefined;
     const status = typeof req.query.status === 'string' ? req.query.status : undefined;
+    const startDate = typeof req.query.startDate === 'string' ? req.query.startDate : undefined;
+    const endDate = typeof req.query.endDate === 'string' ? req.query.endDate : undefined;
 
-    const summary = await callModel.getCallSummary(userId);
+    const summary = await callModel.getCallSummary(userId, startDate, endDate);
     const { calls, filtered_total } = await callModel.getCalls(
       userId,
-      { search, outcome, status },
+      { search, outcome, status, startDate, endDate },
       limit,
       offset
     );

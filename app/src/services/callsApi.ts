@@ -20,6 +20,8 @@ export interface CallItem {
   contact_state?: string | null;
   contact_pin_code?: string | null;
   contact_number: string;
+  project_id?: number | null;
+  project_name?: string | null;
   duration_seconds: number;
   status: 'answered' | 'not_answered';
   purpose: string | null;
@@ -42,6 +44,8 @@ export interface FetchCallsParams {
   search?: string;
   outcome?: string;
   status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface CreateCallPayload {
@@ -69,13 +73,15 @@ export async function createCallRecord(payload: CreateCallPayload, token: string
 }
 
 export async function fetchCalls(
-  { limit = 50, offset = 0, search, outcome, status }: FetchCallsParams,
+  { limit = 50, offset = 0, search, outcome, status, startDate, endDate }: FetchCallsParams,
   token: string
 ): Promise<CallsResponse> {
   const params: Record<string, any> = { limit, offset };
   if (search && search.trim()) params.search = search.trim();
   if (outcome && outcome !== 'all') params.outcome = outcome;
   if (status && status !== 'all') params.status = status;
+  if (startDate) params.startDate = startDate;
+  if (endDate) params.endDate = endDate;
 
   const response = await axios.get<CallsResponse>(`${cleanBaseUrl}/calls`, {
     params,

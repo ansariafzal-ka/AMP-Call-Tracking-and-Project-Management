@@ -17,6 +17,8 @@ export interface CallRow {
   contact_state?: string | null;
   contact_pin_code?: string | null;
   contact_number: string;
+  project_id?: number | null;
+  project_name?: string | null;
   duration_seconds: number;
   status: CallStatus;
   purpose: string | null;
@@ -57,6 +59,8 @@ export interface CallFilters {
   search?: string;
   outcome?: string;
   status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface GetCallsResult {

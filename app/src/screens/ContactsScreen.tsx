@@ -502,10 +502,20 @@ export const ContactsScreen: React.FC = () => {
           <Text style={styles.contactName} numberOfLines={1}>
             {item.name}
           </Text>
-          <View style={[styles.categoryBadge, { backgroundColor: catStyle.bg }]}>
-            <Text style={[styles.categoryBadgeText, { color: catStyle.text }]}>
-              {item.category || 'Other'}
-            </Text>
+          <View style={styles.badgeGroup}>
+            {item.project_name ? (
+              <View style={styles.projectBadge}>
+                <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                <Text style={styles.projectBadgeText} numberOfLines={1}>
+                  {item.project_name}
+                </Text>
+              </View>
+            ) : null}
+            <View style={[styles.categoryBadge, { backgroundColor: catStyle.bg }]}>
+              <Text style={[styles.categoryBadgeText, { color: catStyle.text }]}>
+                {item.category || 'Other'}
+              </Text>
+            </View>
           </View>
         </View>
 
@@ -760,11 +770,30 @@ export const ContactsScreen: React.FC = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <View style={{ flex: 1 }}>
+              <View style={{ flex: 1, marginRight: 8 }}>
                 <Text style={styles.modalTitle}>{selectedContact?.name}</Text>
                 <Text style={styles.modalSubtitle}>
                   {selectedContact?.mobile_number} • Call History
                 </Text>
+                {(selectedContact?.project_name || selectedContact?.category) && (
+                  <View style={styles.modalHeaderBadgeRow}>
+                    {selectedContact?.project_name ? (
+                      <View style={styles.projectBadge}>
+                        <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                        <Text style={styles.projectBadgeText} numberOfLines={1}>
+                          {selectedContact.project_name}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {selectedContact?.category ? (
+                      <View style={[styles.categoryBadge, { backgroundColor: getCategoryStyle(selectedContact.category).bg }]}>
+                        <Text style={[styles.categoryBadgeText, { color: getCategoryStyle(selectedContact.category).text }]}>
+                          {selectedContact.category}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </View>
+                )}
               </View>
               <TouchableOpacity
                 style={styles.modalCloseBtn}
@@ -869,7 +898,7 @@ export const ContactsScreen: React.FC = () => {
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
               {/* Header */}
               <View style={styles.dispositionHeader}>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginRight: 8 }}>
                   <Text style={styles.dispositionTitle}>Update Call Details</Text>
                   <Text style={styles.dispositionSubtitle}>
                     {dispositionContact ? `${dispositionContact.name} • ` : ''}
@@ -878,6 +907,25 @@ export const ContactsScreen: React.FC = () => {
                       ? ` (${formatDuration(activeCallItem.duration_seconds)})`
                       : ''}
                   </Text>
+                  {(dispositionContact?.project_name || activeCallItem?.project_name || dispositionContact?.category) && (
+                    <View style={styles.modalHeaderBadgeRow}>
+                      {(dispositionContact?.project_name || activeCallItem?.project_name) ? (
+                        <View style={styles.projectBadge}>
+                          <Feather name="folder" size={10} color="#475569" style={{ marginRight: 3.5 }} />
+                          <Text style={styles.projectBadgeText} numberOfLines={1}>
+                            {dispositionContact?.project_name || activeCallItem?.project_name}
+                          </Text>
+                        </View>
+                      ) : null}
+                      {dispositionContact?.category ? (
+                        <View style={[styles.categoryBadge, { backgroundColor: getCategoryStyle(dispositionContact.category).bg }]}>
+                          <Text style={[styles.categoryBadgeText, { color: getCategoryStyle(dispositionContact.category).text }]}>
+                            {dispositionContact.category}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  )}
                 </View>
                 <TouchableOpacity
                   style={styles.modalCloseBtn}
@@ -1196,6 +1244,34 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
     flex: 1,
     marginRight: 8,
+  },
+  badgeGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  projectBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F1F5F9',
+    borderColor: '#CBD5E1',
+    borderWidth: 1,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginRight: 6,
+    maxWidth: 130,
+  },
+  projectBadgeText: {
+    fontSize: 10.5,
+    fontWeight: '600',
+    color: '#334155',
+  },
+  modalHeaderBadgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+    flexWrap: 'wrap',
   },
   categoryBadge: {
     paddingHorizontal: 9,

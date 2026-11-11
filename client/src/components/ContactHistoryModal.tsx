@@ -10,6 +10,7 @@ import {
   User,
   MapPin,
   Mail,
+  Folder,
 } from 'lucide-react';
 import apiClient from '../api/client';
 import type {
@@ -132,7 +133,13 @@ export const ContactHistoryModal: React.FC<ContactHistoryModalProps> = ({
               <h2 className="text-base font-bold text-gray-900 leading-tight">
                 {contact?.name || 'Contact Details'}
               </h2>
-              <div className="flex items-center gap-2 mt-0.5">
+              <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                {contact?.project_name && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    <Folder size={10} className="text-slate-500" />
+                    {contact.project_name}
+                  </span>
+                )}
                 {contact?.category && (
                   <span
                     className={`px-2 py-0.2 rounded-md text-[10px] font-bold border ${getCategoryBadgeClass(

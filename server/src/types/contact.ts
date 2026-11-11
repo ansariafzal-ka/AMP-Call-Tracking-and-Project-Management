@@ -10,6 +10,8 @@ export interface ContactRow {
   pin_code?: string | null;
   category: string;
   notes?: string | null;
+  project_id?: number | null;
+  project_name?: string | null;
   created_at: string;
   total_calls?: number;
   last_called_at?: string | null;

@@ -123,21 +123,35 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
         aria-modal="true"
         aria-labelledby="update-call-modal-title"
       >
-        <div className="mb-5">
-          <h2
-            id="update-call-modal-title"
-            className="text-lg font-bold text-text-main"
-          >
-            Update call
-          </h2>
-          <p className="text-sm text-text-muted mt-0.5">
-            {call.contact_number} &bull; {formatDateTime(call.called_at)}
-          </p>
+        <div className="mb-5 flex items-start justify-between">
+          <div>
+            <h2
+              id="update-call-modal-title"
+              className="text-lg font-bold text-text-main"
+            >
+              Update call
+            </h2>
+            <p className="text-sm text-text-muted mt-0.5">
+              {call.contact_number} &bull; {formatDateTime(call.called_at)}
+            </p>
+          </div>
+          {call.project_name && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+              📁 {call.project_name}
+            </span>
+          )}
         </div>
 
         {call.contact_name && call.contact_name !== 'Unknown' ? (
           <div className="mb-4 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium flex items-center justify-between">
-            <span>👤 Contact: <strong>{call.contact_name}</strong></span>
+            <div className="flex items-center gap-2">
+              <span>👤 Contact: <strong>{call.contact_name}</strong></span>
+              {call.project_name && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-white text-slate-700 border border-slate-200">
+                  📁 {call.project_name}
+                </span>
+              )}
+            </div>
             <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full uppercase font-bold">
               Recognized
             </span>

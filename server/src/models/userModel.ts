@@ -50,7 +50,11 @@ export async function updatePassword(id: number, passwordHash: string): Promise<
   return count > 0;
 }
 
-export async function getUserStats(userId: number): Promise<UserStats> {
+export async function getUserStats(
+  userId: number,
+  startDate?: string,
+  endDate?: string
+): Promise<UserStats> {
   const result = await pool.query<{
     total_assigned_contacts: string;
     calls_made_today: string;
@@ -58,7 +62,11 @@ export async function getUserStats(userId: number): Promise<UserStats> {
     total_talk_time_today_seconds: string;
     pending_follow_ups: string;
     total_calls_all_time: string;
-  }>('SELECT * FROM sp_user_get_stats($1)', [userId]);
+  }>('SELECT * FROM sp_user_get_stats($1, $2, $3)', [
+    userId,
+    startDate || null,
+    endDate || null,
+  ]);
 
   const row = result.rows[0];
   return {

@@ -11,6 +11,7 @@ import {
   FolderKanban,
   CalendarClock,
   PhoneCall,
+  TrendingUp,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AmpLogo } from './AmpLogo';
@@ -33,7 +34,8 @@ export const AppLayout: React.FC = () => {
         { to: '/admin/calls', label: 'Team Call Logs', icon: PhoneCall },
         { to: '/admin/projects', label: 'Projects', icon: FolderKanban },
         { to: '/admin/contacts', label: 'Contacts Database', icon: Contact },
-        { to: '/admin/users', label: 'Users & Targets', icon: Target },
+        { to: '/admin/performance', label: 'Coordinator Performance', icon: TrendingUp },
+        { to: '/admin/users', label: 'User Management', icon: Target },
       ]
     : [
         { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },

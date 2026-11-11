@@ -12,6 +12,7 @@ import {
   CalendarDays,
   Copy,
   FileSpreadsheet,
+  Folder,
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import apiClient from '../api/client';
@@ -136,6 +137,7 @@ export const FollowUpsPage: React.FC = () => {
           'Contact Name': item.contact_name,
           'Mobile Number': String(item.contact_mobile || ''),
           'Category': item.contact_category || 'Other',
+          'Project': item.project_name || 'Unassigned',
           'State': item.contact_state || '',
           'City': item.contact_city || '',
           'Pin Code': item.contact_pin_code || '',
@@ -491,6 +493,7 @@ export const FollowUpsPage: React.FC = () => {
                 <tr className="border-b border-gray-100 bg-[#FAF7F7] text-gray-600 font-semibold uppercase tracking-wider text-[11px]">
                   <th className="py-3 px-4 sm:px-6">Contact</th>
                   <th className="py-3 px-4">Phone Number</th>
+                  <th className="py-3 px-4">Project</th>
                   <th className="py-3 px-4">Due Date & Time</th>
                   <th className="py-3 px-4">Context / Notes</th>
                   <th className="py-3 px-4">Status</th>
@@ -554,6 +557,18 @@ export const FollowUpsPage: React.FC = () => {
                             )}
                           </button>
                         </div>
+                      </td>
+
+                      {/* Project */}
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        {item.project_name ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                            <Folder size={10} className="text-slate-500" />
+                            {item.project_name}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-gray-400">—</span>
+                        )}
                       </td>
 
                       {/* Due Date & Time */}

@@ -25,10 +25,14 @@ export async function createCall(userId: number, data: CreateCallDTO): Promise<C
   return result.rows[0] || null;
 }
 
-export async function getCallSummary(userId: number): Promise<CallSummary> {
+export async function getCallSummary(
+  userId: number,
+  startDate?: string,
+  endDate?: string
+): Promise<CallSummary> {
   const result = await pool.query<{ total_calls: string | number; total_duration_seconds: string | number }>(
-    'SELECT * FROM sp_call_get_summary($1)',
-    [userId]
+    'SELECT * FROM sp_call_get_summary($1, $2, $3)',
+    [userId, startDate || null, endDate || null]
   );
   const row = result.rows[0];
   return {
@@ -46,11 +50,13 @@ export async function getCalls(
   const searchParam = filters.search && filters.search.trim() ? filters.search.trim() : null;
   const outcomeParam = filters.outcome ? filters.outcome : null;
   const statusParam = filters.status ? filters.status : null;
+  const startDateParam = filters.startDate ? filters.startDate : null;
+  const endDateParam = filters.endDate ? filters.endDate : null;
 
   // In PostgreSQL function sp_call_get_paginated returns all columns plus filtered_total column
   const result = await pool.query<CallRow & { filtered_total: number | string }>(
-    'SELECT * FROM sp_call_get_paginated($1, $2, $3, $4, $5, $6)',
-    [userId, searchParam, outcomeParam, statusParam, limit, offset]
+    'SELECT * FROM sp_call_get_paginated($1, $2, $3, $4, $5, $6, $7, $8)',
+    [userId, searchParam, outcomeParam, statusParam, limit, offset, startDateParam, endDateParam]
   );
 
   const rows = result.rows;

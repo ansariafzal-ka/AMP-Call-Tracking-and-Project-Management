@@ -40,14 +40,27 @@ export async function getContactById(
         ct.alternate_number,
         ct.email,
         ct.city,
+        ct.state,
+        ct.pin_code,
         ct.category,
         ct.notes,
+        COALESCE(ct.project_id, pr_first.project_id) AS project_id,
+        COALESCE(p.name, pr_first.project_name)::VARCHAR AS project_name,
         ct.created_at,
         COUNT(c.id)::BIGINT AS total_calls
       FROM contacts ct
+      LEFT JOIN projects p ON p.id = ct.project_id
+      LEFT JOIN LATERAL (
+        SELECT cp.project_id, p2.name AS project_name
+        FROM contact_projects cp
+        JOIN projects p2 ON p2.id = cp.project_id
+        WHERE cp.contact_id = ct.id
+        ORDER BY cp.created_at ASC
+        LIMIT 1
+      ) pr_first ON TRUE
       LEFT JOIN calls c ON (c.contact_id = ct.id OR c.contact_number = ct.mobile_number)
       WHERE ct.id = $1
-      GROUP BY ct.id`,
+      GROUP BY ct.id, p.name, pr_first.project_id, pr_first.project_name`,
       [contactId]
     );
     return result.rows[0] || null;

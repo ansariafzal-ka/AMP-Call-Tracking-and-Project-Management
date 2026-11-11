@@ -27,6 +27,8 @@ export interface Call {
   contact_state?: string | null;
   contact_pin_code?: string | null;
   contact_number: string;
+  project_id?: number | null;
+  project_name?: string | null;
   duration_seconds: number;
   status: CallStatus;
   purpose: string | null;
@@ -93,6 +95,8 @@ export interface GetCallsParams {
   search?: string;
   outcome?: string;
   status?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface GetCallsResponse {
@@ -313,6 +317,8 @@ export interface FollowUpItem {
   contact_city?: string | null;
   contact_state?: string | null;
   contact_pin_code?: string | null;
+  project_id?: number | null;
+  project_name?: string | null;
   call_id?: number | null;
   due_at: string;
   status: 'pending' | 'completed' | 'rescheduled' | 'cancelled';
@@ -355,6 +361,8 @@ export interface CallerContact {
   pin_code?: string | null;
   category: string;
   notes?: string | null;
+  project_id?: number | null;
+  project_name?: string | null;
   created_at: string;
   total_calls?: number | string;
   last_called_at?: string | null;

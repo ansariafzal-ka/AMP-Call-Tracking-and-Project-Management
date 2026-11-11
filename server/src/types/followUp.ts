@@ -8,6 +8,8 @@ export interface FollowUpRow {
   contact_city?: string | null;
   contact_state?: string | null;
   contact_pin_code?: string | null;
+  project_id?: number | null;
+  project_name?: string | null;
   call_id?: number | null;
   due_at: string;
   status: 'pending' | 'completed' | 'rescheduled' | 'cancelled';
