@@ -3,6 +3,7 @@ import {
   getAdminUsers,
   createAdminUser,
   updateAdminUser,
+  deleteAdminUser,
 } from '../controllers/adminUserController';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/adminAuth';
@@ -16,6 +17,7 @@ router.use(requireAdmin);
 router.get('/', getAdminUsers);
 router.post('/', createAdminUser);
 router.patch('/:id', updateAdminUser);
+router.delete('/:id', deleteAdminUser);
 
 export default router;
 

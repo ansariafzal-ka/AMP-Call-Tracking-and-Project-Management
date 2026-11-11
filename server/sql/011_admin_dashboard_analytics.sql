@@ -68,7 +68,7 @@ BEGIN
   -- Follow-ups metrics
   SELECT
     COUNT(f.id) FILTER (WHERE f.status = 'pending'),
-    COUNT(f.id) FILTER (WHERE f.status = 'pending' AND f.due_at < v_today_start),
+    COUNT(f.id) FILTER (WHERE f.status = 'pending' AND f.due_at < NOW()),
     COUNT(f.id) FILTER (WHERE f.status = 'pending' AND f.due_at >= v_today_start AND f.due_at < v_today_end)
   INTO
     v_pend_fu,

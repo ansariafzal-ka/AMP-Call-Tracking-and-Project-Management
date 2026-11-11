@@ -13,12 +13,19 @@ export type CallOutcome = 'interested' | 'not_interested' | 'unanswered' | 'foll
 export interface CallItem {
   id: number;
   user_id: number;
+  contact_id?: number | null;
+  contact_name?: string | null;
+  contact_category?: string | null;
+  contact_city?: string | null;
+  contact_state?: string | null;
+  contact_pin_code?: string | null;
   contact_number: string;
   duration_seconds: number;
   status: 'answered' | 'not_answered';
   purpose: string | null;
   outcome: CallOutcome;
   follow_up_date: string | null;
+  follow_up_status?: 'pending' | 'completed' | 'cancelled' | null;
   called_at: string;
   created_at: string;
 }
@@ -84,6 +91,11 @@ export interface UpdateCallPayload {
   purpose?: string | null;
   outcome?: CallOutcome;
   follow_up_date?: string | null;
+  contact_name?: string;
+  contact_category?: string;
+  contact_city?: string;
+  contact_state?: string;
+  contact_pin_code?: string;
 }
 
 export async function updateCallRecord(

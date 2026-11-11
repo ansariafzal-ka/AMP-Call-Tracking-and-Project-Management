@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthenticatedRequest } from '../types/auth';
 import { CallOutcome } from '../types/call';
 import * as callModel from '../models/callModel';
+import * as contactModel from '../models/contactModel';
 
 export async function createCall(req: AuthenticatedRequest, res: Response) {
   try {
@@ -119,13 +120,18 @@ export async function updateCall(req: AuthenticatedRequest, res: Response) {
       return res.status(400).json({ status: 'error', message: 'Invalid call id' });
     }
 
-    const { purpose, outcome, follow_up_date } = req.body;
+    const { purpose, outcome, follow_up_date, contact_name, contact_category, contact_city, contact_state, contact_pin_code } = req.body;
 
     // At least one of the keys must be present
-    if (purpose === undefined && outcome === undefined && follow_up_date === undefined) {
+    if (
+      purpose === undefined &&
+      outcome === undefined &&
+      follow_up_date === undefined &&
+      contact_name === undefined
+    ) {
       return res.status(400).json({
         status: 'error',
-        message: 'At least one of purpose, outcome or follow_up_date must be provided',
+        message: 'At least one field to update must be provided',
       });
     }
 
@@ -181,6 +187,23 @@ export async function updateCall(req: AuthenticatedRequest, res: Response) {
     const existingCall = await callModel.findUserCallById(callId, userId);
     if (!existingCall) {
       return res.status(404).json({ status: 'error', message: 'Call not found' });
+    }
+
+    // If contact details are provided for an unknown number, auto-create/update the contact
+    if (contact_name && typeof contact_name === 'string' && contact_name.trim()) {
+      try {
+        await contactModel.createCallerContact(userId, {
+          name: contact_name.trim(),
+          mobile_number: existingCall.contact_number,
+          category: typeof contact_category === 'string' ? contact_category.trim() : 'other',
+          city: typeof contact_city === 'string' ? contact_city.trim() : undefined,
+          state: typeof contact_state === 'string' ? contact_state.trim() : undefined,
+          pin_code: typeof contact_pin_code === 'string' ? contact_pin_code.trim() : undefined,
+          call_id: callId,
+        });
+      } catch (cErr) {
+        console.warn('Failed to auto-link new contact on call update:', cErr);
+      }
     }
 
     // Perform update

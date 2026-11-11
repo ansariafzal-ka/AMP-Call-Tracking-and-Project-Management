@@ -196,6 +196,7 @@ export async function getMe(req: AuthenticatedRequest, res: Response) {
         fullName: user.full_name,
         email: user.email,
         mobileNumber: user.mobile_number,
+        role: user.role || 'caller',
         createdAt: user.created_at,
       },
     });

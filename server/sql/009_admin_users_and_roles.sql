@@ -191,7 +191,7 @@ BEGIN
       p_is_active IS NULL
       OR u.is_active = p_is_active
     )
-  ORDER BY u.id ASC
+  ORDER BY u.created_at DESC, u.id DESC
   LIMIT p_limit OFFSET p_offset;
 END;
 $$ LANGUAGE plpgsql;

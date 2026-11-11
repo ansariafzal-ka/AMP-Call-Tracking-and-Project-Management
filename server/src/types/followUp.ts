@@ -6,6 +6,8 @@ export interface FollowUpRow {
   contact_mobile: string;
   contact_category: string;
   contact_city?: string | null;
+  contact_state?: string | null;
+  contact_pin_code?: string | null;
   call_id?: number | null;
   due_at: string;
   status: 'pending' | 'completed' | 'rescheduled' | 'cancelled';
@@ -24,6 +26,7 @@ export interface FollowUpSummaryCounts {
   overdue: number;
   upcoming: number;
   completed: number;
+  all?: number;
 }
 
 export interface CreateFollowUpDTO {

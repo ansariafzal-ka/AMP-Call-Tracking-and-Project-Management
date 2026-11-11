@@ -6,12 +6,15 @@ export interface ContactRow {
   alternate_number?: string | null;
   email?: string | null;
   city?: string | null;
+  state?: string | null;
+  pin_code?: string | null;
   category: string;
   notes?: string | null;
   created_at: string;
   total_calls?: number;
   last_called_at?: string | null;
   last_call_status?: string | null;
+  last_call_outcome?: string | null;
   filtered_total?: number;
 }
 

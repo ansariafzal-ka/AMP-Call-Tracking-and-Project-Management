@@ -12,7 +12,7 @@ export async function getFollowUps(req: AuthenticatedRequest, res: Response): Pr
 
     const filter = typeof req.query.status === 'string' ? req.query.status.toLowerCase() : 'all';
     const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit as string, 10) || 20));
+    const limit = Math.min(5000, Math.max(1, parseInt(req.query.limit as string, 10) || 20));
     const offset = (page - 1) * limit;
 
     const { followUps, counts, total } = await followUpModel.getCategorizedFollowUps(

@@ -10,6 +10,8 @@ import followUpsRouter from './routes/followUps';
 import adminUsersRouter from './routes/adminUsers';
 import adminContactsRouter from './routes/adminContacts';
 import adminDashboardRouter from './routes/adminDashboard';
+import adminProjectsRouter from './routes/adminProjects';
+import adminCallsRouter from './routes/adminCalls';
 
 dotenv.config();
 
@@ -45,6 +47,12 @@ app.use('/api/admin/contacts', adminContactsRouter);
 
 app.use('/admin/dashboard', adminDashboardRouter);
 app.use('/api/admin/dashboard', adminDashboardRouter);
+
+app.use('/admin/projects', adminProjectsRouter);
+app.use('/api/admin/projects', adminProjectsRouter);
+
+app.use('/admin/calls', adminCallsRouter);
+app.use('/api/admin/calls', adminCallsRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on http://0.0.0.0:${PORT}`);

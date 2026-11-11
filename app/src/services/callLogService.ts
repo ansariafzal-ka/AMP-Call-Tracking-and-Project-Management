@@ -10,6 +10,14 @@ export interface FormattedCallRecord {
   timestamp?: string | number;
 }
 
+// Format duration in seconds to "Xm Ys"
+export function formatDuration(seconds: number): string {
+  const s = Math.max(0, Math.floor(seconds || 0));
+  const mins = Math.floor(s / 60);
+  const secs = s % 60;
+  return `${mins}m ${secs}s`;
+}
+
 // Format date into exact "DD MMM YYYY, hh:mm A" format
 export function formatDateTime(rawTimestamp: number | string | undefined): string {
   if (!rawTimestamp) return 'N/A';

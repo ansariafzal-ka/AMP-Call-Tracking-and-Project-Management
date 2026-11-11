@@ -158,3 +158,55 @@ export async function updateAdminUser(req: AuthenticatedRequest, res: Response):
   }
 }
 
+export async function deleteAdminUser(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const currentAdminId = req.user?.id;
+    const idParam = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const targetUserId = parseInt(idParam, 10);
+
+    if (!targetUserId || isNaN(targetUserId)) {
+      res.status(400).json({ success: false, message: 'Invalid user ID' });
+      return;
+    }
+
+    if (currentAdminId && currentAdminId === targetUserId) {
+      res.status(400).json({
+        success: false,
+        message: 'You cannot delete your own logged-in admin account',
+      });
+      return;
+    }
+
+    const { transferUserId } = req.body || {};
+    const parsedTransferId = transferUserId ? parseInt(transferUserId, 10) : null;
+
+    if (parsedTransferId && parsedTransferId === targetUserId) {
+      res.status(400).json({
+        success: false,
+        message: 'Cannot transfer contacts to the user being deleted',
+      });
+      return;
+    }
+
+    const result = await adminUserModel.deleteAdminUser(targetUserId, parsedTransferId);
+    if (!result) {
+      res.status(404).json({ success: false, message: 'User not found or already deleted' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `User deleted successfully. ${result.transferred_contacts_count} contact(s) ${parsedTransferId ? 'transferred' : 'unassigned'}.`,
+      data: result,
+    });
+  } catch (err: any) {
+    console.error('Error deleting user via admin:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete user',
+      error: err.message,
+    });
+  }
+}
+
+

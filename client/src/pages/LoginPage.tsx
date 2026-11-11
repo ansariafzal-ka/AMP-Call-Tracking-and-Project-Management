@@ -42,7 +42,9 @@ export const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-page-bg flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-[400px] bg-card-bg rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
         <div className="flex flex-col items-center text-center mb-6">
-          <AmpLogo className="mb-3" />
+          <div className="flex justify-center w-full mb-3">
+            <AmpLogo className="h-10 w-auto" />
+          </div>
           <h1 className="text-xl font-bold text-text-main">Call Tracker</h1>
           <p className="text-sm text-text-muted mt-1">
             Sign in to your coordinator account

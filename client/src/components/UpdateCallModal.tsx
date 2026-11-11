@@ -29,6 +29,11 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
   const [note, setNote] = useState('');
   const [outcome, setOutcome] = useState<CallOutcome>(null);
   const [followUpLocal, setFollowUpLocal] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [contactCategory, setContactCategory] = useState('other');
+  const [contactCity, setContactCity] = useState('');
+  const [contactState, setContactState] = useState('');
+  const [contactPinCode, setContactPinCode] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,6 +42,11 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
       setNote(call.purpose || '');
       setOutcome(call.outcome || null);
       setFollowUpLocal(toDateTimeLocalValue(call.follow_up_date));
+      setContactName(call.contact_name && call.contact_name !== 'Unknown' ? call.contact_name : '');
+      setContactCategory('other');
+      setContactCity('');
+      setContactState('');
+      setContactPinCode('');
       setError(null);
       setSaving(false);
     }
@@ -79,6 +89,11 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
         purpose: trimmedNote ? trimmedNote : null,
         outcome,
         follow_up_date: followUpFormatted,
+        contact_name: contactName.trim() || undefined,
+        contact_category: contactCategory,
+        contact_city: contactCity.trim() || undefined,
+        contact_state: contactState.trim() || undefined,
+        contact_pin_code: contactPinCode.trim() || undefined,
       });
 
       if (res.data?.call) {
@@ -119,6 +134,78 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
             {call.contact_number} &bull; {formatDateTime(call.called_at)}
           </p>
         </div>
+
+        {call.contact_name && call.contact_name !== 'Unknown' ? (
+          <div className="mb-4 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium flex items-center justify-between">
+            <span>👤 Contact: <strong>{call.contact_name}</strong></span>
+            <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full uppercase font-bold">
+              Recognized
+            </span>
+          </div>
+        ) : (
+          <div className="mb-4 p-3 rounded-lg bg-purple-50/70 border border-purple-100 text-xs text-gray-700 space-y-2">
+            <div className="flex items-center justify-between font-semibold text-purple-900">
+              <span>Add to Contacts</span>
+              <span className="text-[10px] text-gray-500 font-normal">(Optional)</span>
+            </div>
+            <div>
+              <label className="block text-[11px] text-gray-600 mb-0.5 font-medium">Full Name</label>
+              <input
+                type="text"
+                placeholder="e.g. Imran Khan"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                className="w-full px-2.5 py-1.5 rounded border border-gray-300 bg-white text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
+              />
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div>
+                <label className="block text-[11px] text-gray-600 mb-0.5 font-medium">Category</label>
+                <select
+                  value={contactCategory}
+                  onChange={(e) => setContactCategory(e.target.value)}
+                  className="w-full px-2 py-1.5 rounded border border-gray-300 bg-white text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                >
+                  <option value="student">Student</option>
+                  <option value="professional">Professional</option>
+                  <option value="donor">Donor</option>
+                  <option value="job_seeker">Job Seeker</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[11px] text-gray-600 mb-0.5 font-medium">State</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Maharashtra"
+                  value={contactState}
+                  onChange={(e) => setContactState(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-gray-300 bg-white text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] text-gray-600 mb-0.5 font-medium">City</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Mumbai"
+                  value={contactCity}
+                  onChange={(e) => setContactCity(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-gray-300 bg-white text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] text-gray-600 mb-0.5 font-medium">Pin Code</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 400001"
+                  value={contactPinCode}
+                  onChange={(e) => setContactPinCode(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-gray-300 bg-white text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           {/* Note Textarea */}

@@ -145,3 +145,52 @@ export async function clearPendingCall(): Promise<void> {
     console.error('Error clearing pending call:', error);
   }
 }
+
+export async function popPendingCall(): Promise<PendingCall | null> {
+  try {
+    const call = await getPendingCall();
+    if (call) {
+      await clearPendingCall();
+    }
+    return call;
+  } catch (error) {
+    console.error('Error popping pending call:', error);
+    return null;
+  }
+}
+
+const LAST_CONTACT_COUNT_PREFIX = 'amp_last_contact_count_';
+
+export async function getLastContactCount(userId: number | string): Promise<number | null> {
+  try {
+    const key = `${LAST_CONTACT_COUNT_PREFIX}${userId}`;
+    let val: string | null = null;
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        val = window.localStorage.getItem(key);
+      }
+    } else {
+      val = await SecureStore.getItemAsync(key);
+    }
+    return val !== null && !isNaN(parseInt(val, 10)) ? parseInt(val, 10) : null;
+  } catch (error) {
+    console.warn('Error reading last contact count:', error);
+    return null;
+  }
+}
+
+export async function saveLastContactCount(userId: number | string, count: number): Promise<void> {
+  try {
+    const key = `${LAST_CONTACT_COUNT_PREFIX}${userId}`;
+    const str = String(count);
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem(key, str);
+      }
+    } else {
+      await SecureStore.setItemAsync(key, str);
+    }
+  } catch (error) {
+    console.warn('Error saving last contact count:', error);
+  }
+}

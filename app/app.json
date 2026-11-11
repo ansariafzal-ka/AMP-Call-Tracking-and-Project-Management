@@ -12,7 +12,8 @@
     "android": {
       "package": "com.amp.calltracker",
       "permissions": [
-        "android.permission.READ_CALL_LOG"
+        "android.permission.READ_CALL_LOG",
+        "android.permission.POST_NOTIFICATIONS"
       ],
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
@@ -25,7 +26,14 @@
     },
     "plugins": [
       "expo-secure-store",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/app-logo.png",
+          "color": "#801321"
+        }
+      ]
     ],
     "extra": {
       "eas": {

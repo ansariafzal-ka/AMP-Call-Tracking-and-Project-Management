@@ -12,12 +12,17 @@ export interface CallRow {
   user_id: number;
   contact_id?: number | null;
   contact_name?: string | null;
+  contact_category?: string | null;
+  contact_city?: string | null;
+  contact_state?: string | null;
+  contact_pin_code?: string | null;
   contact_number: string;
   duration_seconds: number;
   status: CallStatus;
   purpose: string | null;
   outcome: CallOutcome;
   follow_up_date: string | null;
+  follow_up_status?: 'pending' | 'completed' | 'cancelled' | null;
   called_at: Date;
   created_at: Date;
 }

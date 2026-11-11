@@ -26,3 +26,8 @@ npm-debug.log*
 # OS files
 .DS_Store
 Thumbs.db
+/figma-screens
+
+# Mock and test files
+mock_*.csv
+*.csv

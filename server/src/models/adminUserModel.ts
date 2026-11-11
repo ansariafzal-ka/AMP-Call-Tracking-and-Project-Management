@@ -60,3 +60,23 @@ export async function updateAdminUser(
   return result.rows[0] || null;
 }
 
+export async function deleteAdminUser(
+  userId: number,
+  transferUserId?: number | null
+): Promise<{
+  deleted_user_id: number;
+  transferred_contacts_count: number;
+  transferred_followups_count: number;
+} | null> {
+  const result = await pool.query<{
+    deleted_user_id: number;
+    transferred_contacts_count: number;
+    transferred_followups_count: number;
+  }>(
+    'SELECT * FROM sp_admin_delete_user($1, $2)',
+    [userId, transferUserId || null]
+  );
+  return result.rows[0] || null;
+}
+
+

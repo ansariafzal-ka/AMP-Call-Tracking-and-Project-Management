@@ -36,8 +36,11 @@ import {
   savePendingCall,
   getPendingCall,
   clearPendingCall,
+  popPendingCall,
 } from '../services/storage';
 import { findMatchingRecentOutgoingCall } from '../services/callLogService';
+import { lookupContactNumber, RecognizedContact } from '../services/contactsApi';
+import { scheduleFollowUpNotification } from '../services/notificationService';
 
 export function formatDuration(totalSeconds: number): string {
   const sec = Math.max(0, Math.floor(totalSeconds || 0));
@@ -175,6 +178,8 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   // Keypad bottom sheet state
   const [isKeypadVisible, setIsKeypadVisible] = useState(false);
   const [keypadNumber, setKeypadNumber] = useState('');
+  const [recognizedContact, setRecognizedContact] = useState<RecognizedContact | null>(null);
+  const [isLookingUp, setIsLookingUp] = useState<boolean>(false);
 
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
@@ -258,6 +263,15 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   const [isSaving, setIsSaving] = useState(false);
   const [sheetError, setSheetError] = useState<string | null>(null);
 
+  // New Contact fields (when call is with an unknown/unrecognized number)
+  const [contactName, setContactName] = useState('');
+  const [contactCategory, setContactCategory] = useState('other');
+  const [contactCity, setContactCity] = useState('');
+  const [contactState, setContactState] = useState('');
+  const [contactPinCode, setContactPinCode] = useState('');
+  const [sheetRecognizedContact, setSheetRecognizedContact] = useState<RecognizedContact | null>(null);
+  const [isSheetLookingUp, setIsSheetLookingUp] = useState(false);
+
   // Field validation for Update Call
   // Note is optional; Outcome is required; if Outcome is follow_up_required, followUpDate is required
   const isOutcomeValid = selectedOutcome !== null;
@@ -271,6 +285,31 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     setSelectedCall(call);
     setPurposeText(call.purpose || '');
     setSelectedOutcome(call.outcome || null);
+
+    setContactName('');
+    setContactCategory('other');
+    setContactCity('');
+    setContactState('');
+    setContactPinCode('');
+    setSheetRecognizedContact(null);
+
+    // Look up contact details if number is present
+    if (token && call.contact_number) {
+      setIsSheetLookingUp(true);
+      lookupContactNumber(call.contact_number, token)
+        .then((c) => {
+          setSheetRecognizedContact(c);
+          if (c) {
+            setContactName(c.name || '');
+            setContactCategory(c.category || 'other');
+            setContactCity(c.city || '');
+            setContactState(c.state || '');
+            setContactPinCode(c.pin_code || '');
+          }
+        })
+        .catch(() => { })
+        .finally(() => setIsSheetLookingUp(false));
+    }
 
     // Parse existing follow_up_date if present
     if (call.follow_up_date) {
@@ -367,24 +406,35 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     if (isSyncingRef.current || !token) return;
 
     try {
-      const pending = await getPendingCall();
-      if (!pending) return;
-
-      const now = Date.now();
-      if (now - pending.started_at > 3600 * 1000) {
-        console.log('Discarding expired pending call (>1hr)');
-        await clearPendingCall();
+      isSyncingRef.current = true;
+      const pending = await popPendingCall();
+      if (!pending) {
+        isSyncingRef.current = false;
         return;
       }
 
-      isSyncingRef.current = true;
-      setSyncMessage('Processing recent call log...');
+      const now = Date.now();
+      const elapsed = now - pending.started_at;
+      if (elapsed > 3600 * 1000) {
+        console.log('Discarding expired pending call (>1hr)');
+        isSyncingRef.current = false;
+        return;
+      }
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // If user returned immediately (< 3.5s), dialer chooser was dismissed without calling
+      if (elapsed < 3500) {
+        console.log('Returned in <3.5s, dialer was cancelled without calling.');
+        isSyncingRef.current = false;
+        return;
+      }
+
+      // Check silently in the background (wait 1.5s for native log flush)
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const match = await findMatchingRecentOutgoingCall(pending.number, pending.started_at);
 
       if (match) {
+        setSyncMessage('Call recorded successfully!');
         try {
           const createdCall = await createCallRecord(
             {
@@ -395,8 +445,6 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
             },
             token
           );
-          await clearPendingCall();
-          setSyncMessage('Call recorded successfully!');
           setTimeout(() => setSyncMessage(null), 3000);
           await loadCalls(0, true);
 
@@ -411,7 +459,6 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
         }
       } else {
         console.log('No matching call found in log. Discarding pending call.');
-        await clearPendingCall();
       }
     } catch (err) {
       console.warn('Error checking pending call:', err);
@@ -518,12 +565,35 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     });
   }, []);
 
+  // Auto-recognize contact when typing 10 or more digits on keypad
+  useEffect(() => {
+    const cleanDigits = keypadNumber.replace(/\D/g, '');
+    if (cleanDigits.length >= 10 && token) {
+      setIsLookingUp(true);
+      const timer = setTimeout(async () => {
+        try {
+          const contact = await lookupContactNumber(cleanDigits, token);
+          setRecognizedContact(contact);
+        } catch {
+          setRecognizedContact(null);
+        } finally {
+          setIsLookingUp(false);
+        }
+      }, 200);
+      return () => clearTimeout(timer);
+    } else {
+      setRecognizedContact(null);
+      setIsLookingUp(false);
+    }
+  }, [keypadNumber, token]);
+
   const handleKeypadCall = useCallback(async () => {
     const cleanDigits = keypadNumber.replace(/\D/g, '');
     if (cleanDigits.length < 10) return;
     const numberToCall = keypadNumber;
     setIsKeypadVisible(false);
     setKeypadNumber('');
+    setRecognizedContact(null);
     await handleInitiateCall(numberToCall);
   }, [keypadNumber]);
 
@@ -606,18 +676,32 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
           purpose: cleanPurpose || null,
           outcome: selectedOutcome,
           follow_up_date: followUpDateStr,
+          contact_name: contactName.trim() || undefined,
+          contact_category: contactCategory,
+          contact_city: contactCity.trim() || undefined,
+          contact_state: contactState.trim() || undefined,
+          contact_pin_code: contactPinCode.trim() || undefined,
         },
         token
       );
+
+      // Schedule local system notification for this scheduled follow-up
+      if (selectedOutcome === 'follow_up_required' && followUpDate) {
+        scheduleFollowUpNotification({
+          followUpId: `call_${selectedCall.id}`,
+          contactName: contactName.trim() || selectedCall.contact_name || selectedCall.contact_number,
+          contactMobile: selectedCall.contact_number,
+          dueAt: followUpDate,
+          notes: cleanPurpose || undefined,
+        }).catch(() => {});
+      }
 
       // Close the sheet
       setIsSheetVisible(false);
       setSelectedCall(null);
 
-      // Update card in list in-place without reloading whole list
-      setCalls((prev) =>
-        prev.map((c) => (c.id === updated.id ? { ...c, ...updated } : c))
-      );
+      // Refresh calls and summary to reflect new contact assignment and stats
+      await loadCalls(0, true);
     } catch (err: any) {
       console.error('Failed to update call:', err);
       const msg =
@@ -642,7 +726,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     );
   };
 
-  const renderOutcomePill = (outcome: CallOutcome) => {
+  const renderOutcomePill = (outcome: CallOutcome, followUpStatus?: string | null) => {
     let color = '#6B7280';
     let bg = '#F9FAFB';
     let label = 'Not set';
@@ -659,9 +743,15 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
         label = 'Not Interested';
         break;
       case 'follow_up_required':
-        color = '#92400E';
-        bg = '#FEF3C7';
-        label = 'Follow-up Required';
+        if (followUpStatus === 'completed') {
+          color = '#065F46';
+          bg = '#ECFDF5';
+          label = 'Follow-up done';
+        } else {
+          color = '#92400E';
+          bg = '#FEF3C7';
+          label = 'Follow-up Required';
+        }
         break;
       case 'unanswered':
         color = '#374151';
@@ -679,8 +769,28 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     );
   };
 
+  const getCategoryStyles = (category?: string | null) => {
+    switch (category?.toLowerCase()) {
+      case 'donor':
+        return { bg: '#FEF3C7', text: '#B45309', border: '#FDE68A' };
+      case 'beneficiary':
+        return { bg: '#D1FAE5', text: '#047857', border: '#A7F3D0' };
+      case 'student':
+        return { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE' };
+      case 'volunteer':
+        return { bg: '#F3E8FF', text: '#7E22CE', border: '#E9D5FF' };
+      case 'professional':
+        return { bg: '#E0E7FF', text: '#4338CA', border: '#C7D2FE' };
+      default:
+        return { bg: '#F1F5F9', text: '#475569', border: '#E2E8F0' };
+    }
+  };
+
   const renderCallItem = ({ item }: { item: CallItem }) => {
     const isAnswered = item.status === 'answered';
+    const isFollowUpCompleted = item.follow_up_status === 'completed';
+    const hasContact = Boolean(item.contact_name && item.contact_name.trim() && item.contact_name !== 'Unknown');
+    const catStyle = getCategoryStyles(item.contact_category);
 
     return (
       <TouchableOpacity
@@ -688,15 +798,54 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
         activeOpacity={0.8}
         onPress={() => handleOpenUpdateSheet(item, false)}
       >
-        {/* Row 1: Contact Number, Status Pill */}
+        {/* Row 1: Contact Name (or Number) + Category + Status Pill */}
         <View style={[styles.cardRow, styles.cardRowHeader]}>
-          <Text style={styles.contactNumberText}>{item.contact_number}</Text>
+          <View style={styles.cardContactHeaderLeft}>
+            <View style={styles.cardNameRow}>
+              <Text style={styles.contactNameText} numberOfLines={1}>
+                {hasContact ? item.contact_name : item.contact_number}
+              </Text>
+              {hasContact && item.contact_category ? (
+                <View
+                  style={[
+                    styles.categoryBadge,
+                    { backgroundColor: catStyle.bg, borderColor: catStyle.border },
+                  ]}
+                >
+                  <Text style={[styles.categoryBadgeText, { color: catStyle.text }]}>
+                    {item.contact_category}
+                  </Text>
+                </View>
+              ) : !hasContact ? (
+                <View style={styles.unsavedBadge}>
+                  <Text style={styles.unsavedBadgeText}>Unsaved</Text>
+                </View>
+              ) : null}
+            </View>
+
+            {/* Sub-row with phone number and optional location */}
+            {hasContact ? (
+              <View style={styles.cardContactSubRow}>
+                <Text style={styles.cardSubNumberText}>{item.contact_number}</Text>
+                {(() => {
+                  const loc = [item.contact_state, item.contact_city].filter(Boolean).join(', ') + (item.contact_pin_code ? ` - ${item.contact_pin_code}` : '');
+                  return loc ? (
+                    <View style={styles.locationRow}>
+                      <Text style={styles.dotSeparator}>•</Text>
+                      <Feather name="map-pin" size={10} color="#64748B" style={{ marginRight: 3, flexShrink: 0 }} />
+                      <Text style={styles.locationText} numberOfLines={1} ellipsizeMode="tail">{loc}</Text>
+                    </View>
+                  ) : null;
+                })()}
+              </View>
+            ) : null}
+          </View>
           {renderStatusPill(isAnswered)}
         </View>
 
         {/* Row 2: Outcome Pill, Note / Purpose */}
         <View style={styles.cardRow}>
-          {renderOutcomePill(item.outcome)}
+          {renderOutcomePill(item.outcome, item.follow_up_status)}
           <Text style={styles.purposeText} numberOfLines={1} ellipsizeMode="tail">
             {item.purpose ? `Note: ${item.purpose}` : 'No notes'}
           </Text>
@@ -705,10 +854,28 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
         {/* Optional Follow-up Date & Time if scheduled */}
         {item.outcome === 'follow_up_required' && item.follow_up_date && (
           <View style={styles.cardFollowUpRow}>
-            <Feather name="calendar" size={12} color="#92400E" style={{ marginRight: 5 }} />
-            <Text style={styles.cardFollowUpText}>
+            <Feather
+              name={isFollowUpCompleted ? 'check-circle' : 'calendar'}
+              size={12}
+              color={isFollowUpCompleted ? '#059669' : '#92400E'}
+              style={{ marginRight: 5 }}
+            />
+            <Text
+              style={[
+                styles.cardFollowUpText,
+                isFollowUpCompleted && {
+                  textDecorationLine: 'line-through',
+                  color: '#6B7280',
+                },
+              ]}
+            >
               {formatDisplayDateTime(item.follow_up_date)}
             </Text>
+            {isFollowUpCompleted && (
+              <Text style={{ fontSize: 11, fontWeight: '700', color: '#059669', marginLeft: 6 }}>
+                Resolved
+              </Text>
+            )}
           </View>
         )}
 
@@ -726,13 +893,13 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
             <TouchableOpacity
               style={styles.redialBtn}
               accessibilityLabel="Redial"
-              activeOpacity={0.7}
+              activeOpacity={0.85}
               onPress={(e) => {
                 e?.stopPropagation?.();
                 handleInitiateCall(item.contact_number);
               }}
             >
-              <Feather name="phone-call" size={16} color={colors.primary.main} />
+              <Feather name="phone-call" size={17} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
         </View>
@@ -1130,6 +1297,111 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                 </Text>
               </View>
 
+              {/* Contact Information & Auto-Recognition Banner */}
+              {isSheetLookingUp ? (
+                <View style={styles.sheetContactLoading}>
+                  <ActivityIndicator size="small" color={colors.primary.main} />
+                  <Text style={styles.sheetContactLoadingText}>Looking up contact in database...</Text>
+                </View>
+              ) : sheetRecognizedContact ? (
+                <View style={styles.sheetContactCard}>
+                  <View style={styles.sheetContactHeader}>
+                    <View style={styles.sheetContactTitleRow}>
+                      <Feather name="user-check" size={15} color="#059669" style={{ marginRight: 6 }} />
+                      <Text style={styles.sheetContactName}>{sheetRecognizedContact.name}</Text>
+                    </View>
+                    <View style={styles.sheetCategoryBadge}>
+                      <Text style={styles.sheetCategoryText}>
+                        {(sheetRecognizedContact.category || 'OTHER').toUpperCase()}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={styles.sheetContactDetails}>
+                    {sheetRecognizedContact.city ? `${sheetRecognizedContact.city} • ` : ''}
+                    {sheetRecognizedContact.total_calls} calls recorded
+                    {sheetRecognizedContact.last_call_outcome ? ` • Last: ${sheetRecognizedContact.last_call_outcome.replace(/_/g, ' ')}` : ''}
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.newContactCard}>
+                  <View style={styles.newContactHeader}>
+                    <Feather name="user-plus" size={14} color={colors.primary.main} style={{ marginRight: 6 }} />
+                    <Text style={styles.newContactTitle}>Add to Contacts</Text>
+                    <Text style={styles.optionalBadge}>(Optional)</Text>
+                  </View>
+                  <Text style={styles.newContactSubtext}>
+                    Save this contact so future calls auto-recognize their name and details.
+                  </Text>
+
+                  <Text style={styles.newContactFieldLabel}>Full Name</Text>
+                  <TextInput
+                    style={styles.newContactInput}
+                    placeholder="Enter full name"
+                    placeholderTextColor="#94A3B8"
+                    value={contactName}
+                    onChangeText={setContactName}
+                  />
+
+                  <Text style={styles.newContactFieldLabel}>Category</Text>
+                  <View style={styles.categoryChipsRow}>
+                    {['student', 'professional', 'donor', 'job_seeker', 'other'].map((cat) => (
+                      <TouchableOpacity
+                        key={cat}
+                        style={[
+                          styles.catChip,
+                          contactCategory === cat && styles.catChipSelected,
+                        ]}
+                        onPress={() => setContactCategory(cat)}
+                        activeOpacity={0.7}
+                      >
+                        <Text
+                          style={[
+                            styles.catChipText,
+                            contactCategory === cat && styles.catChipTextSelected,
+                          ]}
+                        >
+                          {cat === 'job_seeker' ? 'Job Seeker' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.newContactFieldLabel}>State</Text>
+                      <TextInput
+                        style={styles.newContactInput}
+                        placeholder="e.g. MH"
+                        placeholderTextColor="#94A3B8"
+                        value={contactState}
+                        onChangeText={setContactState}
+                      />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.newContactFieldLabel}>City</Text>
+                      <TextInput
+                        style={styles.newContactInput}
+                        placeholder="e.g. Mumbai"
+                        placeholderTextColor="#94A3B8"
+                        value={contactCity}
+                        onChangeText={setContactCity}
+                      />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.newContactFieldLabel}>Pin Code</Text>
+                      <TextInput
+                        style={styles.newContactInput}
+                        placeholder="e.g. 400001"
+                        placeholderTextColor="#94A3B8"
+                        value={contactPinCode}
+                        onChangeText={setContactPinCode}
+                        keyboardType="numeric"
+                      />
+                    </View>
+                  </View>
+                </View>
+              )}
+
               {/* Note (previously Purpose of call) */}
               <View style={styles.fieldLabelRow}>
                 <Text style={styles.fieldLabel}>Note</Text>
@@ -1361,6 +1633,51 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                 </TouchableOpacity>
               )}
             </View>
+
+            {/* Auto-Recognition Live Banner */}
+            {isLookingUp ? (
+              <View style={styles.recognizedLoadingBanner}>
+                <ActivityIndicator size="small" color={colors.primary.main} />
+                <Text style={styles.recognizedLoadingText}>Checking contact database...</Text>
+              </View>
+            ) : recognizedContact ? (
+              <View style={styles.recognizedCard}>
+                <View style={styles.recognizedRow}>
+                  <Feather name="check-circle" size={13} color="#059669" style={{ marginRight: 5 }} />
+                  <Text style={styles.recognizedName} numberOfLines={1}>
+                    {recognizedContact.name}
+                  </Text>
+                  <View style={styles.recognizedPill}>
+                    <Text style={styles.recognizedPillText}>
+                      {(recognizedContact.category || 'OTHER').toUpperCase()}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.recognizedDetails}>
+                  {(() => {
+                    const loc = [recognizedContact.state, recognizedContact.city].filter(Boolean).join(', ') + (recognizedContact.pin_code ? ` - ${recognizedContact.pin_code}` : '');
+                    return loc ? `${loc} • ` : '';
+                  })()}
+                  {recognizedContact.total_calls} calls recorded
+                  {recognizedContact.last_call_outcome ? ` • Last: ${recognizedContact.last_call_outcome.replace(/_/g, ' ')}` : ''}
+                </Text>
+                {recognizedContact.pending_follow_up_due_at && (
+                  <View style={styles.recognizedPendingRow}>
+                    <Feather name="clock" size={11} color="#B45309" style={{ marginRight: 4 }} />
+                    <Text style={styles.recognizedPendingText}>
+                      Pending callback: {formatDisplayDateTime(recognizedContact.pending_follow_up_due_at)}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            ) : keypadNumber.replace(/\D/g, '').length >= 10 ? (
+              <View style={styles.unrecognizedBanner}>
+                <Feather name="user-plus" size={12} color="#64748B" style={{ marginRight: 5 }} />
+                <Text style={styles.unrecognizedText}>
+                  New Number • You can add contact name after calling
+                </Text>
+              </View>
+            ) : null}
 
             {/* c. Keypad Grid */}
             <View style={styles.keypadGrid}>
@@ -1638,6 +1955,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cardRowHeader: {
+    alignItems: 'flex-start',
     marginBottom: 8,
   },
   leftGroup: {
@@ -1648,6 +1966,74 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     color: colors.text.primary,
+  },
+  cardContactHeaderLeft: {
+    flex: 1,
+    marginRight: 8,
+  },
+  cardNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  contactNameText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text.primary,
+  },
+  categoryBadge: {
+    paddingHorizontal: 7,
+    paddingVertical: 1.5,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  categoryBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'capitalize',
+  },
+  unsavedBadge: {
+    backgroundColor: '#F1F5F9',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  unsavedBadgeText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#64748B',
+  },
+  cardContactSubRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  cardSubNumberText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#64748B',
+    flexShrink: 0,
+  },
+  dotSeparator: {
+    marginHorizontal: 5,
+    color: '#94A3B8',
+    fontSize: 11,
+    flexShrink: 0,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    flexShrink: 1,
+  },
+  locationText: {
+    fontSize: 12,
+    color: '#64748B',
+    fontWeight: '500',
+    flex: 1,
   },
   cardDivider: {
     height: 1,
@@ -1676,12 +2062,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   redialBtn: {
-    width: 34,
-    height: 34,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: colors.primary.main,
-    borderRadius: 8,
+    width: 38,
+    height: 38,
+    backgroundColor: colors.primary.main,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -2237,5 +2621,215 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
     fontWeight: '500',
+  },
+  // Auto-recognition in Keypad
+  recognizedLoadingBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#F8FAFC',
+    borderRadius: 8,
+    marginBottom: 8,
+    marginHorizontal: 16,
+  },
+  recognizedLoadingText: {
+    marginLeft: 8,
+    fontSize: 12,
+    color: '#64748B',
+  },
+  recognizedCard: {
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 8,
+    marginHorizontal: 16,
+  },
+  recognizedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  recognizedName: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#065F46',
+  },
+  recognizedPill: {
+    backgroundColor: '#D1FAE5',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginLeft: 6,
+  },
+  recognizedPillText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#047857',
+  },
+  recognizedDetails: {
+    fontSize: 11,
+    color: '#047857',
+    marginTop: 2,
+  },
+  recognizedPendingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    alignSelf: 'flex-start',
+  },
+  recognizedPendingText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#92400E',
+  },
+  unrecognizedBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 8,
+    marginHorizontal: 16,
+  },
+  unrecognizedText: {
+    fontSize: 11,
+    color: '#64748B',
+  },
+
+  // Update Call Sheet Contact Cards
+  sheetContactLoading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 14,
+  },
+  sheetContactLoadingText: {
+    marginLeft: 8,
+    fontSize: 12,
+    color: '#64748B',
+  },
+  sheetContactCard: {
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 14,
+  },
+  sheetContactHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  sheetContactTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  sheetContactName: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#065F46',
+  },
+  sheetCategoryBadge: {
+    backgroundColor: '#D1FAE5',
+    paddingHorizontal: 7,
+    paddingVertical: 2.5,
+    borderRadius: 6,
+    marginLeft: 6,
+  },
+  sheetCategoryText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#047857',
+  },
+  sheetContactDetails: {
+    fontSize: 11,
+    color: '#047857',
+    marginTop: 4,
+  },
+
+  // New Contact Form Card in Sheet
+  newContactCard: {
+    backgroundColor: '#FAF5FF',
+    borderWidth: 1,
+    borderColor: '#E9D5FF',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 14,
+  },
+  newContactHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  newContactTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.primary.main,
+    marginRight: 6,
+  },
+  newContactSubtext: {
+    fontSize: 11,
+    color: '#6B7280',
+    marginTop: 2,
+    marginBottom: 10,
+  },
+  newContactFieldLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: 4,
+    marginTop: 6,
+  },
+  newContactInput: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    fontSize: 13,
+    color: '#1E293B',
+  },
+  categoryChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    marginVertical: 4,
+  },
+  catChip: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  catChipSelected: {
+    backgroundColor: colors.primary.main,
+    borderColor: colors.primary.main,
+  },
+  catChipText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  catChipTextSelected: {
+    color: '#FFFFFF',
   },
 });

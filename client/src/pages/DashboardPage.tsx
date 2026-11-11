@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   PhoneCall,
   Clock,
@@ -9,7 +10,7 @@ import {
   AlertCircle,
   CheckCircle2,
   CalendarClock,
-  Users,
+  MapPin,
 } from 'lucide-react';
 import apiClient from '../api/client';
 import type {
@@ -145,7 +146,10 @@ export const DashboardPage: React.FC = () => {
     );
   };
 
-  const renderOutcomePill = (outcome: CallOutcome) => {
+  const renderOutcomePill = (
+    outcome: CallOutcome,
+    followUpStatus?: string | null
+  ) => {
     switch (outcome) {
       case 'interested':
         return (
@@ -166,6 +170,14 @@ export const DashboardPage: React.FC = () => {
           </span>
         );
       case 'follow_up_required':
+        if (followUpStatus === 'completed') {
+          return (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 whitespace-nowrap">
+              <CheckCircle2 size={12} className="text-emerald-600" />
+              Follow-up done
+            </span>
+          );
+        }
         return (
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 whitespace-nowrap">
             Follow-up required
@@ -242,20 +254,28 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Pending Follow-ups */}
-        <div className="bg-card-bg rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
-          <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+        <Link
+          to="/follow-ups"
+          className="bg-card-bg rounded-xl shadow-sm border border-gray-100 hover:border-blue-300 hover:shadow-md p-5 flex items-center gap-4 transition-all group"
+        >
+          <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors flex items-center justify-center shrink-0">
             <CalendarClock size={20} />
           </div>
-          <div>
-            <div className="text-sm font-medium text-text-muted">Follow-ups</div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-text-muted">Follow-ups</div>
+              <span className="text-[11px] font-semibold text-blue-600 group-hover:translate-x-0.5 transition-transform">
+                View →
+              </span>
+            </div>
             <div className="text-2xl font-bold text-blue-700 mt-0.5">
               {stats ? stats.pendingFollowUps : 0}
             </div>
-            <div className="text-xs text-blue-600 mt-0.5 font-medium">
+            <div className="text-xs text-blue-600 mt-0.5 font-medium truncate">
               {stats ? `${stats.totalAssignedContacts} assigned contacts` : 'Pending'}
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Call History Card */}
@@ -354,6 +374,7 @@ export const DashboardPage: React.FC = () => {
                     <th className="py-3.5 px-3 whitespace-nowrap">
                       Contact number
                     </th>
+                    <th className="py-3.5 px-3 whitespace-nowrap">Location</th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Status</th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Outcome</th>
                     <th className="py-3.5 px-3 whitespace-nowrap">Follow-up</th>
@@ -388,21 +409,59 @@ export const DashboardPage: React.FC = () => {
                         <td className="py-3.5 px-3 font-medium text-text-main whitespace-nowrap">
                           {call.contact_name ? (
                             <div>
-                              <div className="font-semibold text-text-main">{call.contact_name}</div>
-                              <div className="text-xs text-text-muted font-normal">{call.contact_number}</div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-semibold text-text-main">{call.contact_name}</span>
+                                {call.contact_category && (
+                                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 capitalize">
+                                    {call.contact_category}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-xs text-text-muted font-normal mt-0.5">
+                                <span>{call.contact_number}</span>
+                              </div>
                             </div>
                           ) : (
-                            call.contact_number
+                            <div className="flex items-center gap-1.5">
+                              <span>{call.contact_number}</span>
+                              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">
+                                Unsaved
+                              </span>
+                            </div>
                           )}
+                        </td>
+                        <td className="py-3.5 px-3 whitespace-nowrap">
+                          {(() => {
+                            const loc = [call.contact_state, call.contact_city].filter(Boolean).join(', ') + (call.contact_pin_code ? ` - ${call.contact_pin_code}` : '');
+                            return loc ? (
+                              <div className="text-xs font-medium text-text-main flex items-center gap-1">
+                                <MapPin size={12} className="text-text-muted shrink-0" />
+                                <span>{loc}</span>
+                              </div>
+                            ) : (
+                              <span className="text-xs text-text-muted/60">—</span>
+                            );
+                          })()}
                         </td>
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           {renderStatusPill(call.status)}
                         </td>
                         <td className="py-3.5 px-3 whitespace-nowrap">
-                          {renderOutcomePill(call.outcome)}
+                          {renderOutcomePill(call.outcome, call.follow_up_status)}
                         </td>
                         <td className="py-3.5 px-3 text-text-main whitespace-nowrap">
-                          {followUpValue}
+                          {call.follow_up_status === 'completed' && call.follow_up_date ? (
+                            <div className="flex flex-col">
+                              <span className="text-xs text-text-muted line-through">
+                                {formatDateTime(call.follow_up_date)}
+                              </span>
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+                                <CheckCircle2 size={11} /> Resolved
+                              </span>
+                            </div>
+                          ) : (
+                            followUpValue
+                          )}
                         </td>
                         <td className="py-3.5 px-3 max-w-[220px]">
                           {noteValue ? (

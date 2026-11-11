@@ -222,7 +222,7 @@ BEGIN
     (SELECT COUNT(*)::BIGINT FROM calls WHERE user_id = p_user_id AND called_at >= v_today_start) AS calls_made_today,
     (SELECT COUNT(*)::BIGINT FROM calls WHERE user_id = p_user_id AND called_at >= v_today_start AND status = 'answered') AS connected_calls_today,
     (SELECT COALESCE(SUM(duration_seconds), 0)::BIGINT FROM calls WHERE user_id = p_user_id AND called_at >= v_today_start) AS total_talk_time_today_seconds,
-    (SELECT COUNT(*)::BIGINT FROM calls WHERE user_id = p_user_id AND follow_up_date IS NOT NULL AND follow_up_date >= NOW()) AS pending_follow_ups,
+    (SELECT COUNT(*)::BIGINT FROM follow_ups WHERE user_id = p_user_id AND status = 'pending') AS pending_follow_ups,
     (SELECT COUNT(*)::BIGINT FROM calls WHERE user_id = p_user_id) AS total_calls_all_time;
 END;
 $$ LANGUAGE plpgsql;
