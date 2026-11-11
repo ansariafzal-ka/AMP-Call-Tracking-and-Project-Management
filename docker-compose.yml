@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: amp_call_tracker_backend
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    environment:
+      PORT: 4000
+      DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    expose:
+      - "4000"
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: amp_call_tracker_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
