@@ -59,7 +59,7 @@ export interface CreateCallPayload {
 
 export async function createCallRecord(payload: CreateCallPayload, token: string): Promise<CallItem> {
   const response = await axios.post<{ status: string; call: CallItem }>(
-    `${cleanBaseUrl}/calls`,
+    `${cleanBaseUrl}/api/calls`,
     payload,
     {
       headers: {
@@ -83,7 +83,7 @@ export async function fetchCalls(
   if (startDate) params.startDate = startDate;
   if (endDate) params.endDate = endDate;
 
-  const response = await axios.get<CallsResponse>(`${cleanBaseUrl}/calls`, {
+  const response = await axios.get<CallsResponse>(`${cleanBaseUrl}/api/calls`, {
     params,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ export async function updateCallRecord(
   token: string
 ): Promise<CallItem> {
   const response = await axios.patch<{ status: string; call: CallItem }>(
-    `${cleanBaseUrl}/calls/${id}`,
+    `${cleanBaseUrl}/api/calls/${id}`,
     payload,
     {
       headers: {

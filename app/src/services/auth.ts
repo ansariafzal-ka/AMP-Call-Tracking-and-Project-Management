@@ -49,7 +49,7 @@ export async function loginApi(payload: LoginPayload): Promise<AuthResponse> {
 }
 
 export async function getMeApi(token: string): Promise<{ status: string; user: User }> {
-  const response = await axios.get<{ status: string; user: User }>(`${cleanBaseUrl}/auth/me`, {
+  const response = await axios.get<{ status: string; user: User }>(`${cleanBaseUrl}/api/auth/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
