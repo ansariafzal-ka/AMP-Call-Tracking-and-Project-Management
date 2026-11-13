@@ -1,5 +1,6 @@
 services:
   backend:
+    image: ghcr.io/ampofficetech1-cyber/amp-call-tracker-backend:latest
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -16,13 +17,13 @@ services:
       - "4000"
 
   frontend:
+    image: ghcr.io/ampofficetech1-cyber/amp-call-tracker-frontend:latest
     build:
       context: ./client
       dockerfile: Dockerfile
     container_name: amp_call_tracker_frontend
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "127.0.0.1:4001:80"
     depends_on:
       - backend
-
