@@ -11,6 +11,7 @@ import {
   FileSpreadsheet,
   Pencil,
   History,
+  Calendar,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
@@ -22,15 +23,26 @@ import { AssignByStateModal } from '../components/AssignByStateModal';
 import { BulkUploadModal } from '../components/BulkUploadModal';
 import { EditContactModal } from '../components/EditContactModal';
 import { ContactHistoryModal } from '../components/ContactHistoryModal';
+import { UploadHistoryModal } from '../components/UploadHistoryModal';
 import type {
   AdminContact,
   GetAdminContactsResponse,
   AdminUser,
   GetAdminUsersResponse,
   Project,
+  ContactBatch,
 } from '../types';
 
 const CATEGORIES = ['All', 'Donor', 'Beneficiary', 'Student', 'Volunteer', 'Other'];
+
+const DATE_RANGES = [
+  { label: 'All Time', value: 'all' },
+  { label: 'Today', value: 'today' },
+  { label: 'Yesterday', value: 'yesterday' },
+  { label: 'Last 7 Days', value: '7days' },
+  { label: 'This Month', value: 'this_month' },
+  { label: 'Last 30 Days', value: '30days' },
+];
 
 export const AdminContactsPage: React.FC = () => {
   const [contacts, setContacts] = useState<AdminContact[]>([]);
@@ -59,6 +71,10 @@ export const AdminContactsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedState, setSelectedState] = useState<string>('All');
   const [availableStates, setAvailableStates] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>('All');
+  const [selectedDateRange, setSelectedDateRange] = useState<string>('all');
+  const [selectedBatchId, setSelectedBatchId] = useState<string>('all');
+  const [batches, setBatches] = useState<ContactBatch[]>([]);
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [selectedProjectId, setSelectedProjectId] = useState<string>('all');
   const [page, setPage] = useState<number>(1);
@@ -66,12 +82,35 @@ export const AdminContactsPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(0);
 
+  // Dynamically extract cities (filtered by selected state if a state is selected)
+  const availableCities = useMemo(() => {
+    const list = new Set<string>();
+    contacts.forEach((c) => {
+      if (c.city && c.city.trim()) {
+        const trimmedCity = c.city.trim();
+        if (
+          selectedState === 'All' ||
+          (c.state && c.state.trim().toLowerCase() === selectedState.trim().toLowerCase())
+        ) {
+          list.add(trimmedCity);
+        }
+      }
+    });
+    return Array.from(list).sort((a, b) => a.localeCompare(b));
+  }, [contacts, selectedState]);
+
+  // Reset city filter if state changes
+  useEffect(() => {
+    setSelectedCity('All');
+  }, [selectedState]);
+
   // Selection for Bulk Assignment
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
   // Modal State
   const [isAssignModalOpen, setIsAssignModalOpen] = useState<boolean>(false);
   const [isAssignByStateModalOpen, setIsAssignByStateModalOpen] = useState<boolean>(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState<boolean>(false);
   const [isBulkUploadModalOpen, setIsBulkUploadModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [contactToEdit, setContactToEdit] = useState<AdminContact | null>(null);
@@ -79,7 +118,18 @@ export const AdminContactsPage: React.FC = () => {
   const [contactsToAssign, setContactsToAssign] = useState<AdminContact[]>([]);
   const [isExporting, setIsExporting] = useState<boolean>(false);
 
-  // Fetch Coordinators & Projects for the filter dropdowns
+  const fetchBatchesList = useCallback(() => {
+    apiClient
+      .get<{ success: boolean; data: ContactBatch[] }>('/api/admin/contacts/batches')
+      .then((res) => {
+        if (res.data?.data) {
+          setBatches(res.data.data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Fetch Coordinators, Projects, States, and Batches for filter dropdowns
   useEffect(() => {
     apiClient
       .get<GetAdminUsersResponse>('/api/admin/users', { params: { limit: 100 } })
@@ -109,7 +159,9 @@ export const AdminContactsPage: React.FC = () => {
         }
       })
       .catch(() => {});
-  }, []);
+
+    fetchBatchesList();
+  }, [fetchBatchesList]);
 
   const fetchContacts = useCallback(async () => {
     setLoading(true);
@@ -123,6 +175,9 @@ export const AdminContactsPage: React.FC = () => {
     if (search.trim()) params.search = search.trim();
     if (selectedCategory !== 'All') params.category = selectedCategory;
     if (selectedState !== 'All') params.state = selectedState;
+    if (selectedCity !== 'All') params.city = selectedCity;
+    if (selectedDateRange !== 'all') params.dateRange = selectedDateRange;
+    if (selectedBatchId !== 'all') params.batchId = selectedBatchId;
     if (assignedFilter === 'unassigned') {
       params.assignedUserId = 'unassigned';
     } else if (assignedFilter !== 'all') {
@@ -145,7 +200,7 @@ export const AdminContactsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, search, selectedCategory, selectedState, assignedFilter, selectedProjectId]);
+  }, [page, limit, search, selectedCategory, selectedState, selectedCity, selectedDateRange, selectedBatchId, assignedFilter, selectedProjectId]);
 
   useEffect(() => {
     fetchContacts();
@@ -234,6 +289,15 @@ export const AdminContactsPage: React.FC = () => {
         }
         if (selectedState !== 'All') {
           params.state = selectedState;
+        }
+        if (selectedCity !== 'All') {
+          params.city = selectedCity;
+        }
+        if (selectedDateRange !== 'all') {
+          params.dateRange = selectedDateRange;
+        }
+        if (selectedBatchId !== 'all') {
+          params.batchId = selectedBatchId;
         }
 
         const res = await apiClient.get<GetAdminContactsResponse>('/api/admin/contacts', { params });
@@ -339,37 +403,51 @@ export const AdminContactsPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Top Actions: Bulk Upload & Bulk Assign */}
-        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+        {/* Top Actions: Single-Row Clean Button Group */}
+        <div className="flex items-center gap-2 self-start sm:self-auto flex-nowrap shrink-0 overflow-x-auto pb-1 sm:pb-0">
           <button
             type="button"
             onClick={() => setIsAssignByStateModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-2xs cursor-pointer whitespace-nowrap"
           >
-            <MapPin size={16} className="text-maroon" />
-            <span>Assign by State</span>
+            <MapPin size={14} className="text-maroon shrink-0" />
+            <span>By State</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsHistoryModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-2xs cursor-pointer whitespace-nowrap"
+          >
+            <History size={14} className="text-maroon shrink-0" />
+            <span>Batches</span>
+            {batches.length > 0 && (
+              <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-maroon/10 text-maroon">
+                {batches.length}
+              </span>
+            )}
           </button>
 
           <button
             type="button"
             onClick={() => setIsBulkUploadModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-2xs cursor-pointer whitespace-nowrap"
           >
-            <Upload size={16} />
-            <span>Bulk Upload CSV</span>
+            <Upload size={14} className="shrink-0" />
+            <span>Bulk Upload</span>
           </button>
 
           <button
             type="button"
             onClick={handleOpenBulkAssign}
             disabled={selectedIds.size === 0}
-            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer whitespace-nowrap ${
               selectedIds.size > 0
                 ? 'bg-maroon text-white hover:bg-maroon-hover'
                 : 'bg-gray-100 text-text-muted border border-gray-200 opacity-60 cursor-not-allowed'
             }`}
           >
-            <UserCheck size={16} />
+            <UserCheck size={14} className="shrink-0" />
             <span>Assign Selected ({selectedIds.size})</span>
           </button>
         </div>
@@ -435,6 +513,34 @@ export const AdminContactsPage: React.FC = () => {
         })}
       </div>
 
+      {/* Upload Date Quick Filter Pills Bar (below Category) */}
+      <div className="bg-card-bg rounded-xl shadow-sm border border-gray-100 p-2.5 sm:p-3 flex items-center gap-2 overflow-x-auto">
+        <span className="text-xs font-bold text-text-muted uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1.5">
+          <Calendar size={13} className="text-maroon" />
+          <span>Uploaded:</span>
+        </span>
+        {DATE_RANGES.map((dr) => {
+          const isActive = selectedDateRange === dr.value;
+          return (
+            <button
+              key={dr.value}
+              type="button"
+              onClick={() => {
+                setSelectedDateRange(dr.value);
+                setPage(1);
+              }}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                isActive
+                  ? 'bg-maroon text-white shadow-2xs'
+                  : 'bg-gray-100 text-text-main hover:bg-gray-200/70'
+              }`}
+            >
+              {dr.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Full-Width Contacts Table Card */}
       <div className="w-full bg-card-bg rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Search & Filter Toolbar */}
@@ -480,6 +586,32 @@ export const AdminContactsPage: React.FC = () => {
               )}
             </button>
 
+            {/* Filter by Batch */}
+            {batches.length > 0 && (
+              <select
+                value={selectedBatchId}
+                onChange={(e) => {
+                  setSelectedBatchId(e.target.value);
+                  setPage(1);
+                }}
+                aria-label="Filter by upload batch"
+                className="h-[40px] px-3 rounded-lg border border-gray-200 bg-white text-xs font-medium text-text-main focus:outline-none focus:ring-2 focus:ring-gold/40 cursor-pointer max-w-[150px] truncate"
+              >
+                <option value="all">All Batches</option>
+                {batches.map((b) => {
+                  const d = new Date(b.uploaded_at);
+                  const dateStr = !isNaN(d.getTime())
+                    ? d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+                    : '';
+                  return (
+                    <option key={b.id} value={b.id} title={`${b.file_name} (${b.total_rows || b.total_contacts || 0} contacts)`}>
+                      Batch #{b.id} {dateStr ? `(${dateStr})` : ''}
+                    </option>
+                  );
+                })}
+              </select>
+            )}
+
             {/* Filter by State */}
             <select
               value={selectedState}
@@ -488,12 +620,30 @@ export const AdminContactsPage: React.FC = () => {
                 setPage(1);
               }}
               aria-label="Filter by state"
-              className="h-[40px] px-3 rounded-lg border border-gray-200 bg-white text-xs font-medium text-text-main focus:outline-none focus:ring-2 focus:ring-gold/40 cursor-pointer max-w-[160px] truncate"
+              className="h-[40px] px-3 rounded-lg border border-gray-200 bg-white text-xs font-medium text-text-main focus:outline-none focus:ring-2 focus:ring-gold/40 cursor-pointer max-w-[150px] truncate"
             >
               <option value="All">All States</option>
               {availableStates.map((st) => (
                 <option key={st} value={st}>
                   {st}
+                </option>
+              ))}
+            </select>
+
+            {/* Filter by City (next to State) */}
+            <select
+              value={selectedCity}
+              onChange={(e) => {
+                setSelectedCity(e.target.value);
+                setPage(1);
+              }}
+              aria-label="Filter by city"
+              className="h-[40px] px-3 rounded-lg border border-gray-200 bg-white text-xs font-medium text-text-main focus:outline-none focus:ring-2 focus:ring-gold/40 cursor-pointer max-w-[150px] truncate"
+            >
+              <option value="All">All Cities</option>
+              {availableCities.map((ct) => (
+                <option key={ct} value={ct}>
+                  {ct}
                 </option>
               ))}
             </select>
@@ -536,11 +686,14 @@ export const AdminContactsPage: React.FC = () => {
             </select>
 
             {/* Reset Filters (shown when filters active) */}
-            {(selectedState !== 'All' || selectedProjectId !== 'all' || assignedFilter !== 'all' || selectedCategory !== 'All' || search.trim()) && (
+            {(selectedBatchId !== 'all' || selectedState !== 'All' || selectedCity !== 'All' || selectedDateRange !== 'all' || selectedProjectId !== 'all' || assignedFilter !== 'all' || selectedCategory !== 'All' || search.trim()) && (
               <button
                 type="button"
                 onClick={() => {
+                  setSelectedBatchId('all');
                   setSelectedState('All');
+                  setSelectedCity('All');
+                  setSelectedDateRange('all');
                   setSelectedProjectId('all');
                   setAssignedFilter('all');
                   setSelectedCategory('All');
@@ -586,19 +739,27 @@ export const AdminContactsPage: React.FC = () => {
                       className="rounded text-maroon focus:ring-maroon cursor-pointer"
                     />
                   </th>
-                  <th className="py-3.5 px-4 whitespace-nowrap">Contact Name &amp; Email</th>
-                  <th className="py-3.5 px-4 whitespace-nowrap">Phone &amp; Alt Phone</th>
-                  <th className="py-3.5 px-4 whitespace-nowrap">Location</th>
-                  <th className="py-3.5 px-4 whitespace-nowrap">Notes</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Name</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Email</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Mobile Number</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Alternate Phone</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">State</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">City</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Pin Code</th>
                   <th className="py-3.5 px-4 whitespace-nowrap">Category</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Project</th>
                   <th className="py-3.5 px-4 whitespace-nowrap">Assigned Coordinator</th>
-                  <th className="py-3.5 px-4 whitespace-nowrap">Calls &amp; Outcome</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap text-center">Batch #</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Upload Date</th>
+                  <th className="py-3.5 px-4 whitespace-nowrap">Upload Time</th>
                   <th className="py-3.5 px-6 text-right whitespace-nowrap">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {contacts.map((contact) => {
                   const isChecked = selectedIds.has(contact.id);
+                  const uploadDate = contact.created_at ? new Date(contact.created_at) : null;
+                  const isValidDate = uploadDate && !isNaN(uploadDate.getTime());
 
                   return (
                     <tr
@@ -618,91 +779,75 @@ export const AdminContactsPage: React.FC = () => {
                         />
                       </td>
 
-                      {/* Name & Email */}
-                      <td className="py-4 px-4 min-w-[200px]">
-                        <div className="font-semibold text-text-main">{contact.name}</div>
-                        {contact.email ? (
-                          <div className="text-xs text-text-muted truncate mt-0.5">
-                            {contact.email}
+                      {/* Name */}
+                      <td className="py-4 px-4 whitespace-nowrap font-semibold text-text-main">
+                        {contact.name}
+                      </td>
+
+                      {/* Email */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-muted">
+                        {contact.email || '—'}
+                      </td>
+
+                      {/* Mobile Number */}
+                      <td className="py-4 px-4 whitespace-nowrap font-medium text-text-main">
+                        {contact.mobile_number}
+                      </td>
+
+                      {/* Alternate Phone */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-muted">
+                        {contact.alternate_number || '—'}
+                      </td>
+
+                      {/* State */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-main">
+                        {contact.state || '—'}
+                      </td>
+
+                      {/* City */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-main">
+                        {contact.city || '—'}
+                      </td>
+
+                      {/* Pin Code */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-muted font-mono">
+                        {contact.pin_code || '—'}
+                      </td>
+
+                      {/* Category */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        {renderCategoryPill(contact.category)}
+                      </td>
+
+                      {/* Project */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        {contact.projects && contact.projects.length > 0 ? (
+                          <div className="flex flex-wrap gap-1 max-w-[160px]">
+                            {contact.projects.map((proj) => (
+                              <span
+                                key={proj.id}
+                                className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200"
+                              >
+                                {proj.name}
+                              </span>
+                            ))}
                           </div>
+                        ) : contact.project_name ? (
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                            {contact.project_name}
+                          </span>
                         ) : (
                           <span className="text-xs text-text-muted/60">—</span>
                         )}
-                      </td>
-
-                      {/* Mobile & Alt */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="font-semibold text-text-main flex items-center gap-1.5">
-                          <span>{contact.mobile_number}</span>
-                        </div>
-                        {contact.alternate_number && (
-                          <div className="text-xs text-text-muted mt-0.5">
-                            Alt: {contact.alternate_number}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Location */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        {(contact.city || contact.state || contact.pin_code) ? (
-                          <div className="text-xs font-medium text-text-main flex items-center gap-1">
-                            <MapPin size={12} className="text-text-muted shrink-0" />
-                            <span>
-                              {[contact.state, contact.city].filter(Boolean).join(', ')}
-                              {contact.pin_code ? ` - ${contact.pin_code}` : ''}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-xs text-text-muted/60">—</span>
-                        )}
-                      </td>
-
-                      {/* Notes */}
-                      <td className="py-4 px-4 max-w-xs">
-                        {contact.notes ? (
-                          <div className="text-xs text-text-muted truncate" title={contact.notes}>
-                            {contact.notes}
-                          </div>
-                        ) : (
-                          <span className="text-xs text-text-muted/60">—</span>
-                        )}
-                      </td>
-
-                      {/* Category & Associated Projects */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="flex flex-col gap-1 items-start">
-                          {renderCategoryPill(contact.category)}
-                          {contact.projects && contact.projects.length > 0 ? (
-                            <div className="flex flex-wrap gap-1 max-w-[150px]">
-                              {contact.projects.map((proj) => (
-                                <span
-                                  key={proj.id}
-                                  className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200"
-                                >
-                                  {proj.name}
-                                </span>
-                              ))}
-                            </div>
-                          ) : contact.project_name ? (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200">
-                              {contact.project_name}
-                            </span>
-                          ) : null}
-                        </div>
                       </td>
 
                       {/* Assigned Coordinator */}
-                      <td className="py-4 px-4 min-w-[180px]">
+                      <td className="py-4 px-4 whitespace-nowrap">
                         {contact.assigned_user_name ? (
-                          <div>
-                            <div className="font-semibold text-text-main flex items-center gap-1.5 whitespace-nowrap">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                              <span>{contact.assigned_user_name}</span>
-                            </div>
-                            <div className="text-xs text-text-muted truncate mt-0.5">
-                              {contact.assigned_user_email}
-                            </div>
-                          </div>
+                          <span className="inline-flex items-center gap-1.5 font-medium text-xs text-text-main">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                            <span>{contact.assigned_user_name}</span>
+                          </span>
                         ) : (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
                             Unassigned
@@ -710,18 +855,44 @@ export const AdminContactsPage: React.FC = () => {
                         )}
                       </td>
 
-                      {/* Calls & Outcome */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <div className="font-semibold text-text-main">
-                          {contact.total_calls} calls
-                        </div>
-                        {contact.last_call_outcome ? (
-                          <div className="text-xs capitalize font-medium text-amber-700 mt-0.5">
-                            {contact.last_call_outcome.replace('_', ' ')}
-                          </div>
+                      {/* Batch # */}
+                      <td className="py-4 px-4 text-center whitespace-nowrap">
+                        {contact.batch_id ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedBatchId(String(contact.batch_id));
+                              setPage(1);
+                            }}
+                            title={`Filter by Batch #${contact.batch_id}`}
+                            className="px-2 py-0.5 rounded-md text-xs font-bold bg-maroon/10 text-maroon hover:bg-maroon hover:text-white transition-colors cursor-pointer"
+                          >
+                            #{contact.batch_id}
+                          </button>
                         ) : (
-                          <span className="text-xs text-text-muted">Not called</span>
+                          <span className="text-xs text-text-muted/60">—</span>
                         )}
+                      </td>
+
+                      {/* Upload Date */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-main">
+                        {isValidDate
+                          ? uploadDate.toLocaleDateString('en-IN', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })
+                          : '—'}
+                      </td>
+
+                      {/* Upload Time */}
+                      <td className="py-4 px-4 whitespace-nowrap text-xs text-text-muted">
+                        {isValidDate
+                          ? uploadDate.toLocaleTimeString('en-IN', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
+                          : '—'}
                       </td>
 
                       {/* Action */}
@@ -832,12 +1003,29 @@ export const AdminContactsPage: React.FC = () => {
         projects={projects}
       />
 
+      {/* Upload History & Batches Modal */}
+      <UploadHistoryModal
+        isOpen={isHistoryModalOpen}
+        onClose={() => setIsHistoryModalOpen(false)}
+        onSelectBatch={(batchId) => {
+          setSelectedBatchId(String(batchId));
+          setPage(1);
+        }}
+        coordinators={coordinators}
+        onBatchAssigned={() => {
+          fetchContacts();
+          fetchBatchesList();
+          setSuccessMessage('Batch assigned successfully!');
+        }}
+      />
+
       {/* Bulk Upload CSV Modal */}
       <BulkUploadModal
         isOpen={isBulkUploadModalOpen}
         onClose={() => setIsBulkUploadModalOpen(false)}
         onSuccess={() => {
           fetchContacts();
+          fetchBatchesList();
           setSuccessMessage('Contacts imported successfully!');
         }}
       />

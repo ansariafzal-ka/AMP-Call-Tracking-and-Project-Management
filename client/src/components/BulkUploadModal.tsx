@@ -51,7 +51,10 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successResult, setSuccessResult] = useState<{
+    batchId?: number;
+    fileName?: string;
     importedCount: number;
+    mergedCount?: number;
     assignedCount: number;
     unassignedCount: number;
     skippedCount?: number;
@@ -261,6 +264,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
     try {
       const payload = {
         contacts: parsedRows,
+        fileName: fileName || undefined,
         defaultUserId: defaultUserId || undefined,
         defaultProjectId: defaultProjectId || undefined,
       };
@@ -269,7 +273,10 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         success: boolean;
         message: string;
         data: {
+          batchId?: number;
+          fileName?: string;
           importedCount: number;
+          mergedCount?: number;
           assignedCount: number;
           unassignedCount: number;
           skippedCount: number;
@@ -336,16 +343,25 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 <CheckCircle2 size={36} />
               </div>
               <div>
+                {successResult.batchId && (
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-maroon/10 text-maroon mb-2">
+                    Batch #{successResult.batchId} Created
+                  </span>
+                )}
                 <h4 className="text-lg font-bold text-gray-900">Import Completed!</h4>
                 <p className="text-xs text-text-muted mt-1">
-                  Successfully imported {successResult.importedCount} contacts into your database.
+                  File: <span className="font-semibold text-gray-700">{fileName || 'contacts.csv'}</span>
                 </p>
               </div>
 
-              <div className="max-w-md mx-auto grid grid-cols-3 gap-3 p-3 bg-[#FAF7F7] rounded-xl border border-gray-100 text-xs">
+              <div className="max-w-md mx-auto grid grid-cols-4 gap-2 p-3 bg-[#FAF7F7] rounded-xl border border-gray-100 text-xs">
                 <div>
                   <div className="font-bold text-gray-900 text-base">{successResult.importedCount}</div>
-                  <div className="text-[11px] text-text-muted">Imported</div>
+                  <div className="text-[11px] text-text-muted">New</div>
+                </div>
+                <div>
+                  <div className="font-bold text-amber-600 text-base">{successResult.mergedCount || 0}</div>
+                  <div className="text-[11px] text-text-muted">Merged</div>
                 </div>
                 <div>
                   <div className="font-bold text-emerald-600 text-base">{successResult.assignedCount}</div>

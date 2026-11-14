@@ -273,7 +273,25 @@ export interface AdminContact {
   last_called_at?: string | null;
   last_call_status?: CallStatus | null;
   last_call_outcome?: CallOutcome | null;
+  batch_id?: number | null;
   created_at: string;
+}
+
+export interface ContactBatch {
+  id: number;
+  file_name: string;
+  uploaded_by?: number | null;
+  uploaded_by_name?: string | null;
+  uploaded_at: string;
+  total_rows: number;
+  imported_count: number;
+  merged_count: number;
+  project_id?: number | null;
+  project_name?: string | null;
+  notes?: string | null;
+  total_contacts?: number;
+  assigned_count?: number;
+  unassigned_count?: number;
 }
 
 export interface UpdateAdminContactPayload {
