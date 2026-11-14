@@ -6,6 +6,141 @@ export async function getAdminContacts(
   limit: number = 20,
   offset: number = 0
 ): Promise<{ contacts: AdminContactRow[]; total: number }> {
+  // If state filter is specified, execute parameterized query with state matching
+  if (filters.state && filters.state.trim() && filters.state.toLowerCase() !== 'all') {
+    const whereClauses: string[] = ['1=1'];
+    const params: any[] = [];
+    let pIdx = 1;
+
+    // State filter
+    whereClauses.push(`ct.state ILIKE $${pIdx}`);
+    params.push(filters.state.trim());
+    pIdx++;
+
+    // Search filter
+    if (filters.search && filters.search.trim()) {
+      whereClauses.push(`(
+        ct.name ILIKE $${pIdx}
+        OR ct.mobile_number ILIKE $${pIdx}
+        OR ct.city ILIKE $${pIdx}
+        OR ct.state ILIKE $${pIdx}
+        OR ct.pin_code ILIKE $${pIdx}
+        OR ct.notes ILIKE $${pIdx}
+      )`);
+      params.push(`%${filters.search.trim()}%`);
+      pIdx++;
+    }
+
+    // Category filter
+    if (filters.category && filters.category.trim() && filters.category.toLowerCase() !== 'all') {
+      whereClauses.push(`ct.category ILIKE $${pIdx}`);
+      params.push(filters.category.trim());
+      pIdx++;
+    }
+
+    // City filter
+    if (filters.city && filters.city.trim()) {
+      whereClauses.push(`ct.city ILIKE $${pIdx}`);
+      params.push(filters.city.trim());
+      pIdx++;
+    }
+
+    // Assignment filter
+    if (filters.unassignedOnly) {
+      whereClauses.push(`ct.assigned_user_id IS NULL`);
+    } else if (filters.assignedUserId) {
+      whereClauses.push(`ct.assigned_user_id = $${pIdx}`);
+      params.push(filters.assignedUserId);
+      pIdx++;
+    }
+
+    // Project filter
+    if (filters.projectId) {
+      whereClauses.push(`(
+        ct.project_id = $${pIdx}
+        OR EXISTS (SELECT 1 FROM contact_projects cp WHERE cp.contact_id = ct.id AND cp.project_id = $${pIdx})
+      )`);
+      params.push(filters.projectId);
+      pIdx++;
+    }
+
+    const whereSql = whereClauses.join(' AND ');
+
+    const countQuery = `
+      SELECT COUNT(*)::INT as total
+      FROM contacts ct
+      WHERE ${whereSql}
+    `;
+    const countRes = await pool.query<{ total: number }>(countQuery, params);
+    const total = countRes.rows[0]?.total || 0;
+
+    if (total === 0) {
+      return { contacts: [], total: 0 };
+    }
+
+    const dataParams = [...params, limit, offset];
+    const limitIdx = pIdx++;
+    const offsetIdx = pIdx++;
+
+    const dataQuery = `
+      SELECT
+        ct.id,
+        ct.name,
+        ct.mobile_number,
+        ct.alternate_number,
+        ct.email,
+        ct.city,
+        ct.state,
+        ct.pin_code,
+        ct.category,
+        ct.notes,
+        ct.created_at,
+        ct.assigned_user_id,
+        u.full_name AS assigned_user_name,
+        u.email AS assigned_user_email,
+        ct.project_id,
+        p.name AS project_name,
+        COALESCE(pr_agg.project_ids, ARRAY[]::INT[]) AS project_ids,
+        COALESCE(pr_agg.project_names, '')::TEXT AS project_names,
+        COALESCE(pr_agg.projects_json, '[]'::JSON) AS projects,
+        COALESCE(cs.total_calls, 0)::BIGINT AS total_calls,
+        cs.last_called_at,
+        cs.last_call_status::VARCHAR AS last_call_status,
+        cs.last_call_outcome::VARCHAR AS last_call_outcome,
+        ${total}::BIGINT AS filtered_total
+      FROM contacts ct
+      LEFT JOIN users u ON u.id = ct.assigned_user_id
+      LEFT JOIN projects p ON p.id = ct.project_id
+      LEFT JOIN LATERAL (
+        SELECT
+          ARRAY_AGG(p2.id ORDER BY p2.name) AS project_ids,
+          STRING_AGG(p2.name, ', ' ORDER BY p2.name) AS project_names,
+          JSON_AGG(JSON_BUILD_OBJECT('id', p2.id, 'name', p2.name) ORDER BY p2.name) AS projects_json
+        FROM (
+          SELECT cp.project_id FROM contact_projects cp WHERE cp.contact_id = ct.id
+          UNION
+          SELECT ct.project_id WHERE ct.project_id IS NOT NULL
+        ) cp_all
+        JOIN projects p2 ON p2.id = cp_all.project_id
+      ) pr_agg ON TRUE
+      LEFT JOIN LATERAL (
+        SELECT
+          COUNT(c.id) AS total_calls,
+          MAX(c.called_at) AS last_called_at,
+          (SELECT c2.status FROM calls c2 WHERE (c2.contact_id = ct.id OR c2.contact_number = ct.mobile_number) ORDER BY c2.called_at DESC LIMIT 1) AS last_call_status,
+          (SELECT c3.outcome FROM calls c3 WHERE (c3.contact_id = ct.id OR c3.contact_number = ct.mobile_number) ORDER BY c3.called_at DESC LIMIT 1) AS last_call_outcome
+        FROM calls c
+        WHERE c.contact_id = ct.id OR c.contact_number = ct.mobile_number
+      ) cs ON TRUE
+      WHERE ${whereSql}
+      ORDER BY ct.created_at DESC
+      LIMIT $${limitIdx} OFFSET $${offsetIdx}
+    `;
+
+    const dataRes = await pool.query<AdminContactRow & { filtered_total: string }>(dataQuery, dataParams);
+    return { contacts: dataRes.rows, total };
+  }
+
   const result = await pool.query<AdminContactRow & { filtered_total: string }>(
     'SELECT * FROM sp_admin_get_contacts($1, $2, $3, $4, $5, $6, $7, $8)',
     [

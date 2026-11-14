@@ -57,6 +57,8 @@ export const AdminContactsPage: React.FC = () => {
   // Filters & Pagination
   const [search, setSearch] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedState, setSelectedState] = useState<string>('All');
+  const [availableStates, setAvailableStates] = useState<string[]>([]);
   const [assignedFilter, setAssignedFilter] = useState<string>('all');
   const [selectedProjectId, setSelectedProjectId] = useState<string>('all');
   const [page, setPage] = useState<number>(1);
@@ -97,6 +99,16 @@ export const AdminContactsPage: React.FC = () => {
         }
       })
       .catch(() => {});
+
+    apiClient
+      .get<{ success: boolean; data: Array<{ state: string }> }>('/api/admin/contacts/states-summary')
+      .then((res) => {
+        if (res.data?.data) {
+          const states = res.data.data.map((s) => s.state).filter(Boolean);
+          setAvailableStates(states);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const fetchContacts = useCallback(async () => {
@@ -110,6 +122,7 @@ export const AdminContactsPage: React.FC = () => {
 
     if (search.trim()) params.search = search.trim();
     if (selectedCategory !== 'All') params.category = selectedCategory;
+    if (selectedState !== 'All') params.state = selectedState;
     if (assignedFilter === 'unassigned') {
       params.assignedUserId = 'unassigned';
     } else if (assignedFilter !== 'all') {
@@ -132,7 +145,7 @@ export const AdminContactsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, search, selectedCategory, assignedFilter, selectedProjectId]);
+  }, [page, limit, search, selectedCategory, selectedState, assignedFilter, selectedProjectId]);
 
   useEffect(() => {
     fetchContacts();
@@ -218,6 +231,9 @@ export const AdminContactsPage: React.FC = () => {
         }
         if (selectedProjectId !== 'all') {
           params.projectId = selectedProjectId;
+        }
+        if (selectedState !== 'All') {
+          params.state = selectedState;
         }
 
         const res = await apiClient.get<GetAdminContactsResponse>('/api/admin/contacts', { params });
@@ -464,6 +480,24 @@ export const AdminContactsPage: React.FC = () => {
               )}
             </button>
 
+            {/* Filter by State */}
+            <select
+              value={selectedState}
+              onChange={(e) => {
+                setSelectedState(e.target.value);
+                setPage(1);
+              }}
+              aria-label="Filter by state"
+              className="h-[40px] px-3 rounded-lg border border-gray-200 bg-white text-xs font-medium text-text-main focus:outline-none focus:ring-2 focus:ring-gold/40 cursor-pointer max-w-[160px] truncate"
+            >
+              <option value="All">All States</option>
+              {availableStates.map((st) => (
+                <option key={st} value={st}>
+                  {st}
+                </option>
+              ))}
+            </select>
+
             {/* Filter by Project */}
             <select
               value={selectedProjectId}
@@ -502,10 +536,11 @@ export const AdminContactsPage: React.FC = () => {
             </select>
 
             {/* Reset Filters (shown when filters active) */}
-            {(selectedProjectId !== 'all' || assignedFilter !== 'all' || selectedCategory !== 'All' || search.trim()) && (
+            {(selectedState !== 'All' || selectedProjectId !== 'all' || assignedFilter !== 'all' || selectedCategory !== 'All' || search.trim()) && (
               <button
                 type="button"
                 onClick={() => {
+                  setSelectedState('All');
                   setSelectedProjectId('all');
                   setAssignedFilter('all');
                   setSelectedCategory('All');

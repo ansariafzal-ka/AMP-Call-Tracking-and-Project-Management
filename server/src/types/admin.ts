@@ -86,6 +86,7 @@ export interface AdminContactFilters {
   search?: string;
   category?: string;
   city?: string;
+  state?: string;
   assignedUserId?: number;
   unassignedOnly?: boolean;
   projectId?: number;

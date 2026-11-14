@@ -9,6 +9,9 @@ export async function getAdminContacts(req: AuthenticatedRequest, res: Response)
     const search = typeof req.query.search === 'string' ? req.query.search : undefined;
     const category = typeof req.query.category === 'string' ? req.query.category : undefined;
     const city = typeof req.query.city === 'string' ? req.query.city : undefined;
+    const state = typeof req.query.state === 'string' && req.query.state.trim() && req.query.state.toLowerCase() !== 'all'
+      ? req.query.state.trim()
+      : undefined;
 
     let assignedUserId: number | undefined = undefined;
     let unassignedOnly: boolean | undefined = undefined;
@@ -39,6 +42,7 @@ export async function getAdminContacts(req: AuthenticatedRequest, res: Response)
         search,
         category,
         city,
+        state,
         assignedUserId,
         unassignedOnly,
         projectId,
