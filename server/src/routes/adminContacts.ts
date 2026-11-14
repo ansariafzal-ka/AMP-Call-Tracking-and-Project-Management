@@ -7,6 +7,8 @@ import {
   getExistingContactNumbers,
   getStatesSummary,
   assignContactsByState,
+  getContactBatches,
+  assignContactsByBatch,
 } from '../controllers/adminContactController';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/adminAuth';
@@ -19,6 +21,8 @@ router.use(requireAdmin);
 
 router.get('/existing-numbers', getExistingContactNumbers);
 router.get('/states-summary', getStatesSummary);
+router.get('/batches', getContactBatches);
+router.post('/batches/assign', assignContactsByBatch);
 router.get('/', getAdminContacts);
 router.post('/assign', assignContacts);
 router.post('/assign-by-state', assignContactsByState);

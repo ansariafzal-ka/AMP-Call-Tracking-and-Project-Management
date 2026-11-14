@@ -8,9 +8,14 @@ export async function getAdminContacts(req: AuthenticatedRequest, res: Response)
   try {
     const search = typeof req.query.search === 'string' ? req.query.search : undefined;
     const category = typeof req.query.category === 'string' ? req.query.category : undefined;
-    const city = typeof req.query.city === 'string' ? req.query.city : undefined;
+    const city = typeof req.query.city === 'string' && req.query.city.trim() && req.query.city.toLowerCase() !== 'all'
+      ? req.query.city.trim()
+      : undefined;
     const state = typeof req.query.state === 'string' && req.query.state.trim() && req.query.state.toLowerCase() !== 'all'
       ? req.query.state.trim()
+      : undefined;
+    const dateRange = typeof req.query.dateRange === 'string' && req.query.dateRange.trim() && req.query.dateRange.toLowerCase() !== 'all'
+      ? req.query.dateRange.trim()
       : undefined;
 
     let assignedUserId: number | undefined = undefined;
@@ -33,6 +38,14 @@ export async function getAdminContacts(req: AuthenticatedRequest, res: Response)
       }
     }
 
+    let batchId: number | undefined = undefined;
+    if (req.query.batchId && req.query.batchId !== 'all') {
+      const parsedBatchId = parseInt(req.query.batchId as string, 10);
+      if (!isNaN(parsedBatchId)) {
+        batchId = parsedBatchId;
+      }
+    }
+
     const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
     const limit = Math.min(10000, Math.max(1, parseInt(req.query.limit as string, 10) || 20));
     const offset = (page - 1) * limit;
@@ -43,6 +56,8 @@ export async function getAdminContacts(req: AuthenticatedRequest, res: Response)
         category,
         city,
         state,
+        batchId,
+        dateRange,
         assignedUserId,
         unassignedOnly,
         projectId,
@@ -271,15 +286,25 @@ export async function bulkUploadContacts(req: AuthenticatedRequest, res: Respons
       return;
     }
 
-    const { imported_count, assigned_count, unassigned_count } = await adminContactModel.bulkImportContacts(preparedContacts);
+    const result = await adminContactModel.bulkImportContacts({
+      contacts: preparedContacts,
+      fileName: typeof req.body.fileName === 'string' ? req.body.fileName : (typeof req.body.file_name === 'string' ? req.body.file_name : undefined),
+      uploadedBy: req.user?.id,
+      uploadedByName: req.user?.fullName,
+      projectId: defaultProjectId && !isNaN(parseInt(defaultProjectId, 10)) ? parseInt(defaultProjectId, 10) : undefined,
+      notes: typeof req.body.notes === 'string' ? req.body.notes : undefined,
+    });
 
     res.status(200).json({
       success: true,
-      message: `Successfully imported ${imported_count} contacts (${assigned_count} assigned, ${unassigned_count} unassigned). ${invalidRows.length > 0 ? `${invalidRows.length} duplicate/invalid rows skipped.` : ''}`,
+      message: `Batch #${result.batch_id} created: ${result.imported_count} new contacts, ${result.merged_count} existing merged (${result.assigned_count} assigned, ${result.unassigned_count} unassigned). ${invalidRows.length > 0 ? `${invalidRows.length} duplicate/invalid rows skipped.` : ''}`,
       data: {
-        importedCount: imported_count,
-        assignedCount: assigned_count,
-        unassignedCount: unassigned_count,
+        batchId: result.batch_id,
+        fileName: result.file_name,
+        importedCount: result.imported_count,
+        mergedCount: result.merged_count,
+        assignedCount: result.assigned_count,
+        unassignedCount: result.unassigned_count,
         skippedCount: invalidRows.length,
         invalidRows,
       },
@@ -500,6 +525,60 @@ export async function assignContactsByState(req: AuthenticatedRequest, res: Resp
     res.status(500).json({
       success: false,
       message: 'Failed to assign contacts by state',
+      error: err.message,
+    });
+  }
+}
+
+export async function getContactBatches(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const batches = await adminContactModel.getContactBatches();
+    res.status(200).json({
+      success: true,
+      data: batches,
+    });
+  } catch (err: any) {
+    console.error('Error fetching contact batches:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve upload batches',
+      error: err.message,
+    });
+  }
+}
+
+export async function assignContactsByBatch(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const { batchId, targetUserId, unassignedOnly, reassignFollowUps } = req.body;
+    if (!batchId || !targetUserId) {
+      res.status(400).json({
+        success: false,
+        message: 'batchId and targetUserId are required',
+      });
+      return;
+    }
+
+    const assignedCount = await adminContactModel.assignContactsByBatch({
+      batchId: Number(batchId),
+      targetUserId: Number(targetUserId),
+      unassignedOnly: unassignedOnly !== undefined ? Boolean(unassignedOnly) : true,
+      reassignFollowUps: reassignFollowUps !== undefined ? Boolean(reassignFollowUps) : true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully assigned ${assignedCount} contacts from batch #${batchId} to coordinator.`,
+      data: {
+        assignedCount,
+        batchId: Number(batchId),
+        targetUserId: Number(targetUserId),
+      },
+    });
+  } catch (err: any) {
+    console.error('Error assigning contacts by batch:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to assign contacts by batch',
       error: err.message,
     });
   }

@@ -64,6 +64,7 @@ export interface AdminContactRow {
   last_called_at?: string | null;
   last_call_status?: string | null;
   last_call_outcome?: string | null;
+  batch_id?: number | null;
   filtered_total?: number;
 }
 
@@ -87,11 +88,36 @@ export interface AdminContactFilters {
   category?: string;
   city?: string;
   state?: string;
+  batchId?: number;
+  dateRange?: string;
   assignedUserId?: number;
   unassignedOnly?: boolean;
   projectId?: number;
   page?: number;
   limit?: number;
+}
+
+export interface ContactBatch {
+  id: number;
+  file_name: string;
+  uploaded_by?: number | null;
+  uploaded_by_name?: string | null;
+  uploaded_at: string;
+  total_rows: number;
+  imported_count: number;
+  merged_count: number;
+  project_id?: number | null;
+  project_name?: string | null;
+  notes?: string | null;
+  assigned_count?: number;
+  unassigned_count?: number;
+}
+
+export interface AssignBatchDTO {
+  batchId: number;
+  targetUserId: number;
+  unassignedOnly?: boolean;
+  reassignFollowUps?: boolean;
 }
 
 export interface AssignContactsDTO {

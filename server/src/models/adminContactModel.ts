@@ -1,21 +1,66 @@
 import { pool } from '../config/db';
-import { AdminContactRow, AdminContactFilters, AssignContactsDTO, AdminUpdateContactDTO } from '../types/admin';
+import {
+  AdminContactRow,
+  AdminContactFilters,
+  AssignContactsDTO,
+  AdminUpdateContactDTO,
+  ContactBatch,
+  AssignBatchDTO,
+} from '../types/admin';
 
 export async function getAdminContacts(
   filters: AdminContactFilters,
   limit: number = 20,
   offset: number = 0
 ): Promise<{ contacts: AdminContactRow[]; total: number }> {
-  // If state filter is specified, execute parameterized query with state matching
-  if (filters.state && filters.state.trim() && filters.state.toLowerCase() !== 'all') {
+  // If state, city, dateRange, or batchId filter is specified, execute parameterized query
+  const hasCustomFilter =
+    (filters.state && filters.state.trim() && filters.state.toLowerCase() !== 'all') ||
+    (filters.city && filters.city.trim() && filters.city.toLowerCase() !== 'all') ||
+    (filters.dateRange && filters.dateRange.trim() && filters.dateRange.toLowerCase() !== 'all') ||
+    Boolean(filters.batchId);
+
+  if (hasCustomFilter) {
     const whereClauses: string[] = ['1=1'];
     const params: any[] = [];
     let pIdx = 1;
 
+    // Batch filter
+    if (filters.batchId) {
+      whereClauses.push(`ct.batch_id = $${pIdx}`);
+      params.push(filters.batchId);
+      pIdx++;
+    }
+
     // State filter
-    whereClauses.push(`ct.state ILIKE $${pIdx}`);
-    params.push(filters.state.trim());
-    pIdx++;
+    if (filters.state && filters.state.trim() && filters.state.toLowerCase() !== 'all') {
+      whereClauses.push(`ct.state ILIKE $${pIdx}`);
+      params.push(filters.state.trim());
+      pIdx++;
+    }
+
+    // City filter
+    if (filters.city && filters.city.trim() && filters.city.toLowerCase() !== 'all') {
+      whereClauses.push(`ct.city ILIKE $${pIdx}`);
+      params.push(filters.city.trim());
+      pIdx++;
+    }
+
+    // Date range filter
+    if (filters.dateRange && filters.dateRange.trim() && filters.dateRange.toLowerCase() !== 'all') {
+      const dr = filters.dateRange.trim().toLowerCase();
+      if (dr === 'today') {
+        whereClauses.push(`ct.created_at >= CURRENT_DATE`);
+      } else if (dr === 'yesterday') {
+        whereClauses.push(`ct.created_at >= CURRENT_DATE - INTERVAL '1 day' AND ct.created_at < CURRENT_DATE`);
+      } else if (dr === '7days') {
+        whereClauses.push(`ct.created_at >= NOW() - INTERVAL '7 days'`);
+      } else if (dr === 'this_month') {
+        whereClauses.push(`ct.created_at >= DATE_TRUNC('month', CURRENT_DATE)`);
+      } else if (dr === '30days') {
+        whereClauses.push(`ct.created_at >= NOW() - INTERVAL '30 days'`);
+      }
+    }
 
     // Search filter
     if (filters.search && filters.search.trim()) {
@@ -35,13 +80,6 @@ export async function getAdminContacts(
     if (filters.category && filters.category.trim() && filters.category.toLowerCase() !== 'all') {
       whereClauses.push(`ct.category ILIKE $${pIdx}`);
       params.push(filters.category.trim());
-      pIdx++;
-    }
-
-    // City filter
-    if (filters.city && filters.city.trim()) {
-      whereClauses.push(`ct.city ILIKE $${pIdx}`);
-      params.push(filters.city.trim());
       pIdx++;
     }
 
@@ -96,6 +134,7 @@ export async function getAdminContacts(
         ct.notes,
         ct.created_at,
         ct.assigned_user_id,
+        ct.batch_id,
         u.full_name AS assigned_user_name,
         u.email AS assigned_user_email,
         ct.project_id,
@@ -185,22 +224,249 @@ export interface BulkContactInput {
   notes?: string | null;
   assigned_user_id?: number | null;
   project_id?: number | null;
+  projects?: string | null;
 }
 
-export async function bulkImportContacts(contacts: BulkContactInput[]): Promise<{
+export interface BulkImportOptions {
+  contacts: BulkContactInput[];
+  fileName?: string;
+  uploadedBy?: number;
+  uploadedByName?: string;
+  projectId?: number;
+  notes?: string;
+}
+
+export interface BulkImportResult {
+  batch_id: number;
+  file_name: string;
+  total_rows: number;
   imported_count: number;
+  merged_count: number;
   assigned_count: number;
   unassigned_count: number;
-}> {
-  const result = await pool.query<{
-    imported_count: number;
-    assigned_count: number;
-    unassigned_count: number;
-  }>(
-    'SELECT * FROM sp_admin_bulk_import_contacts($1::JSONB)',
-    [JSON.stringify(contacts)]
-  );
-  return result.rows[0] || { imported_count: 0, assigned_count: 0, unassigned_count: 0 };
+}
+
+export async function bulkImportContacts(options: BulkImportOptions | BulkContactInput[]): Promise<BulkImportResult> {
+  const isOptions = !Array.isArray(options);
+  const contacts = isOptions ? options.contacts : options;
+  const fileName = (isOptions && options.fileName) || `upload_${new Date().toISOString().slice(0, 10)}.csv`;
+  const uploadedBy = isOptions ? options.uploadedBy : null;
+  const uploadedByName = isOptions ? options.uploadedByName : null;
+  const defaultProjectId = isOptions ? options.projectId : null;
+  const batchNotes = isOptions ? options.notes : null;
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // 1. Create Batch record
+    const batchRes = await client.query<{ id: number }>(
+      `INSERT INTO contact_batches (file_name, uploaded_by, uploaded_by_name, total_rows, project_id, project_name, notes)
+       VALUES ($1, $2, $3, $4, $5, (SELECT name FROM projects WHERE id = $5), $6)
+       RETURNING id`,
+      [fileName, uploadedBy || null, uploadedByName || null, contacts.length, defaultProjectId || null, batchNotes || null]
+    );
+    const batchId = batchRes.rows[0].id;
+
+    let importedCount = 0;
+    let mergedCount = 0;
+    let assignedCount = 0;
+    let unassignedCount = 0;
+
+    for (const c of contacts) {
+      const mobile = (c.mobile_number || '').trim();
+      if (!mobile) continue;
+
+      const name = (c.name || '').trim() || 'Unknown Contact';
+      const altNumber = (c.alternate_number || '').trim() || null;
+      const email = (c.email || '').trim() || null;
+      const city = (c.city || '').trim() || null;
+      const state = (c.state || '').trim() || null;
+      const pinCode = (c.pin_code || '').trim() || null;
+      const category = (c.category || '').trim() || 'Donor';
+      const notes = (c.notes || '').trim() || null;
+      const assignedUserId = c.assigned_user_id && c.assigned_user_id > 0 ? c.assigned_user_id : null;
+      const targetProjectId = c.project_id && c.project_id > 0 ? c.project_id : defaultProjectId || null;
+
+      // Check if contact with this mobile already exists
+      const existing = await client.query<{ id: number; assigned_user_id: number | null }>(
+        'SELECT id, assigned_user_id FROM contacts WHERE mobile_number = $1 LIMIT 1',
+        [mobile]
+      );
+
+      let contactId: number;
+      if (existing.rows.length > 0) {
+        // Exists: update details if missing, and stamp batch_id
+        contactId = existing.rows[0].id;
+        mergedCount++;
+        await client.query(
+          `UPDATE contacts
+           SET 
+             name = COALESCE(NULLIF(name, 'Unknown Contact'), $1),
+             city = COALESCE(city, $2),
+             state = COALESCE(state, $3),
+             pin_code = COALESCE(pin_code, $4),
+             category = COALESCE(NULLIF(category, 'Donor'), $5),
+             email = COALESCE(email, $6),
+             batch_id = $7
+           WHERE id = $8`,
+          [name, city, state, pinCode, category, email, batchId, contactId]
+        );
+        if (existing.rows[0].assigned_user_id) {
+          assignedCount++;
+        } else {
+          unassignedCount++;
+        }
+      } else {
+        // New contact: insert
+        const insertRes = await client.query<{ id: number }>(
+          `INSERT INTO contacts (
+             name, mobile_number, alternate_number, email, city, state, pin_code,
+             category, notes, assigned_user_id, project_id, batch_id
+           ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+           RETURNING id`,
+          [
+            name, mobile, altNumber, email, city, state, pinCode,
+            category, notes, assignedUserId, targetProjectId, batchId
+          ]
+        );
+        contactId = insertRes.rows[0].id;
+        importedCount++;
+        if (assignedUserId) {
+          assignedCount++;
+        } else {
+          unassignedCount++;
+        }
+      }
+
+      // Associate with target project
+      if (targetProjectId) {
+        await client.query(
+          `INSERT INTO contact_projects (contact_id, project_id)
+           VALUES ($1, $2)
+           ON CONFLICT (contact_id, project_id) DO NOTHING`,
+          [contactId, targetProjectId]
+        );
+
+        if (assignedUserId) {
+          await client.query(
+            `INSERT INTO project_users (project_id, user_id, assigned_at)
+             VALUES ($1, $2, NOW())
+             ON CONFLICT (project_id, user_id) DO NOTHING`,
+            [targetProjectId, assignedUserId]
+          );
+        }
+      }
+    }
+
+    // Update batch stats
+    await client.query(
+      `UPDATE contact_batches
+       SET imported_count = $1, merged_count = $2
+       WHERE id = $3`,
+      [importedCount, mergedCount, batchId]
+    );
+
+    await client.query('COMMIT');
+
+    return {
+      batch_id: batchId,
+      file_name: fileName,
+      total_rows: contacts.length,
+      imported_count: importedCount,
+      merged_count: mergedCount,
+      assigned_count: assignedCount,
+      unassigned_count: unassignedCount,
+    };
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export async function getContactBatches(): Promise<ContactBatch[]> {
+  const result = await pool.query<ContactBatch>(`
+    SELECT 
+      cb.id,
+      cb.file_name,
+      cb.uploaded_by,
+      cb.uploaded_by_name,
+      cb.uploaded_at,
+      cb.total_rows,
+      cb.imported_count,
+      cb.merged_count,
+      cb.project_id,
+      cb.project_name,
+      cb.notes,
+      COUNT(ct.id)::INT as total_contacts,
+      COUNT(ct.id) FILTER (WHERE ct.assigned_user_id IS NOT NULL)::INT as assigned_count,
+      COUNT(ct.id) FILTER (WHERE ct.assigned_user_id IS NULL)::INT as unassigned_count
+    FROM contact_batches cb
+    LEFT JOIN contacts ct ON ct.batch_id = cb.id
+    GROUP BY cb.id
+    ORDER BY cb.uploaded_at DESC;
+  `);
+  return result.rows;
+}
+
+export async function assignContactsByBatch(data: AssignBatchDTO): Promise<number> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    let selectQuery = `SELECT id FROM contacts WHERE batch_id = $1`;
+    if (data.unassignedOnly !== false) {
+      selectQuery += ` AND assigned_user_id IS NULL`;
+    }
+
+    const idRes = await client.query<{ id: number }>(selectQuery, [data.batchId]);
+    const contactIds = idRes.rows.map((r) => r.id);
+
+    if (contactIds.length === 0) {
+      await client.query('COMMIT');
+      return 0;
+    }
+
+    await client.query(
+      `UPDATE contacts
+       SET assigned_user_id = $1
+       WHERE id = ANY($2::int[])`,
+      [data.targetUserId, contactIds]
+    );
+
+    // Auto-enroll caller in project_users
+    await client.query(
+      `INSERT INTO project_users (project_id, user_id, assigned_at)
+       SELECT DISTINCT p_id, $1::int, NOW()
+       FROM (
+         SELECT project_id AS p_id FROM contacts WHERE id = ANY($2::int[]) AND project_id IS NOT NULL
+         UNION
+         SELECT project_id AS p_id FROM contact_projects WHERE contact_id = ANY($2::int[])
+       ) sub
+       ON CONFLICT (project_id, user_id) DO NOTHING`,
+      [data.targetUserId, contactIds]
+    );
+
+    if (data.reassignFollowUps !== false) {
+      await client.query(
+        `UPDATE follow_ups
+         SET user_id = $1
+         WHERE contact_id = ANY($2::int[])
+           AND status = 'pending'`,
+        [data.targetUserId, contactIds]
+      );
+    }
+
+    await client.query('COMMIT');
+    return contactIds.length;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 export async function updateContact(

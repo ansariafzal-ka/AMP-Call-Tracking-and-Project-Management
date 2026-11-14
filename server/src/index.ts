@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { initDb } from './config/db';
 import healthRouter from './routes/health';
 import authRouter from './routes/auth';
 import callsRouter from './routes/calls';
@@ -53,6 +54,8 @@ app.use('/api/admin/projects', adminProjectsRouter);
 
 app.use('/admin/calls', adminCallsRouter);
 app.use('/api/admin/calls', adminCallsRouter);
+
+initDb().catch((err) => console.error('Database initialization error:', err));
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on http://0.0.0.0:${PORT}`);
