@@ -434,5 +434,73 @@ export async function updateContact(req: AuthenticatedRequest, res: Response): P
   }
 }
 
+export async function getStatesSummary(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const projectId = req.query.projectId ? parseInt(String(req.query.projectId), 10) : undefined;
+    const summary = await adminContactModel.getStatesSummary(
+      projectId && !isNaN(projectId) ? projectId : undefined
+    );
+    res.status(200).json({
+      success: true,
+      data: summary,
+    });
+  } catch (err: any) {
+    console.error('Error fetching states summary:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch states summary',
+      error: err.message,
+    });
+  }
+}
+
+export async function assignContactsByState(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const { state, targetUserId, unassignedOnly, projectId, reassignFollowUps } = req.body;
+
+    if (!state || !state.trim()) {
+      res.status(400).json({
+        success: false,
+        message: 'State is required',
+      });
+      return;
+    }
+
+    if (!targetUserId || isNaN(parseInt(targetUserId, 10))) {
+      res.status(400).json({
+        success: false,
+        message: 'A target coordinator/caller is required',
+      });
+      return;
+    }
+
+    const assignedCount = await adminContactModel.assignContactsByState({
+      state: state.trim(),
+      targetUserId: parseInt(targetUserId, 10),
+      unassignedOnly: unassignedOnly !== undefined ? Boolean(unassignedOnly) : true,
+      projectId: projectId ? parseInt(projectId, 10) : undefined,
+      reassignFollowUps: reassignFollowUps !== undefined ? Boolean(reassignFollowUps) : true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully assigned ${assignedCount} contacts in ${state.trim()} to the coordinator.`,
+      data: {
+        assignedCount,
+        state: state.trim(),
+        targetUserId: parseInt(targetUserId, 10),
+      },
+    });
+  } catch (err: any) {
+    console.error('Error assigning contacts by state:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to assign contacts by state',
+      error: err.message,
+    });
+  }
+}
+
+
 
 

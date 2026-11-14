@@ -18,6 +18,7 @@ import * as XLSX from 'xlsx';
 import apiClient from '../api/client';
 import { getErrorMessage } from '../utils/format';
 import { AssignContactModal } from '../components/AssignContactModal';
+import { AssignByStateModal } from '../components/AssignByStateModal';
 import { BulkUploadModal } from '../components/BulkUploadModal';
 import { EditContactModal } from '../components/EditContactModal';
 import { ContactHistoryModal } from '../components/ContactHistoryModal';
@@ -68,6 +69,7 @@ export const AdminContactsPage: React.FC = () => {
 
   // Modal State
   const [isAssignModalOpen, setIsAssignModalOpen] = useState<boolean>(false);
+  const [isAssignByStateModalOpen, setIsAssignByStateModalOpen] = useState<boolean>(false);
   const [isBulkUploadModalOpen, setIsBulkUploadModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [contactToEdit, setContactToEdit] = useState<AdminContact | null>(null);
@@ -182,6 +184,12 @@ export const AdminContactsPage: React.FC = () => {
 
   const handleAssignSuccess = (assignedCount: number, targetUserName: string) => {
     setSuccessMessage(`Successfully assigned ${assignedCount} contact(s) to ${targetUserName}!`);
+    setSelectedIds(new Set());
+    fetchContacts();
+  };
+
+  const handleAssignByStateSuccess = (assignedCount: number, state: string, targetUserName: string) => {
+    setSuccessMessage(`Successfully assigned ${assignedCount} contact(s) in ${state} to ${targetUserName}!`);
     setSelectedIds(new Set());
     fetchContacts();
   };
@@ -317,6 +325,15 @@ export const AdminContactsPage: React.FC = () => {
 
         {/* Top Actions: Bulk Upload & Bulk Assign */}
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setIsAssignByStateModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-xs cursor-pointer"
+          >
+            <MapPin size={16} className="text-maroon" />
+            <span>Assign by State</span>
+          </button>
+
           <button
             type="button"
             onClick={() => setIsBulkUploadModalOpen(true)}
@@ -769,6 +786,15 @@ export const AdminContactsPage: React.FC = () => {
         contacts={contactsToAssign}
         onClose={() => setIsAssignModalOpen(false)}
         onSuccess={handleAssignSuccess}
+      />
+
+      {/* Assign by State Modal */}
+      <AssignByStateModal
+        isOpen={isAssignByStateModalOpen}
+        onClose={() => setIsAssignByStateModalOpen(false)}
+        onSuccess={handleAssignByStateSuccess}
+        coordinators={coordinators}
+        projects={projects}
       />
 
       {/* Bulk Upload CSV Modal */}

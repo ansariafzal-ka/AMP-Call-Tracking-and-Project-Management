@@ -99,4 +99,126 @@ export async function updateContact(
   return result.rows[0] || null;
 }
 
+export interface StateSummaryRow {
+  state: string;
+  total_count: number;
+  unassigned_count: number;
+}
+
+export async function getStatesSummary(projectId?: number): Promise<StateSummaryRow[]> {
+  let query = `
+    SELECT 
+      ct.state, 
+      COUNT(*)::INT as total_count,
+      COUNT(*) FILTER (WHERE ct.assigned_user_id IS NULL)::INT as unassigned_count
+    FROM contacts ct
+  `;
+  const params: any[] = [];
+  if (projectId) {
+    query += `
+      LEFT JOIN contact_projects cp ON cp.contact_id = ct.id
+      WHERE (ct.project_id = $1 OR cp.project_id = $1)
+        AND ct.state IS NOT NULL AND TRIM(ct.state) != ''
+    `;
+    params.push(projectId);
+  } else {
+    query += `
+      WHERE ct.state IS NOT NULL AND TRIM(ct.state) != ''
+    `;
+  }
+  query += `
+    GROUP BY ct.state
+    ORDER BY ct.state ASC;
+  `;
+
+  const result = await pool.query<StateSummaryRow>(query, params);
+  return result.rows;
+}
+
+export interface AssignByStateDTO {
+  state: string;
+  targetUserId: number;
+  unassignedOnly?: boolean;
+  projectId?: number;
+  reassignFollowUps?: boolean;
+}
+
+export async function assignContactsByState(data: AssignByStateDTO): Promise<number> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    let selectQuery = `
+      SELECT DISTINCT ct.id 
+      FROM contacts ct
+    `;
+    const params: any[] = [data.state.trim()];
+    let paramIndex = 2;
+
+    if (data.projectId) {
+      selectQuery += `
+        LEFT JOIN contact_projects cp ON cp.contact_id = ct.id
+        WHERE ct.state ILIKE $1
+          AND (ct.project_id = $${paramIndex} OR cp.project_id = $${paramIndex})
+      `;
+      params.push(data.projectId);
+      paramIndex++;
+    } else {
+      selectQuery += `
+        WHERE ct.state ILIKE $1
+      `;
+    }
+
+    if (data.unassignedOnly !== false) {
+      selectQuery += ` AND ct.assigned_user_id IS NULL`;
+    }
+
+    const idResult = await client.query<{ id: number }>(selectQuery, params);
+    const contactIds = idResult.rows.map((r) => r.id);
+
+    if (contactIds.length === 0) {
+      await client.query('COMMIT');
+      return 0;
+    }
+
+    await client.query(
+      `UPDATE contacts 
+       SET assigned_user_id = $1 
+       WHERE id = ANY($2::int[])`,
+      [data.targetUserId, contactIds]
+    );
+
+    await client.query(
+      `INSERT INTO project_users (project_id, user_id, assigned_at)
+       SELECT DISTINCT p_id, $1::int, NOW()
+       FROM (
+         SELECT project_id AS p_id FROM contacts WHERE id = ANY($2::int[]) AND project_id IS NOT NULL
+         UNION
+         SELECT project_id AS p_id FROM contact_projects WHERE contact_id = ANY($2::int[])
+       ) sub
+       ON CONFLICT (project_id, user_id) DO NOTHING`,
+      [data.targetUserId, contactIds]
+    );
+
+    if (data.reassignFollowUps !== false) {
+      await client.query(
+        `UPDATE follow_ups 
+         SET user_id = $1 
+         WHERE contact_id = ANY($2::int[]) 
+           AND status = 'pending'`,
+        [data.targetUserId, contactIds]
+      );
+    }
+
+    await client.query('COMMIT');
+    return contactIds.length;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+
 

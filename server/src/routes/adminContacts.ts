@@ -5,6 +5,8 @@ import {
   bulkUploadContacts,
   updateContact,
   getExistingContactNumbers,
+  getStatesSummary,
+  assignContactsByState,
 } from '../controllers/adminContactController';
 import { authenticateToken } from '../middleware/auth';
 import { requireAdmin } from '../middleware/adminAuth';
@@ -16,8 +18,10 @@ router.use(authenticateToken);
 router.use(requireAdmin);
 
 router.get('/existing-numbers', getExistingContactNumbers);
+router.get('/states-summary', getStatesSummary);
 router.get('/', getAdminContacts);
 router.post('/assign', assignContacts);
+router.post('/assign-by-state', assignContactsByState);
 router.post('/bulk-upload', bulkUploadContacts);
 router.put('/:id', updateContact);
 
