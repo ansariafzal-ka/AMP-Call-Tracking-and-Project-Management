@@ -44,6 +44,7 @@ export const EditContactModal: React.FC<EditContactModalProps> = ({
   const [state, setState] = useState('');
   const [pinCode, setPinCode] = useState('');
   const [category, setCategory] = useState('Other');
+  const [customCategory, setCustomCategory] = useState('');
   const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>([]);
   const [assignedUserId, setAssignedUserId] = useState<string>('');
   const [notes, setNotes] = useState('');
@@ -60,7 +61,23 @@ export const EditContactModal: React.FC<EditContactModalProps> = ({
       setCity(contact.city || '');
       setState(contact.state || '');
       setPinCode(contact.pin_code || '');
-      setCategory(contact.category || 'Other');
+      const rawCat = contact.category || 'Other';
+      const isPreset = ['Donor', 'Beneficiary', 'Student', 'Volunteer'].some(
+        (c) => c.toLowerCase() === rawCat.toLowerCase()
+      );
+      if (isPreset) {
+        const matched = ['Donor', 'Beneficiary', 'Student', 'Volunteer'].find(
+          (c) => c.toLowerCase() === rawCat.toLowerCase()
+        )!;
+        setCategory(matched);
+        setCustomCategory('');
+      } else if (rawCat.toLowerCase() !== 'other') {
+        setCategory('Other');
+        setCustomCategory(rawCat);
+      } else {
+        setCategory('Other');
+        setCustomCategory('');
+      }
       const initialProjectIds: number[] = contact.project_ids && contact.project_ids.length > 0
         ? contact.project_ids
         : contact.projects && contact.projects.length > 0
@@ -111,6 +128,8 @@ export const EditContactModal: React.FC<EditContactModalProps> = ({
     setError(null);
 
     try {
+      const finalCategory = category === 'Other' ? (customCategory.trim() || 'Other') : category;
+
       const payload = {
         name: name.trim(),
         mobile_number: mobileNumber.trim(),
@@ -119,7 +138,7 @@ export const EditContactModal: React.FC<EditContactModalProps> = ({
         city: city.trim() || null,
         state: state.trim() || null,
         pin_code: pinCode.trim() || null,
-        category,
+        category: finalCategory,
         project_id: selectedProjectIds.length > 0 ? selectedProjectIds[0] : null,
         project_ids: selectedProjectIds,
         assigned_user_id: assignedUserId ? parseInt(assignedUserId, 10) : null,
@@ -331,6 +350,17 @@ export const EditContactModal: React.FC<EditContactModalProps> = ({
                 ))}
               </select>
             </div>
+            {category === 'Other' && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  placeholder="Specify custom category (e.g. Trustee, Sponsor, Partner)"
+                  className="w-full h-10 px-3 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-maroon/30 focus:border-maroon transition"
+                />
+              </div>
+            )}
           </div>
 
           {/* Row 4: Associated Projects & Coordinator */}

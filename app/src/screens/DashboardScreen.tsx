@@ -368,6 +368,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   // New Contact fields (when call is with an unknown/unrecognized number)
   const [contactName, setContactName] = useState('');
   const [contactCategory, setContactCategory] = useState('other');
+  const [customContactCategory, setCustomContactCategory] = useState('');
   const [contactCity, setContactCity] = useState('');
   const [contactState, setContactState] = useState('');
   const [contactPinCode, setContactPinCode] = useState('');
@@ -388,11 +389,21 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     setPurposeText(call.purpose || '');
     setSelectedOutcome(call.outcome || null);
 
-    setContactName('');
-    setContactCategory('other');
-    setContactCity('');
-    setContactState('');
-    setContactPinCode('');
+    setContactName(call.contact_name && call.contact_name !== 'Unknown' ? call.contact_name : '');
+    const initialRawCat = (call.contact_category || '').toLowerCase();
+    if (['student', 'professional', 'donor', 'volunteer', 'job_seeker'].includes(initialRawCat)) {
+      setContactCategory(initialRawCat);
+      setCustomContactCategory('');
+    } else if (call.contact_category && initialRawCat !== 'other') {
+      setContactCategory('other');
+      setCustomContactCategory(call.contact_category);
+    } else {
+      setContactCategory('other');
+      setCustomContactCategory('');
+    }
+    setContactCity(call.contact_city || '');
+    setContactState(call.contact_state || '');
+    setContactPinCode(call.contact_pin_code || '');
     setSheetRecognizedContact(null);
 
     // Look up contact details if number is present
@@ -402,11 +413,21 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
         .then((c) => {
           setSheetRecognizedContact(c);
           if (c) {
-            setContactName(c.name || '');
-            setContactCategory(c.category || 'other');
-            setContactCity(c.city || '');
-            setContactState(c.state || '');
-            setContactPinCode(c.pin_code || '');
+            setContactName(c.name || call.contact_name || '');
+            const rawCat = (c.category || call.contact_category || '').toLowerCase();
+            if (['student', 'professional', 'donor', 'volunteer', 'job_seeker'].includes(rawCat)) {
+              setContactCategory(rawCat);
+              setCustomContactCategory('');
+            } else if ((c.category || call.contact_category) && rawCat !== 'other') {
+              setContactCategory('other');
+              setCustomContactCategory(c.category || call.contact_category || '');
+            } else {
+              setContactCategory('other');
+              setCustomContactCategory('');
+            }
+            setContactCity(c.city || call.contact_city || '');
+            setContactState(c.state || call.contact_state || '');
+            setContactPinCode(c.pin_code || call.contact_pin_code || '');
           }
         })
         .catch(() => { })
@@ -779,6 +800,10 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
           ? formatDateTimeForApi(followUpDate)
           : null;
 
+      const finalCategory = contactCategory === 'other'
+        ? (customContactCategory.trim() || 'Other')
+        : contactCategory;
+
       const updated = await updateCallRecord(
         selectedCall.id,
         {
@@ -786,7 +811,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
           outcome: selectedOutcome,
           follow_up_date: followUpDateStr,
           contact_name: contactName.trim() || undefined,
-          contact_category: contactCategory,
+          contact_category: finalCategory,
           contact_city: contactCity.trim() || undefined,
           contact_state: contactState.trim() || undefined,
           contact_pin_code: contactPinCode.trim() || undefined,
@@ -1604,7 +1629,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
 
                   <Text style={styles.newContactFieldLabel}>Category</Text>
                   <View style={styles.categoryChipsRow}>
-                    {['student', 'professional', 'donor', 'job_seeker', 'other'].map((cat) => (
+                    {['student', 'professional', 'donor', 'volunteer', 'job_seeker', 'other'].map((cat) => (
                       <TouchableOpacity
                         key={cat}
                         style={[
@@ -1625,6 +1650,18 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                       </TouchableOpacity>
                     ))}
                   </View>
+
+                  {contactCategory === 'other' && (
+                    <View style={{ marginTop: 6, marginBottom: 4 }}>
+                      <TextInput
+                        style={styles.newContactInput}
+                        placeholder="Specify custom category (e.g. Trustee, Sponsor)"
+                        placeholderTextColor="#94A3B8"
+                        value={customContactCategory}
+                        onChangeText={setCustomContactCategory}
+                      />
+                    </View>
+                  )}
 
                   <View style={{ flexDirection: 'row', gap: 8, marginTop: 4 }}>
                     <View style={{ flex: 1 }}>

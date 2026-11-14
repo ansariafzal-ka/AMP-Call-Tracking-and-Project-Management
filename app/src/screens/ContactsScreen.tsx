@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   View,
   Text,
@@ -77,6 +77,20 @@ export const ContactsScreen: React.FC = () => {
   const [searchInput, setSearchInput] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const availableCategories = useMemo(() => {
+    const list = [...CATEGORIES];
+    contacts.forEach((c) => {
+      if (c.category) {
+        const trimmed = c.category.trim();
+        const exists = list.some((item) => item.toLowerCase() === trimmed.toLowerCase());
+        if (!exists) {
+          list.push(trimmed);
+        }
+      }
+    });
+    return list;
+  }, [contacts]);
 
   // History Modal states
   const [historyModalVisible, setHistoryModalVisible] = useState<boolean>(false);
@@ -677,7 +691,7 @@ export const ContactsScreen: React.FC = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoryScroll}
         >
-          {CATEGORIES.map((cat) => {
+          {availableCategories.map((cat) => {
             const isSelected = selectedCategory === cat;
             return (
               <TouchableOpacity

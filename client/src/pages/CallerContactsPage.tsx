@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Search,
   RotateCcw,
@@ -21,7 +21,7 @@ import type { CallerContact, GetCallerContactsResponse } from '../types';
 import { formatDateTime, getErrorMessage } from '../utils/format';
 import { ContactHistoryModal } from '../components/ContactHistoryModal';
 
-const CATEGORIES = ['All', 'Donor', 'Beneficiary', 'Student', 'Volunteer'];
+const CATEGORIES = ['All', 'Donor', 'Beneficiary', 'Student', 'Volunteer', 'Other'];
 
 export const CallerContactsPage: React.FC = () => {
   const [contacts, setContacts] = useState<CallerContact[]>([]);
@@ -29,6 +29,20 @@ export const CallerContactsPage: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(1);
+
+  const availableCategories = useMemo(() => {
+    const list = [...CATEGORIES];
+    contacts.forEach((c) => {
+      if (c.category) {
+        const trimmed = c.category.trim();
+        const exists = list.some((item) => item.toLowerCase() === trimmed.toLowerCase());
+        if (!exists) {
+          list.push(trimmed);
+        }
+      }
+    });
+    return list;
+  }, [contacts]);
 
   // Filters
   const [searchInput, setSearchInput] = useState('');
@@ -228,7 +242,7 @@ export const CallerContactsPage: React.FC = () => {
 
           {/* Category Filter Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
-            {CATEGORIES.map((cat) => (
+            {availableCategories.map((cat: string) => (
               <button
                 key={cat}
                 type="button"

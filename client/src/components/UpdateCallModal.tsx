@@ -31,6 +31,7 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
   const [followUpLocal, setFollowUpLocal] = useState('');
   const [contactName, setContactName] = useState('');
   const [contactCategory, setContactCategory] = useState('other');
+  const [customContactCategory, setCustomContactCategory] = useState('');
   const [contactCity, setContactCity] = useState('');
   const [contactState, setContactState] = useState('');
   const [contactPinCode, setContactPinCode] = useState('');
@@ -43,10 +44,20 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
       setOutcome(call.outcome || null);
       setFollowUpLocal(toDateTimeLocalValue(call.follow_up_date));
       setContactName(call.contact_name && call.contact_name !== 'Unknown' ? call.contact_name : '');
-      setContactCategory('other');
-      setContactCity('');
-      setContactState('');
-      setContactPinCode('');
+      const rawCat = (call.contact_category || '').toLowerCase();
+      if (['donor', 'beneficiary', 'student', 'volunteer', 'professional', 'job_seeker'].includes(rawCat)) {
+        setContactCategory(rawCat);
+        setCustomContactCategory('');
+      } else if (call.contact_category && rawCat !== 'other') {
+        setContactCategory('other');
+        setCustomContactCategory(call.contact_category);
+      } else {
+        setContactCategory('other');
+        setCustomContactCategory('');
+      }
+      setContactCity(call.contact_city || '');
+      setContactState(call.contact_state || '');
+      setContactPinCode(call.contact_pin_code || '');
       setError(null);
       setSaving(false);
     }
@@ -85,12 +96,16 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
 
     setSaving(true);
     try {
+      const finalCategory = contactCategory === 'other'
+        ? (customContactCategory.trim() || 'Other')
+        : contactCategory;
+
       const res = await apiClient.patch<UpdateCallResponse>(`/api/calls/${call.id}`, {
         purpose: trimmedNote ? trimmedNote : null,
         outcome,
         follow_up_date: followUpFormatted,
         contact_name: contactName.trim() || undefined,
-        contact_category: contactCategory,
+        contact_category: finalCategory,
         contact_city: contactCity.trim() || undefined,
         contact_state: contactState.trim() || undefined,
         contact_pin_code: contactPinCode.trim() || undefined,
@@ -180,12 +195,23 @@ export const UpdateCallModal: React.FC<UpdateCallModalProps> = ({
                   onChange={(e) => setContactCategory(e.target.value)}
                   className="w-full px-2 py-1.5 rounded border border-gray-300 bg-white text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
                 >
-                  <option value="student">Student</option>
-                  <option value="professional">Professional</option>
                   <option value="donor">Donor</option>
+                  <option value="beneficiary">Beneficiary</option>
+                  <option value="student">Student</option>
+                  <option value="volunteer">Volunteer</option>
+                  <option value="professional">Professional</option>
                   <option value="job_seeker">Job Seeker</option>
                   <option value="other">Other</option>
                 </select>
+                {contactCategory === 'other' && (
+                  <input
+                    type="text"
+                    placeholder="Specify (e.g. Trustee, Sponsor)"
+                    value={customContactCategory}
+                    onChange={(e) => setCustomContactCategory(e.target.value)}
+                    className="w-full mt-1.5 px-2 py-1 rounded border border-gray-300 bg-white text-[11px] text-gray-800 focus:outline-none focus:ring-1 focus:ring-purple-400"
+                  />
+                )}
               </div>
               <div>
                 <label className="block text-[11px] text-gray-600 mb-0.5 font-medium">State</label>

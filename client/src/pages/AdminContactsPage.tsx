@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Search,
   UserCheck,
@@ -38,6 +38,20 @@ export const AdminContactsPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const availableCategories = useMemo(() => {
+    const list = [...CATEGORIES];
+    contacts.forEach((c) => {
+      if (c.category) {
+        const trimmed = c.category.trim();
+        const exists = list.some((item) => item.toLowerCase() === trimmed.toLowerCase());
+        if (!exists) {
+          list.push(trimmed);
+        }
+      }
+    });
+    return list;
+  }, [contacts]);
 
   // Filters & Pagination
   const [search, setSearch] = useState<string>('');
@@ -366,7 +380,7 @@ export const AdminContactsPage: React.FC = () => {
         <span className="text-xs font-bold text-text-muted uppercase tracking-wider shrink-0 mr-1">
           Category:
         </span>
-        {CATEGORIES.map((cat) => {
+        {availableCategories.map((cat: string) => {
           const isActive = selectedCategory === cat;
           return (
             <button
