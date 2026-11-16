@@ -27,6 +27,7 @@ interface ParsedContactRow {
   assigned_to?: string;
   projects?: string;
   project_ids?: number[];
+  missingProjects?: string[];
   isValid: boolean;
   isDuplicate?: boolean;
   errorReason?: string;
@@ -197,16 +198,27 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 
         // Match project IDs if projects column is populated in Excel
         let rowProjectIds: number[] = [];
+        const missingProjects: string[] = [];
         if (projectsStr) {
           const names = projectsStr
             .split(/[;,|]/)
-            .map((s) => s.trim().toLowerCase())
+            .map((s) => s.trim())
             .filter(Boolean);
-          for (const n of names) {
-            const match = projects.find((p) => p.name.toLowerCase().trim() === n);
-            if (match && !rowProjectIds.includes(match.id)) {
-              rowProjectIds.push(match.id);
+          for (const rawName of names) {
+            const cleanName = rawName.toLowerCase();
+            const match = projects.find((p) => p.name.toLowerCase().trim() === cleanName);
+            if (match) {
+              if (!rowProjectIds.includes(match.id)) {
+                rowProjectIds.push(match.id);
+              }
+            } else {
+              missingProjects.push(rawName);
             }
+          }
+
+          if (missingProjects.length > 0) {
+            isValid = false;
+            errorReason = `Project not found: ${missingProjects.map((m) => `"${m}"`).join(', ')}`;
           }
         }
 
@@ -216,6 +228,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
           category,
           projects: projectsStr || undefined,
           project_ids: rowProjectIds.length > 0 ? rowProjectIds : undefined,
+          missingProjects: missingProjects.length > 0 ? missingProjects : undefined,
           city,
           state,
           pin_code,
@@ -682,7 +695,15 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 
                               {/* Projects */}
                               <td className="py-2 px-3">
-                                {row.projects ? (
+                                {row.missingProjects && row.missingProjects.length > 0 ? (
+                                  <span
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-red-50 text-red-700 border border-red-200 whitespace-nowrap"
+                                    title={row.errorReason}
+                                  >
+                                    <AlertTriangle size={10} className="text-red-500 shrink-0" />
+                                    Unknown: {row.missingProjects.join(', ')}
+                                  </span>
+                                ) : row.projects ? (
                                   <span
                                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200 whitespace-nowrap"
                                     title={row.projects}
