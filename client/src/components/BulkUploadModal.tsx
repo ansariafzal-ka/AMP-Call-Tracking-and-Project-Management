@@ -8,7 +8,9 @@ import {
   CheckCircle2,
   Check,
   AlertTriangle,
+  FolderKanban,
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import apiClient from '../api/client';
 import type { AdminUser, Project } from '../types';
 import { getErrorMessage } from '../utils/format';
@@ -23,6 +25,8 @@ interface ParsedContactRow {
   email?: string;
   notes?: string;
   assigned_to?: string;
+  projects?: string;
+  project_ids?: number[];
   isValid: boolean;
   isDuplicate?: boolean;
   errorReason?: string;
@@ -43,7 +47,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
   const [projects, setProjects] = useState<Project[]>([]);
   const [existingDbNumbers, setExistingDbNumbers] = useState<Set<string>>(new Set());
   const [defaultUserId, setDefaultUserId] = useState<string>('');
-  const [defaultProjectId, setDefaultProjectId] = useState<string>('');
+  const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>([]);
 
   const [fileName, setFileName] = useState<string | null>(null);
   const [parsedRows, setParsedRows] = useState<ParsedContactRow[]>([]);
@@ -96,118 +100,139 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Robust CSV line parser with duplicate & validity checks
-  const parseCSV = (text: string, dbNumbers: Set<string>): ParsedContactRow[] => {
-    const lines = text
-      .split(/\r?\n/)
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0);
+  // Robust Excel (.xlsx, .xls) and CSV parser with duplicate & validity checks
+  const parseExcelOrCsv = (buffer: ArrayBuffer, dbNumbers: Set<string>): ParsedContactRow[] => {
+    try {
+      const data = new Uint8Array(buffer);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      if (!sheetName) return [];
+      const worksheet = workbook.Sheets[sheetName];
+      if (!worksheet) return [];
 
-    if (lines.length < 2) return [];
-
-    const parseLine = (line: string): string[] => {
-      const result: string[] = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"' || char === "'") {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          result.push(current.trim().replace(/^["']|["']$/g, ''));
-          current = '';
-        } else {
-          current += char;
-        }
-      }
-      result.push(current.trim().replace(/^["']|["']$/g, ''));
-      return result;
-    };
-
-    const headers = parseLine(lines[0]).map((h) => h.toLowerCase().replace(/\s+|_/g, ''));
-
-    const nameIdx = headers.findIndex((h) => h === 'name' || h === 'contactname' || h === 'fullname');
-    const mobileIdx = headers.findIndex(
-      (h) => h === 'mobilenumber' || h === 'mobile' || h === 'phone' || h === 'phonenumber' || h === 'contact'
-    );
-    const categoryIdx = headers.findIndex((h) => h === 'category' || h === 'type');
-    const cityIdx = headers.findIndex((h) => h === 'city' || h === 'location');
-    const stateIdx = headers.findIndex((h) => h === 'state' || h === 'province' || h === 'region');
-    const pinCodeIdx = headers.findIndex(
-      (h) => h === 'pincode' || h === 'pin' || h === 'postalcode' || h === 'zip' || h === 'zipcode'
-    );
-    const emailIdx = headers.findIndex((h) => h === 'email' || h === 'emailaddress');
-    const notesIdx = headers.findIndex((h) => h === 'notes' || h === 'note' || h === 'context' || h === 'remarks');
-    const assignedIdx = headers.findIndex(
-      (h) =>
-        h === 'assignedto' ||
-        h === 'calleremail' ||
-        h === 'assignedcaller' ||
-        h === 'caller' ||
-        h === 'assignedtoemail'
-    );
-
-    const rows: ParsedContactRow[] = [];
-    const seenInCsv = new Set<string>();
-
-    for (let i = 1; i < lines.length; i++) {
-      const parts = parseLine(lines[i]);
-      if (parts.length === 0 || (parts.length === 1 && !parts[0])) continue;
-
-      const name = nameIdx !== -1 && parts[nameIdx] ? parts[nameIdx].trim() : '';
-      const rawMobile = mobileIdx !== -1 && parts[mobileIdx] ? parts[mobileIdx].trim() : '';
-      const cleanDigits = rawMobile.replace(/\D/g, '');
-      const tenDigits = cleanDigits.slice(-10);
-      const category = categoryIdx !== -1 && parts[categoryIdx] ? parts[categoryIdx].trim() : 'Donor';
-      const city = cityIdx !== -1 ? parts[cityIdx].trim() : undefined;
-      const state = stateIdx !== -1 ? parts[stateIdx].trim() : undefined;
-      const pin_code = pinCodeIdx !== -1 ? parts[pinCodeIdx].trim() : undefined;
-      const email = emailIdx !== -1 ? parts[emailIdx].trim() : undefined;
-      const notes = notesIdx !== -1 ? parts[notesIdx].trim() : undefined;
-      const assigned_to = assignedIdx !== -1 ? parts[assignedIdx].trim() : undefined;
-
-      let isValid = true;
-      let isDuplicate = false;
-      let errorReason: string | undefined = undefined;
-
-      if (!name) {
-        isValid = false;
-        errorReason = 'Missing contact name';
-      } else if (!rawMobile) {
-        isValid = false;
-        errorReason = 'Missing mobile number';
-      } else if (cleanDigits.length < 10) {
-        isValid = false;
-        errorReason = 'Incomplete number (< 10 digits)';
-      } else if (dbNumbers.has(tenDigits)) {
-        isValid = false;
-        isDuplicate = true;
-        errorReason = 'Already exists in database';
-      } else if (seenInCsv.has(tenDigits)) {
-        isValid = false;
-        isDuplicate = true;
-        errorReason = 'Duplicate in upload file';
-      } else {
-        seenInCsv.add(tenDigits);
-      }
-
-      rows.push({
-        name: name || 'Unknown',
-        mobile_number: rawMobile,
-        category,
-        city,
-        state,
-        pin_code,
-        email,
-        notes,
-        assigned_to,
-        isValid,
-        isDuplicate,
-        errorReason,
+      const rawRows = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, {
+        defval: '',
+        raw: false,
       });
-    }
 
-    return rows;
+      if (rawRows.length === 0) return [];
+
+      // Helper to match column headers case-insensitively ignoring spaces & underscores
+      const getVal = (row: Record<string, any>, possibleKeys: string[]): string => {
+        const rowKeys = Object.keys(row);
+        for (const pk of possibleKeys) {
+          const foundKey = rowKeys.find(
+            (rk) => rk.toLowerCase().replace(/[^a-z0-9]/g, '') === pk
+          );
+          if (foundKey && row[foundKey] !== undefined && row[foundKey] !== null) {
+            return String(row[foundKey]).trim();
+          }
+        }
+        return '';
+      };
+
+      const rows: ParsedContactRow[] = [];
+      const seenInSheet = new Set<string>();
+
+      for (let i = 0; i < rawRows.length; i++) {
+        const raw = rawRows[i];
+
+        const name = getVal(raw, ['name', 'contactname', 'fullname']);
+        const rawMobile = getVal(raw, [
+          'mobilenumber',
+          'mobile',
+          'phone',
+          'phonenumber',
+          'contact',
+          'contactnumber',
+        ]);
+        const cleanDigits = rawMobile.replace(/\D/g, '');
+        const tenDigits = cleanDigits.slice(-10);
+
+        const category = getVal(raw, ['category', 'type']) || 'Donor';
+        const projectsStr = getVal(raw, ['projects', 'project', 'campaign', 'campaigns']);
+        const city = getVal(raw, ['city', 'location']) || undefined;
+        const state = getVal(raw, ['state', 'province', 'region']) || undefined;
+        const pin_code = getVal(raw, ['pincode', 'pin', 'postalcode', 'zip', 'zipcode']) || undefined;
+        const email = getVal(raw, ['email', 'emailaddress']) || undefined;
+        const notes = getVal(raw, ['notes', 'note', 'context', 'remarks', 'comment']) || undefined;
+        const assigned_to = getVal(raw, [
+          'assignedto',
+          'calleremail',
+          'assignedcaller',
+          'caller',
+          'assignedtoemail',
+          'assignedcoordinator',
+          'coordinator',
+          'assignedcoordinatoremail',
+        ]) || undefined;
+
+        // Skip completely empty rows
+        if (!name && !rawMobile && !email && !city) continue;
+
+        let isValid = true;
+        let isDuplicate = false;
+        let errorReason: string | undefined = undefined;
+
+        if (!name) {
+          isValid = false;
+          errorReason = 'Missing contact name';
+        } else if (!rawMobile) {
+          isValid = false;
+          errorReason = 'Missing mobile number';
+        } else if (cleanDigits.length < 10) {
+          isValid = false;
+          errorReason = 'Incomplete number (< 10 digits)';
+        } else if (dbNumbers.has(tenDigits)) {
+          isValid = false;
+          isDuplicate = true;
+          errorReason = 'Already exists in database';
+        } else if (seenInSheet.has(tenDigits)) {
+          isValid = false;
+          isDuplicate = true;
+          errorReason = 'Duplicate in upload file';
+        } else {
+          seenInSheet.add(tenDigits);
+        }
+
+        // Match project IDs if projects column is populated in Excel
+        let rowProjectIds: number[] = [];
+        if (projectsStr) {
+          const names = projectsStr
+            .split(/[;,|]/)
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean);
+          for (const n of names) {
+            const match = projects.find((p) => p.name.toLowerCase().trim() === n);
+            if (match && !rowProjectIds.includes(match.id)) {
+              rowProjectIds.push(match.id);
+            }
+          }
+        }
+
+        rows.push({
+          name: name || 'Unknown',
+          mobile_number: rawMobile,
+          category,
+          projects: projectsStr || undefined,
+          project_ids: rowProjectIds.length > 0 ? rowProjectIds : undefined,
+          city,
+          state,
+          pin_code,
+          email,
+          notes,
+          assigned_to,
+          isValid,
+          isDuplicate,
+          errorReason,
+        });
+      }
+
+      return rows;
+    } catch (err: any) {
+      console.error('Failed to parse Excel file:', err);
+      return [];
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -220,30 +245,58 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      const text = event.target?.result as string;
-      const rows = parseCSV(text, existingDbNumbers);
-      setParsedRows(rows);
-      if (rows.length === 0) {
-        setError('No rows could be parsed. Please check that your file has proper headers.');
+      try {
+        const buffer = event.target?.result as ArrayBuffer;
+        const rows = parseExcelOrCsv(buffer, existingDbNumbers);
+        setParsedRows(rows);
+        if (rows.length === 0) {
+          setError('No rows could be parsed. Please verify your Excel sheet contains the proper column headers.');
+        }
+      } catch (err: any) {
+        setError('Failed to parse file: ' + (err?.message || 'Invalid format'));
       }
     };
     reader.onerror = () => {
       setError('Failed to read the file.');
     };
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
   };
 
-  const downloadSampleTemplate = () => {
-    const sampleHeaders = 'name,mobile_number,category,state,city,pin_code,email,notes,assigned_to\n';
+  // Download Blank Excel Template (.xlsx) without dummy rows
+  const downloadExcelTemplate = () => {
+    const headers = [
+      'Name',
+      'Mobile Number',
+      'Category',
+      'Projects',
+      'City',
+      'State',
+      'Pin Code',
+      'Email',
+      'Notes',
+      'Assigned Coordinator Email',
+    ];
 
-    const blob = new Blob([sampleHeaders], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'amp_contacts_bulk_sample.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Create sheet with ONLY the header row
+    const worksheet = XLSX.utils.aoa_to_sheet([headers]);
+
+    // Set professional column widths in Excel
+    worksheet['!cols'] = [
+      { wch: 22 }, // Name
+      { wch: 16 }, // Mobile Number
+      { wch: 14 }, // Category
+      { wch: 28 }, // Projects
+      { wch: 16 }, // City
+      { wch: 16 }, // State
+      { wch: 12 }, // Pin Code
+      { wch: 26 }, // Email
+      { wch: 30 }, // Notes
+      { wch: 28 }, // Assigned Coordinator Email
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Contacts');
+    XLSX.writeFile(workbook, 'amp_contacts_template.xlsx');
   };
 
   const validCount = parsedRows.filter((r) => r.isValid && !r.isDuplicate).length;
@@ -266,7 +319,8 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         contacts: parsedRows,
         fileName: fileName || undefined,
         defaultUserId: defaultUserId || undefined,
-        defaultProjectId: defaultProjectId || undefined,
+        defaultProjectId: selectedProjectIds.length > 0 ? selectedProjectIds[0] : undefined,
+        project_ids: selectedProjectIds,
       };
 
       const res = await apiClient.post<{
@@ -313,9 +367,9 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               <Upload size={20} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-gray-900">Bulk Upload Contacts</h3>
+              <h3 className="text-base font-bold text-gray-900">Bulk Upload Contacts (Excel)</h3>
               <p className="text-xs text-text-muted">
-                Upload CSV spreadsheet to import and auto-assign contacts to coordinators
+                Upload Excel spreadsheet (.xlsx, .xls) to import, tag projects, and assign contacts to coordinators
               </p>
             </div>
           </div>
@@ -383,21 +437,21 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
             </div>
           ) : (
             <>
-              {/* CSV Template Download */}
+              {/* Excel Template Download */}
               <div className="p-3.5 rounded-xl bg-gray-50/70 border border-gray-200/60 flex items-center justify-between text-xs">
                 <div>
-                  <div className="font-bold text-gray-800">Need the CSV format?</div>
+                  <div className="font-bold text-gray-800">Need the Excel template?</div>
                   <div className="text-[11px] text-text-muted">
-                    Download the pre-formatted template with all columns and sample rows.
+                    Download the clean blank template (.xlsx) with all columns ready for data entry.
                   </div>
                 </div>
                 <button
                   type="button"
-                  onClick={downloadSampleTemplate}
+                  onClick={downloadExcelTemplate}
                   className="px-3 py-1.5 rounded-lg border border-maroon text-maroon hover:bg-maroon/5 font-semibold text-xs transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <Download size={13} />
-                  Download Sample CSV
+                  Download Excel Template (.xlsx)
                 </button>
               </div>
 
@@ -405,7 +459,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv"
+                accept=".xlsx, .xls, .csv"
                 onChange={handleFileChange}
                 className="hidden"
               />
@@ -424,13 +478,16 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 {fileName ? (
                   <div>
                     <span className="text-xs font-bold text-gray-900">{fileName}</span>
-                    <p className="text-[11px] text-text-muted mt-0.5">Click to choose a different CSV file</p>
+                    <p className="text-[11px] text-text-muted mt-0.5">Click to choose a different Excel file</p>
                   </div>
                 ) : (
                   <div>
-                    <span className="text-xs font-bold text-gray-900">Click to upload contacts CSV</span>
+                    <span className="text-xs font-bold text-gray-900">Click to upload contacts Excel file</span>
                     <p className="text-[11px] text-text-muted mt-0.5">
-                      Supports .CSV files with columns: name, mobile_number, category, state, city, pin_code, email, notes, assigned_to
+                      Supports Microsoft Excel (.xlsx, .xls) and CSV
+                    </p>
+                    <p className="text-[10px] text-text-muted mt-0.5 font-mono">
+                      Columns: Name, Mobile Number, Category, Projects, City, State, Pin Code, Email, Notes, Assigned Coordinator
                     </p>
                   </div>
                 )}
@@ -460,23 +517,45 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block font-bold text-gray-700 uppercase tracking-wider text-[10px] mb-1">
-                    Target Campaign / Project (Optional)
+                  <label className="block font-bold text-gray-700 uppercase tracking-wider text-[10px] mb-1 flex items-center justify-between">
+                    <span>Target Campaign / Project(s) (Optional)</span>
+                    <span className="text-[10px] text-text-muted font-normal lowercase">
+                      {selectedProjectIds.length === 0
+                        ? 'none selected'
+                        : `${selectedProjectIds.length} selected`}
+                    </span>
                   </label>
-                  <select
-                    value={defaultProjectId}
-                    onChange={(e) => setDefaultProjectId(e.target.value)}
-                    className="w-full h-9 px-3 rounded-lg border border-gray-200 bg-white text-gray-800 text-xs focus:outline-hidden focus:border-maroon"
-                  >
-                    <option value="">No Project Tag (General Contacts)</option>
-                    {projects.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="text-[10px] text-text-muted mt-0.5 block">
-                    Tags imported contacts to this campaign.
+                  {projects.length === 0 ? (
+                    <div className="text-xs text-text-muted italic py-1.5">No active projects available</div>
+                  ) : (
+                    <div className="flex flex-wrap gap-1.5 p-2 rounded-xl border border-gray-200 bg-gray-50/50 min-h-[42px] max-h-32 overflow-y-auto items-center">
+                      {projects.map((p) => {
+                        const isSelected = selectedProjectIds.includes(p.id);
+                        return (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedProjectIds((prev) =>
+                                isSelected ? prev.filter((id) => id !== p.id) : [...prev, p.id]
+                              );
+                            }}
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+                              isSelected
+                                ? 'bg-purple-600 text-white shadow-2xs'
+                                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
+                            }`}
+                          >
+                            <FolderKanban size={12} className={isSelected ? 'text-white' : 'text-purple-600'} />
+                            <span>{p.name}</span>
+                            {isSelected && <Check size={12} className="ml-0.5" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <span className="text-[10px] text-text-muted mt-1 block">
+                    Tags all contacts in this upload to the selected campaign(s).
                   </span>
                 </div>
               </div>
@@ -536,6 +615,7 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                           <th className="py-2 px-3">Name</th>
                           <th className="py-2 px-3">Mobile Number</th>
                           <th className="py-2 px-3">Category</th>
+                          <th className="py-2 px-3">Projects</th>
                           <th className="py-2 px-3">Assigned To</th>
                           <th className="py-2 px-3 text-right">Status</th>
                         </tr>
@@ -598,6 +678,27 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                                 <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-700 whitespace-nowrap">
                                   {row.category}
                                 </span>
+                              </td>
+
+                              {/* Projects */}
+                              <td className="py-2 px-3">
+                                {row.projects ? (
+                                  <span
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200 whitespace-nowrap"
+                                    title={row.projects}
+                                  >
+                                    <FolderKanban size={10} className="text-purple-600" />
+                                    {row.projects}
+                                  </span>
+                                ) : selectedProjectIds.length > 0 ? (
+                                  <span className="text-[10px] text-purple-600 italic whitespace-nowrap">
+                                    Default ({selectedProjectIds.length})
+                                  </span>
+                                ) : (
+                                  <span className="text-[10px] text-gray-400 italic whitespace-nowrap">
+                                    General
+                                  </span>
+                                )}
                               </td>
 
                               {/* Coordinator */}

@@ -92,6 +92,7 @@ export const FollowUpsScreen: React.FC = () => {
   const [rescheduleModalVisible, setRescheduleModalVisible] = useState<boolean>(false);
   const [selectedFollowUp, setSelectedFollowUp] = useState<FollowUpItem | null>(null);
   const [rescheduleDate, setRescheduleDate] = useState<Date>(new Date());
+  const [rescheduleQuickPreset, setRescheduleQuickPreset] = useState<'tomorrow' | '3days' | 'next_week' | 'custom' | null>(null);
   const [rescheduleNotes, setRescheduleNotes] = useState<string>('');
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [showTimePicker, setShowTimePicker] = useState<boolean>(false);
@@ -110,6 +111,7 @@ export const FollowUpsScreen: React.FC = () => {
   const [noteText, setNoteText] = useState<string>('');
   const [selectedOutcome, setSelectedOutcome] = useState<CallOutcome>(null);
   const [followUpDate, setFollowUpDate] = useState<Date | null>(null);
+  const [dispositionQuickPreset, setDispositionQuickPreset] = useState<'tomorrow' | '3days' | 'next_week' | 'custom' | null>('tomorrow');
   const [isSavingDisposition, setIsSavingDisposition] = useState<boolean>(false);
   const [dispositionError, setDispositionError] = useState<string | null>(null);
   const [showDispositionDatePicker, setShowDispositionDatePicker] = useState<boolean>(false);
@@ -180,7 +182,13 @@ export const FollowUpsScreen: React.FC = () => {
     }
     setNoteText(call.purpose || '');
     setSelectedOutcome(call.outcome || null);
-    setFollowUpDate(call.follow_up_date ? new Date(call.follow_up_date) : null);
+    if (call.follow_up_date) {
+      setFollowUpDate(new Date(call.follow_up_date));
+      setDispositionQuickPreset('custom');
+    } else {
+      setFollowUpDate(null);
+      setDispositionQuickPreset('tomorrow');
+    }
     setDispositionError(null);
     setIsDispositionVisible(true);
   }, [followUps]);
@@ -347,10 +355,40 @@ export const FollowUpsScreen: React.FC = () => {
     return `${d} ${m} ${y}, ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
   };
 
+  // Quick Follow-up Preset Handlers
+  const handleSelectDispositionQuickPreset = (preset: 'tomorrow' | '3days' | 'next_week') => {
+    setDispositionQuickPreset(preset);
+    const target = new Date();
+    if (preset === 'tomorrow') {
+      target.setDate(target.getDate() + 1);
+    } else if (preset === '3days') {
+      target.setDate(target.getDate() + 3);
+    } else if (preset === 'next_week') {
+      target.setDate(target.getDate() + 7);
+    }
+    target.setHours(11, 0, 0, 0);
+    setFollowUpDate(target);
+  };
+
+  const handleSelectRescheduleQuickPreset = (preset: 'tomorrow' | '3days' | 'next_week') => {
+    setRescheduleQuickPreset(preset);
+    const target = new Date();
+    if (preset === 'tomorrow') {
+      target.setDate(target.getDate() + 1);
+    } else if (preset === '3days') {
+      target.setDate(target.getDate() + 3);
+    } else if (preset === 'next_week') {
+      target.setDate(target.getDate() + 7);
+    }
+    target.setHours(11, 0, 0, 0);
+    setRescheduleDate(target);
+  };
+
   // Disposition Date & Time Handlers
   const handleDispositionDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDispositionDatePicker(false);
     if (event.type === 'set' && selectedDate) {
+      setDispositionQuickPreset('custom');
       const currentHours = followUpDate ? followUpDate.getHours() : 11;
       const currentMinutes = followUpDate ? followUpDate.getMinutes() : 0;
       selectedDate.setHours(currentHours, currentMinutes, 0, 0);
@@ -363,6 +401,7 @@ export const FollowUpsScreen: React.FC = () => {
   const handleDispositionTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
     setShowDispositionTimePicker(false);
     if (event.type === 'set' && selectedTime) {
+      setDispositionQuickPreset('custom');
       const base = followUpDate ? new Date(followUpDate) : new Date();
       base.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0);
       setFollowUpDate(base);
@@ -423,6 +462,7 @@ export const FollowUpsScreen: React.FC = () => {
     setSelectedFollowUp(item);
     const existingDate = item.due_at ? new Date(item.due_at) : new Date();
     setRescheduleDate(!isNaN(existingDate.getTime()) ? existingDate : new Date());
+    setRescheduleQuickPreset(null);
     setRescheduleNotes('');
     setRescheduleModalVisible(true);
   };
@@ -431,6 +471,7 @@ export const FollowUpsScreen: React.FC = () => {
   const onDateChange = (event: DateTimePickerEvent, selected?: Date) => {
     setShowDatePicker(false);
     if (event.type === 'set' && selected) {
+      setRescheduleQuickPreset('custom');
       const updated = new Date(rescheduleDate);
       updated.setFullYear(selected.getFullYear(), selected.getMonth(), selected.getDate());
       setRescheduleDate(updated);
@@ -443,6 +484,7 @@ export const FollowUpsScreen: React.FC = () => {
   const onTimeChange = (event: DateTimePickerEvent, selected?: Date) => {
     setShowTimePicker(false);
     if (event.type === 'set' && selected) {
+      setRescheduleQuickPreset('custom');
       const updated = new Date(rescheduleDate);
       updated.setHours(selected.getHours(), selected.getMinutes(), 0, 0);
       setRescheduleDate(updated);
@@ -945,6 +987,64 @@ export const FollowUpsScreen: React.FC = () => {
             {/* Date & Time Picker Buttons */}
             <View style={styles.pickerSection}>
               <Text style={styles.inputLabel}>New Callback Date & Time</Text>
+
+              {/* Quick Presets Row: Tomorrow, 3 Days, Next Week */}
+              <View style={[styles.quickChipsRow, { marginBottom: 10 }]}>
+                <TouchableOpacity
+                  style={[
+                    styles.quickChip,
+                    rescheduleQuickPreset === 'tomorrow' && styles.quickChipSelected,
+                  ]}
+                  onPress={() => handleSelectRescheduleQuickPreset('tomorrow')}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.quickChipText,
+                      rescheduleQuickPreset === 'tomorrow' && styles.quickChipTextSelected,
+                    ]}
+                  >
+                    Tomorrow
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.quickChip,
+                    rescheduleQuickPreset === '3days' && styles.quickChipSelected,
+                  ]}
+                  onPress={() => handleSelectRescheduleQuickPreset('3days')}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.quickChipText,
+                      rescheduleQuickPreset === '3days' && styles.quickChipTextSelected,
+                    ]}
+                  >
+                    3 Days
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.quickChip,
+                    rescheduleQuickPreset === 'next_week' && styles.quickChipSelected,
+                  ]}
+                  onPress={() => handleSelectRescheduleQuickPreset('next_week')}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.quickChipText,
+                      rescheduleQuickPreset === 'next_week' && styles.quickChipTextSelected,
+                    ]}
+                  >
+                    Next Week
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
               <View style={styles.dateTimeBtnRow}>
                 <TouchableOpacity
                   style={styles.dateTimeBtn}
@@ -1219,6 +1319,7 @@ export const FollowUpsScreen: React.FC = () => {
                           tom.setDate(tom.getDate() + 1);
                           tom.setHours(11, 0, 0, 0);
                           setFollowUpDate(tom);
+                          setDispositionQuickPreset('tomorrow');
                         }
                       }}
                       activeOpacity={0.75}
@@ -1253,14 +1354,93 @@ export const FollowUpsScreen: React.FC = () => {
                     </Text>
                   </View>
 
-                  <TouchableOpacity
-                    style={styles.pickDateBtn}
-                    onPress={() => setShowDispositionDatePicker(true)}
-                    activeOpacity={0.7}
-                  >
-                    <Feather name="edit-3" size={13} color={colors.primary.main} style={{ marginRight: 5 }} />
-                    <Text style={styles.pickDateBtnText}>Pick Date & Time</Text>
-                  </TouchableOpacity>
+                  {/* Quick Preset Pills Row: Tomorrow, 3 Days, Next Week */}
+                  <View style={styles.quickChipsRow}>
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        dispositionQuickPreset === 'tomorrow' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectDispositionQuickPreset('tomorrow')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          dispositionQuickPreset === 'tomorrow' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Tomorrow
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        dispositionQuickPreset === '3days' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectDispositionQuickPreset('3days')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          dispositionQuickPreset === '3days' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        3 Days
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        dispositionQuickPreset === 'next_week' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectDispositionQuickPreset('next_week')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          dispositionQuickPreset === 'next_week' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Next Week
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Pick Date & Time Button */}
+                  <View style={{ marginTop: 8 }}>
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        dispositionQuickPreset === 'custom' && styles.quickChipSelected,
+                        { alignSelf: 'flex-start' },
+                      ]}
+                      onPress={() => {
+                        setDispositionQuickPreset('custom');
+                        setShowDispositionDatePicker(true);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Feather
+                        name="edit-3"
+                        size={13}
+                        color={dispositionQuickPreset === 'custom' ? '#FFFFFF' : colors.primary.main}
+                        style={{ marginRight: 5 }}
+                      />
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          dispositionQuickPreset === 'custom' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Pick Date & Time
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
                   {showDispositionDatePicker && (
                     <DateTimePicker
@@ -2012,6 +2192,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: colors.primary.main,
+  },
+  quickChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  quickChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D4A854',
+  },
+  quickChipSelected: {
+    backgroundColor: colors.primary.main,
+    borderColor: colors.primary.main,
+  },
+  quickChipText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.primary.main,
+  },
+  quickChipTextSelected: {
+    color: '#FFFFFF',
   },
   dispositionErrorText: {
     color: '#EF4444',

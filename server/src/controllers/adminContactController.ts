@@ -262,6 +262,11 @@ export async function bulkUploadContacts(req: AuthenticatedRequest, res: Respons
         projectId = parseInt(defaultProjectId, 10);
       }
 
+      let rowProjectIds: number[] = [];
+      if (Array.isArray(row.project_ids) && row.project_ids.length > 0) {
+        rowProjectIds = row.project_ids.map(Number).filter((n: number) => !isNaN(n) && n > 0);
+      }
+
       preparedContacts.push({
         name: name || 'Unknown Contact',
         mobile_number: rawMobile,
@@ -273,7 +278,8 @@ export async function bulkUploadContacts(req: AuthenticatedRequest, res: Respons
         category: row.category ? String(row.category).trim() : 'Donor',
         notes: row.notes ? String(row.notes).trim() : null,
         assigned_user_id: assignedUserId,
-        project_id: projectId,
+        project_id: projectId || (rowProjectIds.length > 0 ? rowProjectIds[0] : null),
+        project_ids: rowProjectIds.length > 0 ? rowProjectIds : (projectId ? [projectId] : undefined),
       });
     });
 
@@ -286,12 +292,22 @@ export async function bulkUploadContacts(req: AuthenticatedRequest, res: Respons
       return;
     }
 
+    const rawProjectIds = Array.isArray(req.body.project_ids)
+      ? req.body.project_ids
+      : defaultProjectId && !isNaN(parseInt(defaultProjectId, 10))
+      ? [parseInt(defaultProjectId, 10)]
+      : [];
+    const parsedProjectIds = rawProjectIds
+      .map((p: any) => parseInt(p, 10))
+      .filter((n: number) => !isNaN(n) && n > 0);
+
     const result = await adminContactModel.bulkImportContacts({
       contacts: preparedContacts,
       fileName: typeof req.body.fileName === 'string' ? req.body.fileName : (typeof req.body.file_name === 'string' ? req.body.file_name : undefined),
       uploadedBy: req.user?.id,
       uploadedByName: req.user?.fullName,
-      projectId: defaultProjectId && !isNaN(parseInt(defaultProjectId, 10)) ? parseInt(defaultProjectId, 10) : undefined,
+      projectId: parsedProjectIds.length > 0 ? parsedProjectIds[0] : (defaultProjectId && !isNaN(parseInt(defaultProjectId, 10)) ? parseInt(defaultProjectId, 10) : undefined),
+      projectIds: parsedProjectIds,
       notes: typeof req.body.notes === 'string' ? req.body.notes : undefined,
     });
 

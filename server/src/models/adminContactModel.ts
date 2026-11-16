@@ -225,6 +225,7 @@ export interface BulkContactInput {
   assigned_user_id?: number | null;
   project_id?: number | null;
   projects?: string | null;
+  project_ids?: number[];
 }
 
 export interface BulkImportOptions {
@@ -233,6 +234,7 @@ export interface BulkImportOptions {
   uploadedBy?: number;
   uploadedByName?: string;
   projectId?: number;
+  projectIds?: number[];
   notes?: string;
 }
 
@@ -252,19 +254,35 @@ export async function bulkImportContacts(options: BulkImportOptions | BulkContac
   const fileName = (isOptions && options.fileName) || `upload_${new Date().toISOString().slice(0, 10)}.csv`;
   const uploadedBy = isOptions ? options.uploadedBy : null;
   const uploadedByName = isOptions ? options.uploadedByName : null;
-  const defaultProjectId = isOptions ? options.projectId : null;
+  const rawProjectIds = isOptions
+    ? (options.projectIds && options.projectIds.length > 0
+        ? options.projectIds
+        : options.projectId ? [options.projectId] : [])
+    : [];
+  const projectIds = rawProjectIds.filter((p) => p && !isNaN(p) && p > 0);
+  const defaultProjectId = projectIds.length > 0 ? projectIds[0] : null;
   const batchNotes = isOptions ? options.notes : null;
 
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
+    // Fetch concatenated project names for batch summary
+    let batchProjectName: string | null = null;
+    if (projectIds.length > 0) {
+      const pNamesRes = await client.query<{ name: string }>(
+        'SELECT name FROM projects WHERE id = ANY($1::int[]) ORDER BY name',
+        [projectIds]
+      );
+      batchProjectName = pNamesRes.rows.map((r) => r.name).join(', ') || null;
+    }
+
     // 1. Create Batch record
     const batchRes = await client.query<{ id: number }>(
       `INSERT INTO contact_batches (file_name, uploaded_by, uploaded_by_name, total_rows, project_id, project_name, notes)
-       VALUES ($1, $2, $3, $4, $5, (SELECT name FROM projects WHERE id = $5), $6)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING id`,
-      [fileName, uploadedBy || null, uploadedByName || null, contacts.length, defaultProjectId || null, batchNotes || null]
+      [fileName, uploadedBy || null, uploadedByName || null, contacts.length, defaultProjectId || null, batchProjectName, batchNotes || null]
     );
     const batchId = batchRes.rows[0].id;
 
@@ -339,13 +357,19 @@ export async function bulkImportContacts(options: BulkImportOptions | BulkContac
         }
       }
 
-      // Associate with target project
-      if (targetProjectId) {
+      // Associate with target projects (multi-project support)
+      const targetProjects: number[] = (c.project_ids && c.project_ids.length > 0)
+        ? c.project_ids
+        : c.project_id
+        ? [c.project_id]
+        : projectIds;
+
+      for (const pId of targetProjects) {
         await client.query(
           `INSERT INTO contact_projects (contact_id, project_id)
            VALUES ($1, $2)
            ON CONFLICT (contact_id, project_id) DO NOTHING`,
-          [contactId, targetProjectId]
+          [contactId, pId]
         );
 
         if (assignedUserId) {
@@ -353,7 +377,7 @@ export async function bulkImportContacts(options: BulkImportOptions | BulkContac
             `INSERT INTO project_users (project_id, user_id, assigned_at)
              VALUES ($1, $2, NOW())
              ON CONFLICT (project_id, user_id) DO NOTHING`,
-            [targetProjectId, assignedUserId]
+            [pId, assignedUserId]
           );
         }
       }

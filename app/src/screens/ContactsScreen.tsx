@@ -105,6 +105,7 @@ export const ContactsScreen: React.FC = () => {
   const [noteText, setNoteText] = useState<string>('');
   const [selectedOutcome, setSelectedOutcome] = useState<CallOutcome>(null);
   const [followUpDate, setFollowUpDate] = useState<Date | null>(null);
+  const [quickPreset, setQuickPreset] = useState<'tomorrow' | '3days' | 'next_week' | 'custom' | null>('tomorrow');
   const [isSavingDisposition, setIsSavingDisposition] = useState<boolean>(false);
   const [dispositionError, setDispositionError] = useState<string | null>(null);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -203,7 +204,13 @@ export const ContactsScreen: React.FC = () => {
     }
     setNoteText(call.purpose || '');
     setSelectedOutcome(call.outcome || null);
-    setFollowUpDate(call.follow_up_date ? new Date(call.follow_up_date) : null);
+    if (call.follow_up_date) {
+      setFollowUpDate(new Date(call.follow_up_date));
+      setQuickPreset('custom');
+    } else {
+      setFollowUpDate(null);
+      setQuickPreset('tomorrow');
+    }
     setDispositionError(null);
     setIsDispositionVisible(true);
   }, [contacts]);
@@ -389,10 +396,26 @@ export const ContactsScreen: React.FC = () => {
     return `${d} ${m} ${y}, ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
   };
 
+  // Quick Follow-up Preset Handler
+  const handleSelectQuickPreset = (preset: 'tomorrow' | '3days' | 'next_week') => {
+    setQuickPreset(preset);
+    const target = new Date();
+    if (preset === 'tomorrow') {
+      target.setDate(target.getDate() + 1);
+    } else if (preset === '3days') {
+      target.setDate(target.getDate() + 3);
+    } else if (preset === 'next_week') {
+      target.setDate(target.getDate() + 7);
+    }
+    target.setHours(11, 0, 0, 0);
+    setFollowUpDate(target);
+  };
+
   // Native Date & Time picker handlers for Follow-up
   const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (event.type === 'set' && selectedDate) {
+      setQuickPreset('custom');
       const currentHours = followUpDate ? followUpDate.getHours() : 11;
       const currentMinutes = followUpDate ? followUpDate.getMinutes() : 0;
       selectedDate.setHours(currentHours, currentMinutes, 0, 0);
@@ -406,6 +429,7 @@ export const ContactsScreen: React.FC = () => {
   const handleTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
     setShowTimePicker(false);
     if (event.type === 'set' && selectedTime) {
+      setQuickPreset('custom');
       const base = followUpDate ? new Date(followUpDate) : new Date();
       base.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0);
       setFollowUpDate(base);
@@ -991,6 +1015,7 @@ export const ContactsScreen: React.FC = () => {
                           tom.setDate(tom.getDate() + 1);
                           tom.setHours(11, 0, 0, 0);
                           setFollowUpDate(tom);
+                          setQuickPreset('tomorrow');
                         }
                       }}
                       activeOpacity={0.75}
@@ -1025,14 +1050,93 @@ export const ContactsScreen: React.FC = () => {
                     </Text>
                   </View>
 
-                  <TouchableOpacity
-                    style={styles.pickDateBtn}
-                    onPress={() => setShowDatePicker(true)}
-                    activeOpacity={0.7}
-                  >
-                    <Feather name="edit-3" size={13} color={colors.primary.main} style={{ marginRight: 5 }} />
-                    <Text style={styles.pickDateBtnText}>Pick Date & Time</Text>
-                  </TouchableOpacity>
+                  {/* Quick Preset Pills Row: Tomorrow, 3 Days, Next Week */}
+                  <View style={styles.quickChipsRow}>
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === 'tomorrow' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectQuickPreset('tomorrow')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === 'tomorrow' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Tomorrow
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === '3days' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectQuickPreset('3days')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === '3days' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        3 Days
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === 'next_week' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectQuickPreset('next_week')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === 'next_week' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Next Week
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Pick Date & Time Button */}
+                  <View style={{ marginTop: 8 }}>
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === 'custom' && styles.quickChipSelected,
+                        { alignSelf: 'flex-start' },
+                      ]}
+                      onPress={() => {
+                        setQuickPreset('custom');
+                        setShowDatePicker(true);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Feather
+                        name="edit-3"
+                        size={13}
+                        color={quickPreset === 'custom' ? '#FFFFFF' : colors.primary.main}
+                        style={{ marginRight: 5 }}
+                      />
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === 'custom' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Pick Date & Time
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
 
                   {showDatePicker && (
                     <DateTimePicker
@@ -1741,6 +1845,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: colors.primary.main,
+  },
+  quickChipsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  quickChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D4A854',
+  },
+  quickChipSelected: {
+    backgroundColor: colors.primary.main,
+    borderColor: colors.primary.main,
+  },
+  quickChipText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.primary.main,
+  },
+  quickChipTextSelected: {
+    color: '#FFFFFF',
   },
   dispositionErrorText: {
     color: '#EF4444',

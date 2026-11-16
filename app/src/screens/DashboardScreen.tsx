@@ -357,6 +357,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   const [purposeText, setPurposeText] = useState('');
   const [selectedOutcome, setSelectedOutcome] = useState<CallOutcome>(null);
   const [followUpDate, setFollowUpDate] = useState<Date | null>(null);
+  const [quickPreset, setQuickPreset] = useState<'tomorrow' | '3days' | 'next_week' | 'custom' | null>('tomorrow');
 
   // Native Date and Time Picker states
   const [showNativeDatePicker, setShowNativeDatePicker] = useState(false);
@@ -438,8 +439,10 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     if (call.follow_up_date) {
       const parsed = new Date(call.follow_up_date);
       setFollowUpDate(isNaN(parsed.getTime()) ? null : parsed);
+      setQuickPreset('custom');
     } else {
       setFollowUpDate(null);
+      setQuickPreset('tomorrow');
     }
 
     setShowNativeDatePicker(false);
@@ -749,10 +752,26 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
     return `${d} ${m} ${y}, ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
   };
 
+  // Quick Follow-up Preset Handler
+  const handleSelectQuickPreset = (preset: 'tomorrow' | '3days' | 'next_week') => {
+    setQuickPreset(preset);
+    const target = new Date();
+    if (preset === 'tomorrow') {
+      target.setDate(target.getDate() + 1);
+    } else if (preset === '3days') {
+      target.setDate(target.getDate() + 3);
+    } else if (preset === 'next_week') {
+      target.setDate(target.getDate() + 7);
+    }
+    target.setHours(11, 0, 0, 0);
+    setFollowUpDate(target);
+  };
+
   // Native Picker Change Handlers
   const handleNativeDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowNativeDatePicker(false);
     if (event.type === 'set' && selectedDate) {
+      setQuickPreset('custom');
       // Keep existing hours/minutes if already set, or default to 11:00 AM
       const currentHours = followUpDate ? followUpDate.getHours() : 11;
       const currentMinutes = followUpDate ? followUpDate.getMinutes() : 0;
@@ -769,6 +788,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
   const handleNativeTimeChange = (event: DateTimePickerEvent, selectedTime?: Date) => {
     setShowNativeTimePicker(false);
     if (event.type === 'set' && selectedTime) {
+      setQuickPreset('custom');
       const base = followUpDate ? new Date(followUpDate) : new Date();
       base.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0);
       setFollowUpDate(base);
@@ -1778,15 +1798,91 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateToSe
                     </Text>
                   </View>
 
-                  {/* Pick Date & Time Button */}
+                  {/* Quick Preset Pills Row: Tomorrow, 3 Days, Next Week */}
                   <View style={styles.quickChipsRow}>
                     <TouchableOpacity
-                      style={styles.quickChip}
-                      onPress={() => setShowNativeDatePicker(true)}
+                      style={[
+                        styles.quickChip,
+                        quickPreset === 'tomorrow' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectQuickPreset('tomorrow')}
                       activeOpacity={0.7}
                     >
-                      <Feather name="edit-3" size={13} color={colors.primary.main} style={{ marginRight: 5 }} />
-                      <Text style={styles.quickChipText}>Pick Date & Time</Text>
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === 'tomorrow' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Tomorrow
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === '3days' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectQuickPreset('3days')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === '3days' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        3 Days
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === 'next_week' && styles.quickChipSelected,
+                      ]}
+                      onPress={() => handleSelectQuickPreset('next_week')}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === 'next_week' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Next Week
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Pick Date & Time Button */}
+                  <View style={{ marginTop: 8 }}>
+                    <TouchableOpacity
+                      style={[
+                        styles.quickChip,
+                        quickPreset === 'custom' && styles.quickChipSelected,
+                        { alignSelf: 'flex-start' },
+                      ]}
+                      onPress={() => {
+                        setQuickPreset('custom');
+                        setShowNativeDatePicker(true);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Feather
+                        name="edit-3"
+                        size={13}
+                        color={quickPreset === 'custom' ? '#FFFFFF' : colors.primary.main}
+                        style={{ marginRight: 5 }}
+                      />
+                      <Text
+                        style={[
+                          styles.quickChipText,
+                          quickPreset === 'custom' && styles.quickChipTextSelected,
+                        ]}
+                      >
+                        Pick Date & Time
+                      </Text>
                     </TouchableOpacity>
                   </View>
 
