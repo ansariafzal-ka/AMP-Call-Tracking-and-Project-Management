@@ -771,17 +771,17 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-100 bg-[#FAF7F7] flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={loading}
-            className="px-4 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-200/70 transition-colors cursor-pointer"
-          >
-            {successResult ? 'Close' : 'Cancel'}
-          </button>
+        {!successResult && (
+          <div className="px-6 py-4 border-t border-gray-100 bg-[#FAF7F7] flex items-center justify-between">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="px-4 py-2 rounded-lg text-xs font-semibold text-gray-600 hover:bg-gray-200/70 transition-colors cursor-pointer"
+            >
+              Cancel
+            </button>
 
-          {!successResult && (
             <div className="flex items-center gap-3">
               {hasErrors && (
                 <span className="text-[11px] text-red-600 font-medium hidden sm:inline">
@@ -804,8 +804,8 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
                   : 'Import Contacts'}
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
