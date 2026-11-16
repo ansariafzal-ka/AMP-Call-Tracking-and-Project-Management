@@ -1,13 +1,17 @@
+def safeExtGet(prop, fallback) {
+  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
   namespace "expo.modules.calllog"
-  compileSdkVersion 35
+  compileSdkVersion safeExtGet('compileSdkVersion', 36)
 
   defaultConfig {
-    minSdkVersion 24
-    targetSdkVersion 35
+    minSdkVersion safeExtGet('minSdkVersion', 24)
+    targetSdkVersion safeExtGet('targetSdkVersion', 36)
     versionCode 1
     versionName "1.0.0"
   }
