@@ -33,6 +33,153 @@ interface ParsedContactRow {
   errorReason?: string;
 }
 
+// Standard Indian States & Union Territories (36 total)
+const INDIAN_STATES = [
+  'Andaman and Nicobar Islands',
+  'Andhra Pradesh',
+  'Arunachal Pradesh',
+  'Assam',
+  'Bihar',
+  'Chandigarh',
+  'Chhattisgarh',
+  'Dadra and Nagar Haveli and Daman and Diu',
+  'Delhi',
+  'Goa',
+  'Gujarat',
+  'Haryana',
+  'Himachal Pradesh',
+  'Jammu and Kashmir',
+  'Jharkhand',
+  'Karnataka',
+  'Kerala',
+  'Ladakh',
+  'Lakshadweep',
+  'Madhya Pradesh',
+  'Maharashtra',
+  'Manipur',
+  'Meghalaya',
+  'Mizoram',
+  'Nagaland',
+  'Odisha',
+  'Puducherry',
+  'Punjab',
+  'Rajasthan',
+  'Sikkim',
+  'Tamil Nadu',
+  'Telangana',
+  'Tripura',
+  'Uttar Pradesh',
+  'Uttarakhand',
+  'West Bengal',
+];
+
+// Standard Major Indian Cities & Regional Hubs (sorted alphabetically)
+const STANDARD_CITIES = [
+  'Agra',
+  'Ahmedabad',
+  'Ahmednagar',
+  'Ajmer',
+  'Akola',
+  'Aligarh',
+  'Allahabad (Prayagraj)',
+  'Alwar',
+  'Amravati',
+  'Amritsar',
+  'Asansol',
+  'Aurangabad (Chhatrapati Sambhaji Nagar)',
+  'Bareilly',
+  'Belagavi',
+  'Bengaluru',
+  'Bhavnagar',
+  'Bhilai',
+  'Bhiwandi',
+  'Bhopal',
+  'Bhubaneswar',
+  'Bikaner',
+  'Chandigarh',
+  'Chennai',
+  'Coimbatore',
+  'Cuttack',
+  'Dehradun',
+  'Delhi NCR',
+  'Dhanbad',
+  'Durgapur',
+  'Faridabad',
+  'Firozabad',
+  'Ghaziabad',
+  'Gorakhpur',
+  'Guntur',
+  'Gurugram',
+  'Guwahati',
+  'Gwalior',
+  'Hubballi-Dharwad',
+  'Hyderabad',
+  'Indore',
+  'Jabalpur',
+  'Jaipur',
+  'Jalandhar',
+  'Jalgaon',
+  'Jammu',
+  'Jamnagar',
+  'Jamshedpur',
+  'Jhansi',
+  'Jodhpur',
+  'Kannur',
+  'Kanpur',
+  'Kochi',
+  'Kolhapur',
+  'Kolkata',
+  'Kollam',
+  'Kota',
+  'Kozhikode',
+  'Kurnool',
+  'Lucknow',
+  'Ludhiana',
+  'Madurai',
+  'Malappuram',
+  'Malegaon',
+  'Mangaluru',
+  'Meerut',
+  'Moradabad',
+  'Mumbai',
+  'Muzaffarnagar',
+  'Muzaffarpur',
+  'Mysuru',
+  'Nagpur',
+  'Nanded',
+  'Nashik',
+  'Navi Mumbai',
+  'Noida',
+  'Palakkad',
+  'Patna',
+  'Pune',
+  'Raipur',
+  'Rajahmundry',
+  'Rajkot',
+  'Ranchi',
+  'Saharanpur',
+  'Salem',
+  'Sangli',
+  'Shimla',
+  'Siliguri',
+  'Solapur',
+  'Srinagar',
+  'Surat',
+  'Thane',
+  'Thiruvananthapuram',
+  'Thrissur',
+  'Tiruchirappalli',
+  'Tirunelveli',
+  'Udaipur',
+  'Ujjain',
+  'Vadodara',
+  'Varanasi',
+  'Vasai-Virar',
+  'Vijayawada',
+  'Visakhapatnam',
+  'Warangal',
+];
+
 interface BulkUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -275,41 +422,145 @@ export const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
     reader.readAsArrayBuffer(file);
   };
 
-  // Download Blank Excel Template (.xlsx) without dummy rows
-  const downloadExcelTemplate = () => {
-    const headers = [
-      'Name',
-      'Mobile Number',
-      'Category',
-      'Projects',
-      'City',
-      'State',
-      'Pin Code',
-      'Email',
-      'Notes',
-      'Assigned Coordinator Email',
-    ];
+  // Download Blank Excel Template (.xlsx) with native In-Cell Dropdowns for Category & Coordinators
+  const downloadExcelTemplate = async () => {
+    try {
+      const ExcelJS = await import('exceljs');
+      const WorkbookClass = (ExcelJS as any).Workbook || (ExcelJS as any).default?.Workbook || (ExcelJS as any).default;
+      const wb = new WorkbookClass();
+      const ws = wb.addWorksheet('Contacts');
+      const refWs = wb.addWorksheet('Lists');
+      refWs.state = 'hidden'; // Keep lists clean in a hidden reference tab
 
-    // Create sheet with ONLY the header row
-    const worksheet = XLSX.utils.aoa_to_sheet([headers]);
+      const categories = ['Donor', 'Beneficiary', 'Student', 'Volunteer', 'Other'];
+      const coordinatorEmails = users
+        .map((u) => u.email)
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+      const projectNames = projects
+        .map((p) => p.name)
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
 
-    // Set professional column widths in Excel
-    worksheet['!cols'] = [
-      { wch: 22 }, // Name
-      { wch: 16 }, // Mobile Number
-      { wch: 14 }, // Category
-      { wch: 28 }, // Projects
-      { wch: 16 }, // City
-      { wch: 16 }, // State
-      { wch: 12 }, // Pin Code
-      { wch: 26 }, // Email
-      { wch: 30 }, // Notes
-      { wch: 28 }, // Assigned Coordinator Email
-    ];
+      // Populate reference lists
+      categories.forEach((cat, i) => {
+        refWs.getCell(`A${i + 1}`).value = cat;
+      });
 
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Contacts');
-    XLSX.writeFile(workbook, 'amp_contacts_template.xlsx');
+      coordinatorEmails.forEach((email, i) => {
+        refWs.getCell(`B${i + 1}`).value = email;
+      });
+
+      INDIAN_STATES.forEach((st, i) => {
+        refWs.getCell(`C${i + 1}`).value = st;
+      });
+
+      STANDARD_CITIES.forEach((ct, i) => {
+        refWs.getCell(`D${i + 1}`).value = ct;
+      });
+
+      projectNames.forEach((proj, i) => {
+        refWs.getCell(`E${i + 1}`).value = proj;
+      });
+
+      // Define Contacts columns with spacious auto-widths
+      ws.columns = [
+        { header: 'Name', key: 'name', width: 22 },
+        { header: 'Mobile Number', key: 'mobile', width: 16 },
+        { header: 'Category', key: 'category', width: 16 },
+        { header: 'Projects', key: 'projects', width: 28 },
+        { header: 'City', key: 'city', width: 20 },
+        { header: 'State', key: 'state', width: 24 },
+        { header: 'Pin Code', key: 'pin', width: 12 },
+        { header: 'Email', key: 'email', width: 26 },
+        { header: 'Notes', key: 'notes', width: 30 },
+        { header: 'Assigned Coordinator Email', key: 'coordinator', width: 30 },
+      ];
+
+      // Clean bold header styling
+      const headerRow = ws.getRow(1);
+      headerRow.font = { bold: true, color: { argb: 'FF1F2937' }, size: 11 };
+      headerRow.height = 24;
+
+      // Apply in-cell dropdown rules for rows 2 through 500
+      for (let r = 2; r <= 500; r++) {
+        // Category dropdown (Permissive: shows preset dropdown list, but allows typing custom categories)
+        ws.getCell(`C${r}`).dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: [`Lists!$A$1:$A$${categories.length}`],
+          showErrorMessage: false,
+        };
+
+        // Projects dropdown (Permissive: shows active projects, allows typing single or multiple separated by ;)
+        if (projectNames.length > 0) {
+          ws.getCell(`D${r}`).dataValidation = {
+            type: 'list',
+            allowBlank: true,
+            formulae: [`Lists!$E$1:$E$${projectNames.length}`],
+            showErrorMessage: false,
+          };
+        }
+
+        // City dropdown (Permissive: shows standard cities, allows typing unlisted towns)
+        ws.getCell(`E${r}`).dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: [`Lists!$D$1:$D$${STANDARD_CITIES.length}`],
+          showErrorMessage: false,
+        };
+
+        // State dropdown (Permissive: shows 36 Indian states & UTs, allows typing custom)
+        ws.getCell(`F${r}`).dataValidation = {
+          type: 'list',
+          allowBlank: true,
+          formulae: [`Lists!$C$1:$C$${INDIAN_STATES.length}`],
+          showErrorMessage: false,
+        };
+
+        // Coordinator dropdown (Shows active coordinators, allows typing or selecting)
+        if (coordinatorEmails.length > 0) {
+          ws.getCell(`J${r}`).dataValidation = {
+            type: 'list',
+            allowBlank: true,
+            formulae: [`Lists!$B$1:$B$${coordinatorEmails.length}`],
+            showErrorMessage: false,
+          };
+        }
+      }
+
+      const buffer = await wb.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'amp_contacts_template.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error('Failed to generate Excel template with dropdowns:', err);
+      // Fallback to basic template if ExcelJS encounters any issue
+      const headers = [
+        'Name',
+        'Mobile Number',
+        'Category',
+        'Projects',
+        'City',
+        'State',
+        'Pin Code',
+        'Email',
+        'Notes',
+        'Assigned Coordinator Email',
+      ];
+      const worksheet = XLSX.utils.aoa_to_sheet([headers]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Contacts');
+      XLSX.writeFile(workbook, 'amp_contacts_template.xlsx');
+    }
   };
 
   const validCount = parsedRows.filter((r) => r.isValid && !r.isDuplicate).length;
