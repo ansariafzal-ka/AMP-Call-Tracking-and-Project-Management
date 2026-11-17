@@ -19,7 +19,7 @@ class CallLogModule : Module() {
         CallLog.Calls.TYPE
       )
 
-      val sortOrder = "${CallLog.Calls.DATE} DESC LIMIT $limit"
+      val sortOrder = "${CallLog.Calls.DATE} DESC"
 
       val cursor = context.contentResolver.query(
         CallLog.Calls.CONTENT_URI,
@@ -35,7 +35,7 @@ class CallLogModule : Module() {
         val dateIdx = it.getColumnIndex(CallLog.Calls.DATE)
         val typeIdx = it.getColumnIndex(CallLog.Calls.TYPE)
 
-        while (it.moveToNext()) {
+        while (it.moveToNext() && list.size < limit) {
           val number = if (numberIdx != -1) it.getString(numberIdx) else "Unknown"
           val duration = if (durationIdx != -1) it.getLong(durationIdx) else 0L
           val date = if (dateIdx != -1) it.getLong(dateIdx) else 0L

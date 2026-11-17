@@ -83,7 +83,19 @@ function formatEntry(entry: any): FormattedCallRecord {
 }
 
 /**
- * Safe loader for local Kotlin Expo module
+ * Safe loader for react-native-call-log
+ */
+function getCallLogsLibrary(): any {
+  try {
+    const lib = require('react-native-call-log');
+    return lib.default || lib;
+  } catch (err) {
+    return null;
+  }
+}
+
+/**
+ * Safe loader for local Kotlin Expo module fallback
  */
 function getLocalCallLogModule(): any {
   try {
@@ -95,13 +107,27 @@ function getLocalCallLogModule(): any {
 }
 
 /**
- * Fetch raw call log entries from native Expo call-log module
+ * Fetch raw call log entries from react-native-call-log or local module
  */
 export async function loadRawCallLogs(limit: number = 20): Promise<any[]> {
   if (Platform.OS !== 'android') {
     return [];
   }
 
+  // 1. Try react-native-call-log (primary)
+  const CallLogs = getCallLogsLibrary();
+  if (CallLogs && typeof CallLogs.load === 'function') {
+    try {
+      const entries = await CallLogs.load(limit);
+      if (Array.isArray(entries)) {
+        return entries;
+      }
+    } catch (err) {
+      console.warn('react-native-call-log load error, falling back to local module:', err);
+    }
+  }
+
+  // 2. Fallback to local Kotlin module
   const localMod = getLocalCallLogModule();
   if (localMod && typeof localMod.load === 'function') {
     try {
@@ -110,7 +136,7 @@ export async function loadRawCallLogs(limit: number = 20): Promise<any[]> {
         return entries;
       }
     } catch (err) {
-      console.warn('Native CallLog module error:', err);
+      console.warn('local CallLog module error:', err);
       throw err;
     }
   }
