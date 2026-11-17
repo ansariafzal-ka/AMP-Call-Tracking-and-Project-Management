@@ -33,7 +33,8 @@
           "icon": "./assets/app-logo.png",
           "color": "#801321"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "eas": {
