@@ -324,14 +324,9 @@ export const AdminCallsPage: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold text-text-main tracking-tight">
-              Team Call Logs
-            </h1>
-            <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-gold/15 text-amber-800">
-              Admin
-            </span>
-          </div>
+          <h1 className="text-2xl font-bold text-text-main tracking-tight">
+            Team Call Logs
+          </h1>
           <p className="text-sm text-text-muted mt-1">
             Real-time chronological master history of calls placed across all coordinators and campaigns
           </p>
